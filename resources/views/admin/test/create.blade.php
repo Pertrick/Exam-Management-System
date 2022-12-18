@@ -96,7 +96,7 @@ $("select.subject").change(function() {
             var count = 1;
             $.get('/admin/exam/question/' + subjectId, (data) => {
                 data.forEach(function(item, index) {
-                    var card = `<div class="col-md-6 is-select">
+                    var card = `<div class="col-md-6 mb-2 is-select">
                                     <div class="card-group"> 
                                         <div class="card">
                                             <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;

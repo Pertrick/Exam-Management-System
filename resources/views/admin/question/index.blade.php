@@ -46,7 +46,6 @@
                                             <th>Question</th>
                                             <th>Type</th>
                                             <th>Points</th>
-                                            <th>Answers</th>
                                             <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
@@ -57,13 +56,7 @@
                                                 <td>{{ $question->question }}</td>
                                                 <td>{{ $question->type }}</td>
                                                 <td>{{ $question->point }}</td>
-                                                <td>
-                                                    @foreach ($question->options as $key => $option)
-                                                        @if ($option->is_correct)
-                                                            {{ $option->label }}
-                                                        @endif
-                                                    @endforeach
-                                                </td>
+                                               
                                                 <td class="text-right">
                                                     <button type="button" class="btn btn-sm btn-info options"  data-id ={{$question->options}} data-toggle="modal" data-target="#view-options-modal">
                                                      options <i
@@ -124,7 +117,14 @@
             var label ='';
             options.forEach(element => {
                 console.log(element)
-                label += `<li>${element.label}</li>`;
+                if(element.is_correct ==1){
+                    label += `<h6><li class="text-left bg-success rounded-sm p-1 ">${element.label} <i
+                                                     class="fa fa-check"></i></li></h6>` 
+                }else{
+                    label += `<h6><li class="text-left">${element.label} <i
+                                                     class="fa fa-times text-danger"></i></li></h6>`;
+                }
+               
             });
             $('#option-p').append(label);
         });

@@ -1,4 +1,10 @@
 @include('admin.partials.header')
+<style>
+.myModal{
+    height: 550px;
+    overflow-y: auto;
+}
+</style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -36,7 +42,7 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            <a class="btn btn-sm btn-success" href="{{ route('admin.test.create') }}"><i
+                            <a class="btn btn-sm bg-success" href="{{ route('admin.test.create') }}"><i
                                     class="fa fa-plus"></i> Add Exam</a><br><br>
                             <div class="col-md-12 table-responsive">
                                 <table id="example1" class="table table-bordered table-hover">
@@ -58,28 +64,28 @@
                                                 <td>{{ $test->duration }}</td>
 
                                                 <td class="text-right">
-                                                    <a class="btn btn-sm bg2"
+                                                    <a class="btn btn-sm btn-warning"
                                                         href="{{ route('admin.test.publish', $test->id) }}"><i
-                                                            class="fa fa-edit"></i>
+                                                            class="fa fa-plane"></i>
                                                         publish</a>
 
                                                     <button type="button" class="btn btn-sm btn-info questions"
-                                                        data-id={{ $test }} data-toggle="modal"
+                                                        data-id="{{ $test->questions }}" data-toggle="modal"
                                                         data-target="#view-question-modal">
-                                                        questions <i class="fa fa-eye"></i>
+                                                        <i class="fa fa-eye"></i>
                                                     </button>
 
                                                     <a class="btn btn-sm bg4"
                                                         href="{{ route('admin.test.edit', $test->id) }}"><i
                                                             class="fa fa-edit"></i>
-                                                        edit</a>
+                                                        </a>
 
                                                     <form action="{{ route('admin.test.delete', $test->id) }}"
                                                         method="post" class="d-inline">
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btn-sm bg1" type="submit"
-                                                            onclick="return confirm('Are you sure?')">delete<i
+                                                            onclick="return confirm('Are you sure?')"><i
                                                                 class="fa fa-trash-alt"></i></button>
                                                     </form>
                                                 </td>
@@ -107,9 +113,10 @@
     <div id="view-question-modal" class="modal animated rubberBand delete-modal" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-body text-center">
+                <div class="modal-body myModal text-center">
+                    <label for="options">Options</label>
                     <div class="row" id="questionrow"></div>
-
+                   
                 </div>
             </div>
         </div>
@@ -117,40 +124,25 @@
     @include('admin.partials.footer')
     <script>
         $('.questions').on('click', function() {
-            // $('.questionrow').html('');
+            $('#questionrow').html('');
             var data = $(this).attr('data-id');
-            console.log(data);
             var question = JSON.parse(data);
             var count = 1;
             question.forEach(function(item) {
-                    var card = `<div class="col-md-6 is-select">
+                var card = `<div class="col-md-12 mb-2 is-select">
                                     <div class="card-group"> 
                                         <div class="card">
-                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>
-                                                <p class="card-text"><li>option</li></p>
-                            </div>
-                                    <div class="card-footer"> 
-                                        <div class="text-left">
-                                            <label class="text-right text-xs">*check to select question</label>
-                                            <input type="checkbox" name="question_ids[]" value="" >
-                                        </div>
-                                        <div class="text-right">
-                                            <small class="text-muted">Last updated: </small> 
-                                        </div>
-                                    </div>                                 
+                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
+                    item.options.forEach(function(value, key) {
+                        card += `<h6 class="card-text"><li class="text-left">${value.label}</li></h6>`
+                    });
+                    card +=`
+                            </div>                                
                                 </div>                             
                             </div>                     
                         </div>`
                     $('#questionrow').append(card);
                 });
-            // var question = JSON.parse(data);
-            // console.log(question);
-            // var label = '';
-            // options.forEach(element => {
-            //     console.log(element)
-            //     label += `<li>${element.label}</li>`;
-            // });
-            // $('#option-p').append(label);
         });
         $(function() {
             $("#example1").DataTable();

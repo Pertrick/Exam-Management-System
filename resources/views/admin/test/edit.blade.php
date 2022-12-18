@@ -169,7 +169,7 @@ $("select.subject").change(function() {
                                         <div class="card">
                                             <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
                     item.options.forEach(function(value, key) {
-                        card += `<p class="card-text"><li>${value.label}</li></p>`
+                        card += `<h6 class="card-text"><li>${value.label}</li></h6>`
                     });
                     card +=`
                             </div>
