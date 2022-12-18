@@ -114,7 +114,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body myModal text-center">
-                    <label for="options">Options</label>
+                    <label for="options">Questions</label>
                     <div class="row" id="questionrow"></div>
                    
                 </div>
