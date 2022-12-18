@@ -17,7 +17,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        $tests = Test::with('subjects')->get();
+        $tests = Test::with('subject')->get();
         return view('admin.test.index', compact('tests'));
     }
 
@@ -48,7 +48,16 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $test = Test::create([
+            'subject_id' => $request->subject_id,
+            'duration' => $request->duration,
+        ]);
+
+        foreach($request->question_ids as $question_id){
+            $test->questions()->attach($question_id);
+        }
+
+        return redirect()->route('admin.test.index')->with('message', 'Question added to Exam successfully!');
     }
 
     /**

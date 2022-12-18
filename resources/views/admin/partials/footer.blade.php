@@ -5,5 +5,5 @@
  <!-- DataTables  & Plugins -->
  <script src="EMS/asset/tables/datatables/jquery.dataTables.min.js"></script>
  <script src="EMS/asset/tables/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
- <script src="EMS/asset/tables/datatables-responsive/js/responsive.bootstrap4.min.js"></script>s
+ <script src="EMS/asset/tables/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
  <script src="EMS/asset/tables/datatables-buttons/js/buttons.bootstrap4.min.js"></script>

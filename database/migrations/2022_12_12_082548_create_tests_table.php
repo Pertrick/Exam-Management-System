@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subject_id')->constrained();
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->string('duration')->nullable();
+            $table->boolean('is_published')->default(0);
             $table->timestamps();
         });
     }

@@ -46,7 +46,6 @@
                                             <th>Question</th>
                                             <th>Type</th>
                                             <th>Points</th>
-                                            <th>Options</th>
                                             <th>Answers</th>
                                             <th class="text-right">Action</th>
                                         </tr>
@@ -59,11 +58,6 @@
                                                 <td>{{ $question->type }}</td>
                                                 <td>{{ $question->point }}</td>
                                                 <td>
-                                                    @foreach ($question->options as $option)
-                                                        <li>{{ $option->label }}</li>
-                                                    @endforeach
-                                                </td>
-                                                <td>
                                                     @foreach ($question->options as $key => $option)
                                                         @if ($option->is_correct)
                                                             {{ $option->label }}
@@ -71,13 +65,18 @@
                                                     @endforeach
                                                 </td>
                                                 <td class="text-right">
+                                                    <button type="button" class="btn btn-sm btn-info options"  data-id ={{$question->options}} data-toggle="modal" data-target="#view-options-modal">
+                                                     options <i
+                                                     class="fa fa-eye"></i>
+                                                    </button>
+
                                                     <a class="btn btn-sm bg3"
                                                         href="{{ route('admin.question.edit', $question->id) }}"><i
                                                             class="fa fa-edit"></i>
                                                         edit</a>
 
                                                     <form action="{{ route('admin.question.delete', $question->id) }}"
-                                                        method="post">
+                                                        method="post" class="d-inline">
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btn-sm bg1" type="submit"
@@ -105,24 +104,36 @@
     <!-- /.content-wrapper -->
     </div>
     <!-- ./wrapper -->
-    <div id="delete" class="modal animated rubberBand delete-modal" role="dialog">
+    <div id="view-options-modal" class="modal animated rubberBand delete-modal" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <img src="../asset/img/sent.png" alt="" width="50" height="46">
-                    <h3>Are you sure want to delete this Course?</h3>
-                    <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="submit" class="btn bg1">Delete</button>
-                    </div>
+                    <h6>Options</h6>
+                    <p id="option-p"></p>
                 </div>
             </div>
         </div>
     </div>
     @include('admin.partials.footer')
     <script>
+
+        $('.options').on('click', function(){
+            $('#option-p').html('');
+            var data = $(this).attr('data-id');
+            var options =JSON.parse(data);
+            var label ='';
+            options.forEach(element => {
+                console.log(element)
+                label += `<li>${element.label}</li>`;
+            });
+            $('#option-p').append(label);
+        });
+
         $(function() {
             $("#example1").DataTable();
         });
+
+      
     </script>
 </body>
 

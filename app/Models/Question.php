@@ -6,7 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Option;
 use App\Models\Subject;
+use App\Models\Test;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 class Question extends Model
 {
     use HasFactory;
@@ -37,6 +40,15 @@ class Question extends Model
 
     public function subject(){
         return $this->belongsTo(Subject::class);
+    }
+
+    public function tests(){
+        return $this->belongsToMany(Test::class);
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return Carbon::createFromTimestamp(strtotime($value))->diffForHumans();
     }
 
     public function delete()    

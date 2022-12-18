@@ -14,7 +14,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Subject
+                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Exam
                             </h1>
                         </div>
                         <!-- /.col -->
@@ -36,12 +36,12 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <!-- form start -->
-                        <form action="{{ route('admin.question.store') }}" method="POST" id="form-subject">
+                        <form action="{{ route('admin.test.store') }}" method="POST" id="form-subject">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <div class="card-header">
+                                        <div class="card-header mb-3">
                                             <span class="fa fa-book"> Add Exam</span>
                                         </div>
                                         <div class="row" id="row-id">
@@ -90,39 +90,68 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
-        $(function() {
-            $("#example1").DataTable();
-        });
 
-        $("select.subject").change(function() {
+$("select.subject").change(function() {
             var subjectId = $(this).children("option:selected").val();
+            var count = 1;
             $.get('/admin/exam/question/' + subjectId, (data) => {
                 data.forEach(function(item, index) {
-                    var card = `<div class="col-md-6">
+                    var card = `<div class="col-md-6 is-select">
                                     <div class="card-group"> 
                                         <div class="card">
-                                            <div class="card-body is-selected"><h4 class="card-title">${item.question}</h4>`;
+                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
                     item.options.forEach(function(value, key) {
-                        card += `<p class="card-text">${value.label}</p>`
+                        card += `<p class="card-text"><li>${value.label}</li></p>`
                     });
                     card +=`
                             </div>
                                     <div class="card-footer"> 
-                                        <small class="text-muted">Last updated 3 mins ago</small> 
+                                        <div class="text-left">
+                                            <label class="text-right text-xs">*check to select question</label>
+                                            <input type="checkbox" name="question_ids[]" value="${item.id}" >
+                                        </div>
+                                        <div class="text-right">
+                                            <small class="text-muted">Last updated: ${item.updated_at}</small> 
+                                        </div>
                                     </div>                                 
                                 </div>                             
-                            </div>                         
+                            </div>                     
                         </div>`
                     $('#row-id').append(card);
                 });
 
             });
+
+            appendTime();
+        });
+        
+        $('.is-select').on('click',function(){
+            alert();
         });
 
-
-        $('div.is-selected').on('click','.card[data-clickable=true]',function(){
-            console.log('jfjfkjd');
+        $(function() {
+            $("#example1").DataTable();
         });
+
+       
+
+
+        function appendTime(){
+            var time = `<div class="col-md-12">
+                            <div class="form-group">
+                                <label>Exam Duration</label>
+                                    <input type='text' placeholder="Enter exam duraton in seconds" class="form-control" name="duration">
+                                        @error('duration')
+                                            <div class="error text-danger text-xs">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                            </div>
+                        </div>
+                        `
+                        $('#row-id').append(time);
+                    
+        }
+    
     </script>
 </body>
 
