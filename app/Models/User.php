@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Test;
 
 class User extends Authenticatable
 {
@@ -43,10 +44,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function tests()
+    {
+        return $this->belongsToMany(Test::class);
+    }
+
     public function getRedirectRouteName(): string{
         return match((int)$this->role_id){
           Role::ADMIN => 'admin.dashboard',
           Role::USER => 'student.dashboard'
         };
     }
+
+
 }

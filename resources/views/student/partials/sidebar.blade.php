@@ -17,7 +17,7 @@
                     </a>
                 </li>
                 <li class="nav-item" title="Upcoming Exam">
-                    <a href="{{route('student.upcoming.exam')}}" class="nav-link">
+                    <a href="{{route('student.test.index')}}" class="nav-link">
                         <i class="nav-icon fa fa-file-signature"></i>
                         <p>
                             Upcoming Exam

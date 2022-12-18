@@ -17,7 +17,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        $tests = Test::with('subject')->get();
+        $tests = Test::with(['subject', 'questions:question'])->get();
         return view('admin.test.index', compact('tests'));
     }
 
@@ -48,14 +48,13 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
+
         $test = Test::create([
             'subject_id' => $request->subject_id,
             'duration' => $request->duration,
         ]);
 
-        foreach($request->question_ids as $question_id){
-            $test->questions()->attach($question_id);
-        }
+        $test->questions()->attach($request->question_ids);
 
         return redirect()->route('admin.test.index')->with('message', 'Question added to Exam successfully!');
     }
@@ -77,9 +76,14 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function edit(Test $test)
+    public function edit($id)
     {
-        //
+        $test = Test::with(['questions.options','subject'])->findOrFail($id);
+        $test_subject_id = $test->subject_id;
+        $test_question_ids = $test->questions->pluck('id');
+        $questions = Question::where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
+        
+        return view('admin.test.edit', compact('test', 'questions'));
     }
 
     /**
@@ -89,9 +93,35 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Test $test)
+    public function update(Request $request, $id)
     {
-        //
+        $test = Test::findOrFail($id);
+        $test->duration =  $request->duration ?? $test->duration;
+        $test->save();
+
+        $test->questions()->sync($request->question_ids);
+
+        return redirect()->route('admin.test.index')->with('message', 'Questions updated to Exam successfully!');
+
+    }
+
+
+      /**
+     * Publish the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Test  $test
+     * @return \Illuminate\Http\Response
+     */
+    public function publish(Request $request,$id)
+    {
+        dd($request->all());
+        $test = Test::findOrFail($id);
+        $test->is_published =  $request->is_published ?? $test->is_published;
+        $test->save();
+
+        return redirect()->route('admin.test.index')->with('message', 'Question published successfully!');
+
     }
 
     /**
@@ -100,8 +130,11 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Test $test)
+    public function destroy($id)
     {
-        //
+        $test = Test::findOrFail($id);
+        $test->delete();
+
+        return redirect()->back()->with('message', 'Test Deleted Successfully!');
     }
 }

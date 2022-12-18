@@ -95,7 +95,6 @@ class SubjectController extends Controller
         $subject = Subject::findOrFail($id);
         $subject->delete();
 
-        
         return redirect()->back()->with('message', 'Subject Deleted Successfully!');
     }
 }

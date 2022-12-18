@@ -49,9 +49,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::get('', [TestController::class, 'index'])->name('admin.test.index');
         Route::get('/question/{id}', [TestController::class, 'question'])->name('admin.test.questions');
         Route::get('create', [TestController::class, 'create'])->name('admin.test.create');
-        Route::get('edit', [TestController::class, 'edit'])->name('admin.test.edit');
+        Route::get('edit/{id}', [TestController::class, 'edit'])->name('admin.test.edit');
         Route::post('store', [TestController::class, 'store'])->name('admin.test.store');
-        Route::put('update', [TestController::class, 'update'])->name('admin.test.update');
+        Route::put('update/{id}', [TestController::class, 'update'])->name('admin.test.update');
+        Route::post('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
         Route::delete('delete/{id}', [testController::class, 'destroy'])->name('admin.test.delete');
     });
    

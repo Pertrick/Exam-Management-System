@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Models\Test;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Question;
 
 class TestController extends Controller
 {
@@ -15,7 +16,8 @@ class TestController extends Controller
      */
     public function index()
     {
-        return view('student.upcoming-exam');
+        $tests = Test::with(['subject', 'questions:question'])->get();
+        return view('student.test.index', compact('tests'));
     }
 
     /**
@@ -45,9 +47,13 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show(Test $test)
+    public function show($id)
     {
-        //
+        $option_type= Question::OPTION;
+        $multi_choice_type = Question::MULTI_CHOICE;
+        $sn =1;
+        $test = Test::with(['questions.options','subject'])->findOrFail($id);
+        return view('student.test.show', compact('test', 'option_type', 'multi_choice_type', 'sn'));
     }
 
     /**

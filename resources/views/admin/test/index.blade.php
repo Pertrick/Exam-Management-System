@@ -44,28 +44,32 @@
                                         <tr>
                                             {{-- <th>Name</th> --}}
                                             <th>Subject</th>
+                                            <th>No of questions</th>
                                             <th>Duration(seconds)</th>
                                             <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        
                                         @foreach ($tests as $test)
                                             <tr>
-                                                <td>{{ $test->subject->name}}</td>
-                                                <td>{{ $test->duration}}</td>
-                                               
+                                                <td>{{ $test->subject->name }}</td>
+                                                <td>{{$test->questions->count()}}</td>
+                                                <td>{{ $test->duration }}</td>
+
                                                 <td class="text-right">
                                                     <a class="btn btn-sm bg2"
-                                                        href="{{ route('admin.test.edit', $test->id) }}"><i
+                                                        href="{{ route('admin.test.publish', $test->id) }}"><i
                                                             class="fa fa-edit"></i>
                                                         publish</a>
 
-                                                        <a class="btn btn-sm bg3"
-                                                        href="{{ route('admin.test.edit', $test->id) }}"><i
-                                                            class="fa fa-edit"></i>
-                                                        view</a>
+                                                    <button type="button" class="btn btn-sm btn-info questions"
+                                                        data-id={{ $test }} data-toggle="modal"
+                                                        data-target="#view-question-modal">
+                                                        questions <i class="fa fa-eye"></i>
+                                                    </button>
 
-                                                        <a class="btn btn-sm bg4"
+                                                    <a class="btn btn-sm bg4"
                                                         href="{{ route('admin.test.edit', $test->id) }}"><i
                                                             class="fa fa-edit"></i>
                                                         edit</a>
@@ -75,7 +79,8 @@
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btn-sm bg1" type="submit"
-                                                            onclick="return confirm('Are you sure?')" >delete<i class="fa fa-trash-alt"></i></button>
+                                                            onclick="return confirm('Are you sure?')">delete<i
+                                                                class="fa fa-trash-alt"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -99,21 +104,54 @@
     <!-- /.content-wrapper -->
     </div>
     <!-- ./wrapper -->
-    <div id="delete" class="modal animated rubberBand delete-modal" role="dialog">
+    <div id="view-question-modal" class="modal animated rubberBand delete-modal" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <img src="../asset/img/sent.png" alt="" width="50" height="46">
-                    <h3>Are you sure want to delete this Course?</h3>
-                    <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="submit" class="btn bg1">Delete</button>
-                    </div>
+                    <div class="row" id="questionrow"></div>
+
                 </div>
             </div>
         </div>
     </div>
     @include('admin.partials.footer')
     <script>
+        $('.questions').on('click', function() {
+            // $('.questionrow').html('');
+            var data = $(this).attr('data-id');
+            console.log(data);
+            var question = JSON.parse(data);
+            var count = 1;
+            question.forEach(function(item) {
+                    var card = `<div class="col-md-6 is-select">
+                                    <div class="card-group"> 
+                                        <div class="card">
+                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>
+                                                <p class="card-text"><li>option</li></p>
+                            </div>
+                                    <div class="card-footer"> 
+                                        <div class="text-left">
+                                            <label class="text-right text-xs">*check to select question</label>
+                                            <input type="checkbox" name="question_ids[]" value="" >
+                                        </div>
+                                        <div class="text-right">
+                                            <small class="text-muted">Last updated: </small> 
+                                        </div>
+                                    </div>                                 
+                                </div>                             
+                            </div>                     
+                        </div>`
+                    $('#questionrow').append(card);
+                });
+            // var question = JSON.parse(data);
+            // console.log(question);
+            // var label = '';
+            // options.forEach(element => {
+            //     console.log(element)
+            //     label += `<li>${element.label}</li>`;
+            // });
+            // $('#option-p').append(label);
+        });
         $(function() {
             $("#example1").DataTable();
         });

@@ -18,7 +18,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        $questions = Question::with('options', 'subject')->get();
+        $questions = Question::with(['options', 'subject'])->get();
         return view('admin.question.index', compact('questions'));
     }
 

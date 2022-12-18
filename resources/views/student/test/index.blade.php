@@ -39,7 +39,6 @@
                         <table class="table align-items-center mb-0">
                            <thead>
                               <tr>
-                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Exam Name</th>
                                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Subject</th>
                                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Duration</th>
                                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Take Exam</th>
@@ -47,46 +46,15 @@
                               </tr>
                            </thead>
                            <tbody>
+                              @foreach($tests as $test)
                               <tr>
-                                 <td>EXAM 1</td>
-                                 <td>Mathematics</td>
-                                 <td>60 mins</td>
+                                 <td>{{$test->subject->name}}</td>
+                                 <td>{{$test->duration}} seconds</td>
                                  <td>
-                                    <a class="btn btn-sm bg3" href="#"><i class="fa fa-file-word"></i> Take Exam</a>
+                                    <a class="btn btn-sm bg3" href="{{route('student.test.show', $test->id)}}"><i class="fa fa-file-word"></i> Take Exam</a>
                                  </td>
                               </tr>
-                              <tr>
-                                 <td>EXAM 2</td>
-                                 <td>Programming</td>
-                                 <td>75 mins</td>
-                                 <td>
-                                    <a class="btn btn-sm bg3" href="#"><i class="fa fa-file-word"></i> Take Exam</a>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>EXAM 3</td>
-                                 <td>English</td>
-                                 <td>45 mins</td>
-                                 <td>
-                                    <a class="btn btn-sm bg3" href="#"><i class="fa fa-file-word"></i> Take Exam</a>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>EXAM 4</td>
-                                 <td>Science</td>
-                                 <td>60 mins</td>
-                                 <td>
-                                    <a class="btn btn-sm bg3" href="#"><i class="fa fa-file-word"></i> Take Exam</a>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>EXAM 5</td>
-                                 <td>Data Structure</td>
-                                 <td>80 mins</td>
-                                 <td>
-                                    <a class="btn btn-sm bg3" href="#"><i class="fa fa-file-word"></i> Take Exam</a>
-                                 </td>
-                              </tr>
+                              @endforeach
                            </tbody>
                         </table>
                      </div>
