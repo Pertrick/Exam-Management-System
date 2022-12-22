@@ -29,7 +29,7 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        $subjects = Subject::all();
+        $subjects = Subject::all(['id', 'name']);
         $question_types = Question::TYPES;
         return view('admin.question.create', compact('subjects', 'question_types'));
     }
@@ -86,7 +86,7 @@ class QuestionController extends Controller
      */
     public function edit($id)
     {
-        $subjects = Subject::all();
+        $subjects = Subject::select('name');
         $question_types = Question::TYPES;
         $question = Question::with('options', 'subject')->findOrFail($id);
 

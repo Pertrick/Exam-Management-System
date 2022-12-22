@@ -52,7 +52,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::get('edit/{id}', [TestController::class, 'edit'])->name('admin.test.edit');
         Route::post('store', [TestController::class, 'store'])->name('admin.test.store');
         Route::put('update/{id}', [TestController::class, 'update'])->name('admin.test.update');
-        Route::post('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
+        Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
         Route::delete('delete/{id}', [testController::class, 'destroy'])->name('admin.test.delete');
     });
    

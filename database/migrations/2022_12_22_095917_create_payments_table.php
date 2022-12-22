@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('responses', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('question_id')->constrained();
-            $table->foreignId('test_id')->constrained();
-            $table->text('answer');
-            $table->foreignId('result_id')->nullable()->constrained();
+            $table->string('reference_no');
+            $table->string('currency')->default('NGN');
+            $table->string('amount');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('responses');
+        Schema::dropIfExists('payments');
     }
 };

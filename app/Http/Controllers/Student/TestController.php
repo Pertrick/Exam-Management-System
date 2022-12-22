@@ -6,6 +6,7 @@ use App\Models\Test;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Question;
+use Carbon\Carbon;
 
 class TestController extends Controller
 {
@@ -16,7 +17,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        $tests = Test::with(['subject', 'questions:question'])->get();
+        $tests = Test::with(['subject', 'questions:question'])->where('is_published',Test::PUBLISHED)->get();
         return view('student.test.index', compact('tests'));
     }
 
@@ -38,7 +39,13 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        auth()->user()->tests()->attach($request->test_id, 
+        [
+            'start_time' => Carbon::now(), 
+            'end_time' => Carbon::now()->addSecond($request->duration)
+        ]);
+        
+        return true;
     }
 
     /**

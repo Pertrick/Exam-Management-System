@@ -58,7 +58,7 @@
                                                 <td>{{ $question->point }}</td>
                                                
                                                 <td class="text-right">
-                                                    <button type="button" class="btn btn-sm btn-info options"  data-id ={{$question->options}} data-toggle="modal" data-target="#view-options-modal">
+                                                    <button type="button" class="btn btn-sm btn-info options"  data-id ="{{$question->options}}" data-toggle="modal" data-target="#view-options-modal">
                                                      options <i
                                                      class="fa fa-eye"></i>
                                                     </button>
@@ -113,6 +113,7 @@
         $('.options').on('click', function(){
             $('#option-p').html('');
             var data = $(this).attr('data-id');
+            console.log(data);
             var options =JSON.parse(data);
             var label ='';
             options.forEach(element => {

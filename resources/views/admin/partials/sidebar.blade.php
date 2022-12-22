@@ -9,15 +9,15 @@
 <nav class="mt-2">
 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
  <li class="nav-item">
-    <a href="{{route('admin.dashboard')}}" class="nav-link">
-       <i class="nav-icon fa fa-tachometer-alt"></i>
+    <a href="{{route('admin.dashboard')}}" class="nav-link {{ request()->is('admin/dashboard') ? 'active' : ''}}">
+       <i class="nav-icon fa fa-tachometer-alt "></i>
        <p>
           Dashboard
        </p>
     </a>
  </li>
  <li class="nav-item">
-    <a href="{{route('admin.subject.index')}}" class="nav-link">
+    <a href="{{route('admin.subject.index')}}" class="nav-link {{ request()->is('admin/subject') ? 'active' : ''}}">
        <i class="nav-icon fa fa-book"></i>
        <p>
           Subject
@@ -25,38 +25,38 @@
     </a>
  </li>
  <li class="nav-item">
-   <a href="{{route('admin.question.index')}}" class="nav-link">
-      <i class="nav-icon fa fa-certificate"></i>
+   <a href="{{route('admin.question.index')}}" class="nav-link {{ request()->is('admin/question') ? 'active' : ''}}">
+      <i class="nav-icon fa fa-certificate "></i>
       <p>
          Question
       </p>
    </a>
 </li>
 <li class="nav-item">
-   <a href="{{route('admin.student.index')}}" class="nav-link">
-      <i class="nav-icon fa fa-user-graduate"></i>
+   <a href="{{route('admin.student.index')}}" class="nav-link {{ request()->is('admin/student') ? 'active' : ''}}">
+      <i class="nav-icon fa fa-user-graduate "></i>
       <p>
          Student
       </p>
    </a>
 </li>
  <li class="nav-item">
-    <a href="{{route('admin.test.index')}}" class="nav-link">
-       <i class="nav-icon fa fa-chalkboard-teacher"></i>
+    <a href="{{route('admin.test.index')}}" class="nav-link {{ request()->is('admin/test') ? 'active' : ''}}">
+       <i class="nav-icon fa fa-chalkboard-teacher "></i>
        <p>
           Test
        </p>
     </a>
  </li>
 
- <li class="nav-item">
+ {{-- <li class="nav-item">
     <a href="assign-teacher.html" class="nav-link">
        <i class="nav-icon fa fa-file"></i>
        <p>
           Assign Teacher
        </p>
     </a>
- </li>
+ </li> --}}
 </ul>
 </nav>
 <!-- /.sidebar-menu -->

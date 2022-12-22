@@ -35,36 +35,60 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="card card-info">
-                        <div class="card-body">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <div class="card-group">
-                                        <div class="card">
-                                          <p id="seconds-left" class="text-right pr-3">{{$test->duration}} seconds</p>
-                                            @foreach ($test->questions as $quest)
-                                                <div class="card-body">
-                                                    <h4 class="card-title">{{ $sn++ }}. {{ $quest->question }}
-                                                    </h4>
-                                                    @foreach ($quest->options as $option)
-                                                        <p class="card-text">
+                        <!-- form start -->
+                        <form action="{{ route('student.response.store') }}" method="POST" id="form-subject">
+                            @csrf
+                            <div class="card-body">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="card-group">
+                                            <div class="card">
+                                                <p id="seconds-left" class="text-right pr-3">{{ $test->duration }}
+                                                    seconds</p>
 
-                                                        <ol type="a">
-                                                            <li>{{ $option->label }} <input type="radio"
-                                                                    name="answer[]" id="answer-id"
-                                                                    value="{{ $option->id }}"></li>
+                                                @foreach ($test->questions as $quest)
+                                                    <div class="card-body">
+                                                        <h4 class="card-title">{{ $sn++ }}.
+                                                            {{ $quest->question }}
+                                                        </h4>
+                                                        @foreach ($quest->options as $key => $option)
+                                                            <p class="card-text">
+                                                                @if($quest->type == $option_type)
+                                                                    <ol type="a">
+                                                                        <li>{{ $option->label }} <input type="radio"
+                                                                                name="{{ $quest->id }}[]" id="answer-id"
+                                                                                value="{{ $option->label }}">
+                                                                        </li>
+                                                                    </ol>
+                                                                @elseif($quest->type == $multi_choice_type)
+                                                                    <ol type="a">
+                                                                        <li>{{ $option->label }} <input type="checkbox"
+                                                                                name="{{ $quest->id }}[]" id="answer-id"
+                                                                                value="{{ $option->label }} ">
+                                                                        </li>
+                                                                    </ol>
+                                                                @endif
 
-                                                        </ol>
+                                                         
 
-                                                        </p>
-                                                    @endforeach
-                                                </div>
-                                            @endforeach
+                                                            </p>
+                                                        @endforeach
+                                                    </div>
+                                                @endforeach
+
+                                                <input type="hidden" value="{{$test->id}}" name="test_id">
+                                            </div>
+
+                                        </div>
+                                    
+                                        <div class="col-md-12 m-3 text-right">
+                                            <button type="submit" class="btn btn-success">Submit</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /.card-body -->
+                            <!-- /.card-body -->
+                        </form>
                     </div>
                 </div>
                 <!-- /.container-fluid -->
@@ -90,17 +114,15 @@
     <!-- jQuery -->
     @include('student.partials.footer')
     <script>
-
-         var value  = $('#seconds-left').text();
-         var duration = value.split(' ')[0];
+        var value = $('#seconds-left').text();
+        var duration = value.split(' ')[0];
         window.setInterval(function() {
             if (duration > 0)
                 duration--;
-            document.getElementById("seconds-left").innerHTML = "Time Left : " + duration + " seconds" ;
+            document.getElementById("seconds-left").innerHTML = "Time Left : " + duration + " seconds";
             if (duration <= 0)
-                duration = 60;
+                window.location = '/student/exam'
         }, 1000);
-
 
         $(function() {
             $("#example1").DataTable();

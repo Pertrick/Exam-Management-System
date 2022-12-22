@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\User;
+use App\Models\Result;
 
 class HomeController extends Controller
 {
@@ -17,9 +18,10 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $subject_count =  Subject::count();
-        $student_count =  User::count() -1;
+        $students =  User::where('role_id', '!=', 1)->get(['name', 'created_at']);
+        $results = Result::with('test.subject')->latest(6);
     
-        return view('admin.dashboard', compact('subject_count', 'student_count'));
+        return view('admin.dashboard', compact('subject_count', 'students', 'results'));
     }
 
     /**

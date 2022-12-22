@@ -38,61 +38,23 @@
                      <thead>
                        <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Exam Name</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Score</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Score(%)</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">View Score</th>
                          <th class="text-secondary opacity-7"></th>
                        </tr>
                      </thead>
                      <tbody>
+                        @foreach($results as $result)
                        <tr>
-                        <td>Exam 1</td>
-                         <td>79</td>
-                         <td><span class="badge bg-success">passed</span></td> 
+                        <td>{{$result->test->subject->name}}</td>
+                         <td>{{number_format($result->score_percentage,2)}}</td>
+                         <td><span class="{{$result->status ? 'badge bg-success' : 'badge bg-danger'}}">{{$result->status? 'passed' : 'failed'}}</span></td> 
                          <td>
-                            <a class="btn btn-sm bg3" href="{{route('student.result.show')}}"><i class="fa fa-eye"></i> view</a>
+                            <a class="btn btn-sm bg3" href="{{route('student.result.show', $result->id)}}"><i class="fa fa-eye"></i> view</a>
                          </td>
                        </tr>
-                       <tr>
-                        <td>Exam 2</td>
-                        <td>89</td>
-                        <td><span class="badge bg-success">passed</span></td> 
-                        <td>
-                           <a class="btn btn-sm bg3" href="view-score.html"><i class="fa fa-eye"></i> view</a>
-                        </td>
-                       </tr>
-                       <tr>
-                        <td>Exam 3</td>
-                        <td>73</td>
-                        <td><span class="badge bg-danger">failed</span></td> 
-                        <td>
-                           <a class="btn btn-sm bg3" href="view-score.html"><i class="fa fa-eye"></i> view</a>
-                        </td>
-                       </tr>
-                       <tr>
-                        <td>Exam 4</td>
-                        <td>90</td>
-                        <td><span class="badge bg-success">passed</span></td> 
-                        <td>
-                           <a class="btn btn-sm bg3" href="view-score.html"><i class="fa fa-eye"></i> view</a>
-                        </td>
-                       </tr>
-                       <tr>
-                        <td>Exam 5</td>
-                        <td>96</td>
-                        <td><span class="badge bg-success">passed</span></td> 
-                        <td>
-                           <a class="btn btn-sm bg3" href="view-score.html"><i class="fa fa-eye"></i> view</a>
-                        </td>
-                       </tr>
-                       <tr>
-                        <td>Exam 6</td>
-                        <td>74</td>
-                        <td><span class="badge bg-danger">failed</span></td> 
-                        <td>
-                           <a class="btn btn-sm bg3" href="view-score.html"><i class="fa fa-eye"></i> view</a>
-                        </td>
-                       </tr>
+                       @endforeach
                      </tbody>
                    </table>
                </div>

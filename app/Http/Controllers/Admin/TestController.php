@@ -81,7 +81,7 @@ class TestController extends Controller
         $test = Test::with(['questions.options','subject'])->findOrFail($id);
         $test_subject_id = $test->subject_id;
         $test_question_ids = $test->questions->pluck('id');
-        $questions = Question::where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
+        $questions = Question::with('options')->where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
         
         return view('admin.test.edit', compact('test', 'questions'));
     }
@@ -113,14 +113,18 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function publish(Request $request,$id)
+    public function publish($id)
     {
-        dd($request->all());
         $test = Test::findOrFail($id);
-        $test->is_published =  $request->is_published ?? $test->is_published;
-        $test->save();
-
-        return redirect()->route('admin.test.index')->with('message', 'Question published successfully!');
+        if($test->is_published){
+        $test->is_published = Test::UNPUBLISHED;
+            $test->save();
+            return false;
+        }else{
+            $test->is_published = Test::PUBLISHED;
+            $test->save();
+            return true;
+        }
 
     }
 

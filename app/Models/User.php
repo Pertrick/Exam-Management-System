@@ -8,6 +8,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Test;
+use App\Models\Response;
+use App\Models\Result;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -46,7 +49,22 @@ class User extends Authenticatable
 
     public function tests()
     {
-        return $this->belongsToMany(Test::class);
+        return $this->belongsToMany(Test::class)->withTimestamps();
+    }
+
+    public function responses()
+    {
+        return $this->hasMany(Response::class);
+    }
+
+    public function results()
+    {
+        return $this->hasMany(Result::class);
+    }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::createFromTimeStamp(strtotime($value))->diffForHumans();
     }
 
     public function getRedirectRouteName(): string{

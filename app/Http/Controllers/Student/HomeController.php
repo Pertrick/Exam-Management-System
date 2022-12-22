@@ -15,8 +15,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $test = Test::with('users')->get();
-        return view('student.dashboard');
+        $test_count = auth()->user()->tests()->count();
+        $passed_count = auth()->user()->results()->where('status',1)->count();
+        $failed_count = auth()->user()->results()->where('status',0)->count();
+        return view('student.dashboard', compact('test_count', 'passed_count', 'failed_count'));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Question;
 
 class Option extends Model
 {
@@ -26,6 +27,11 @@ class Option extends Model
     public function setIsCorrectAttribute($value){
         ($value == "on") ? $this->attributes['is_correct'] = 1 : $this->attributes['is_correct'] = 0; 
         
+    }
+
+
+    public function question(){
+        return $this->belongsTo(Question::class);
     }
 
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Option;
 use App\Models\Subject;
 use App\Models\Test;
+use App\Models\Response;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -45,6 +46,11 @@ class Question extends Model
     public function tests(){
         return $this->belongsToMany(Test::class);
     }
+
+    public function responses(){
+        return $this->hasMany(Response::class);
+    }
+
 
     public function getUpdatedAtAttribute($value)
     {

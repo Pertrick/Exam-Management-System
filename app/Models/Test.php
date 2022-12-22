@@ -13,10 +13,19 @@ class Test extends Model
 {
     use HasFactory;
 
+    const PUBLISHED = 1, UNPUBLISHED =0;
+
+
     protected $fillable = [
         'subject_id',
         'duration'
     ];
+
+
+    protected $cast =[
+        'is_published' => 'boolean'
+    ];
+
 
     public function subject()
     {
@@ -30,7 +39,7 @@ class Test extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withTimestamps();
     }
 
     public function delete()

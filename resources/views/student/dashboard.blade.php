@@ -41,7 +41,7 @@
                                 <div class="info-box-content">
                                     <span class="info-box-text">Number of Total Exam</span>
                                     <span class="info-box-number">
-                                        20
+                                        {{$test_count}}
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->
@@ -69,7 +69,7 @@
                                 <div class="info-box-content">
                                     <span class="info-box-text">Number of Passed Exam</span>
                                     <span class="info-box-number">
-                                        5
+                                        {{$passed_count}}
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->
@@ -83,7 +83,7 @@
                                 <div class="info-box-content">
                                     <span class="info-box-text">Number of Failed Exam</span>
                                     <span class="info-box-number">
-                                        5
+                                        {{$failed_count}}
                                     </span>
                                 </div>
                                 <!-- /.info-box-content -->

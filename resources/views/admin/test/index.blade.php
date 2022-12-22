@@ -1,9 +1,9 @@
 @include('admin.partials.header')
 <style>
-.myModal{
-    height: 550px;
-    overflow-y: auto;
-}
+    .myModal {
+        height: 550px;
+        overflow-y: auto;
+    }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -56,18 +56,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        
+
                                         @foreach ($tests as $test)
                                             <tr>
                                                 <td>{{ $test->subject->name }}</td>
-                                                <td>{{$test->questions->count()}}</td>
+                                                <td>{{ $test->questions->count() }}</td>
                                                 <td>{{ $test->duration }}</td>
 
                                                 <td class="text-right">
-                                                    <a class="btn btn-sm btn-warning"
-                                                        href="{{ route('admin.test.publish', $test->id) }}"><i
-                                                            class="fa fa-plane"></i>
-                                                        publish</a>
+                                                    <button class="{{$test->is_published ?'btn btn-sm btn-warning' : 'btn btn-sm btn-success' }}" id="{{$test->id}}"
+                                                        onclick="publish({{ $test->id }});">
+                                                        {{$test->is_published ? "unpublish" : "publish"}}</button>
 
                                                     <button type="button" class="btn btn-sm btn-info questions"
                                                         data-id="{{ $test->questions }}" data-toggle="modal"
@@ -78,7 +77,7 @@
                                                     <a class="btn btn-sm bg4"
                                                         href="{{ route('admin.test.edit', $test->id) }}"><i
                                                             class="fa fa-edit"></i>
-                                                        </a>
+                                                    </a>
 
                                                     <form action="{{ route('admin.test.delete', $test->id) }}"
                                                         method="post" class="d-inline">
@@ -116,7 +115,7 @@
                 <div class="modal-body myModal text-center">
                     <label for="options">Questions</label>
                     <div class="row" id="questionrow"></div>
-                   
+
                 </div>
             </div>
         </div>
@@ -129,24 +128,53 @@
             var question = JSON.parse(data);
             var count = 1;
             question.forEach(function(item) {
-                var card = `<div class="col-md-12 mb-2 is-select">
+                var card =
+                    `<div class="col-md-12 mb-2 is-select">
                                     <div class="card-group"> 
                                         <div class="card">
-                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
-                    item.options.forEach(function(value, key) {
-                        card += `<h6 class="card-text"><li class="text-left">${value.label}</li></h6>`
-                    });
-                    card +=`
+                                            <div class="card-body"><h4 class="card-title" style="font-size:x-small"> ${count++}. ${item.question}</h4>`;
+                item.options.forEach(function(value, key) {
+
+                    if(value.is_correct ==1){
+                    card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left bg-success rounded-sm p-1 ">${value.label} <i
+                                                     class="fa fa-check"></i></li></h6>` 
+                }else{
+                    card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left">${value.label} <i
+                                                     class="fa fa-times text-danger"></i></li></h6>`;
+                }
+                
+                });
+                card += `
                             </div>                                
                                 </div>                             
                             </div>                     
                         </div>`
-                    $('#questionrow').append(card);
-                });
+                $('#questionrow').append(card);
+            });
         });
         $(function() {
             $("#example1").DataTable();
         });
+
+        function publish(testId) {
+                $.ajax({
+                    url: '/admin/exam/publish/' + testId,
+                    type: 'GET',
+                    success: function(response) {
+                        if(response == 1){
+                            $("#"+testId).text("unpublish");
+                            $("#"+testId).attr("class","btn btn-sm btn-warning");
+                           
+                           
+                        }else{
+                            $("#"+testId).text("publish");
+                            $("#"+testId).attr("class","btn btn-sm btn-success");
+                           
+                            
+                        }
+                    },
+            });
+        }
     </script>
 </body>
 

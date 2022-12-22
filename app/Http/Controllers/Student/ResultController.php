@@ -15,7 +15,8 @@ class ResultController extends Controller
      */
     public function index()
     {
-        return view('student.result.index');
+        $results = auth()->user()->results()->with('test.subject')->get();
+        return view('student.result.index', compact('results'));
     }
 
     /**
@@ -45,9 +46,14 @@ class ResultController extends Controller
      * @param  \App\Models\Result  $result
      * @return \Illuminate\Http\Response
      */
-    public function show(Result $result)
+    public function show($result_id)
     {
-        return view('student.result.show');
+        $responses = auth()->user()->responses()->with(['question.options' => function($query){
+            $query->where('is_correct', 1);
+        }])->where('result_id', $result_id)->get();
+        $sn =1;
+        
+        return view('student.result.show', compact('responses', 'sn'));
     }
 
     /**
@@ -62,6 +68,19 @@ class ResultController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Result  $result
+     * @return \Illuminate\Http\Response
+     */
+    public function calculate(Request $request, Result $result)
+    {
+        
+    }
+
+
+       /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

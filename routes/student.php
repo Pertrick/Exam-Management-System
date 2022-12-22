@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\TestController;
 use App\Http\Controllers\Student\ResultController;
+use App\Http\Controllers\Student\ResponseController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('student.dashboard');
     Route::get('/result', [ResultController::class, 'index'])->name('student.result.index');
-    Route::get('/result-show', [ResultController::class, 'show'])->name('student.result.show');
+    Route::get('/result-show/{id}', [ResultController::class, 'show'])->name('student.result.show');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -35,5 +36,16 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
         Route::post('store', [TestController::class, 'store'])->name('student.test.store');
         Route::put('update/{id}', [TestController::class, 'update'])->name('student.test.update');
         Route::delete('delete/{id}', [testController::class, 'destroy'])->name('student.test.delete');
+    });
+
+    Route::prefix('response')->group(function(){
+        Route::get('', [ResponseController::class, 'index'])->name('student.response.index');
+        Route::get('/question/{id}', [ResponseController::class, 'question'])->name('student.response.questions');
+        Route::get('create', [ResponseController::class, 'create'])->name('student.response.create');
+        Route::get('/show/{id}', [ResponseController::class, 'show'])->name('student.response.show');
+        Route::get('edit/{id}', [ResponseController::class, 'edit'])->name('student.response.edit');
+        Route::post('store', [ResponseController::class, 'store'])->name('student.response.store');
+        Route::put('update/{id}', [ResponseController::class, 'update'])->name('student.response.update');
+        Route::delete('delete/{id}', [ResponseController::class, 'destroy'])->name('student.response.delete');
     });
 });

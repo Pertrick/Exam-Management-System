@@ -8,8 +8,8 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item" title="Dashboard" >
-                    <a href="{{route('student.dashboard')}}" class="nav-link">
+                <li class="nav-item" title="Dashboard">
+                    <a href="{{route('student.dashboard')}}" class="nav-link {{ request()->is('student/dashboard') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -17,7 +17,7 @@
                     </a>
                 </li>
                 <li class="nav-item" title="Upcoming Exam">
-                    <a href="{{route('student.test.index')}}" class="nav-link">
+                    <a href="{{route('student.test.index')}}" class="nav-link {{ request()->is('student/exam') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-file-signature"></i>
                         <p>
                             Upcoming Exam
@@ -25,7 +25,7 @@
                     </a>
                 </li>
                 <li class="nav-item" title="Result">
-                    <a href="{{route('student.result.index')}}" class="nav-link">
+                    <a href="{{route('student.result.index')}}" class="nav-link {{ request()->is('student/result') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-star"></i>
                         <p>
                             Result

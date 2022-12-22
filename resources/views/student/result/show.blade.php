@@ -46,70 +46,28 @@
                        </tr>
                      </thead>
                      <tbody>
+                      @foreach($responses as $response)
                        <tr>
                          <td>
                            <div class="d-flex px-2 py-1">
                              <div class="d-flex flex-column justify-content-center">
-                               <h6 class="text-xs text-secondary mb-0">1</h6>
+                               <h6 class="text-xs text-secondary mb-0">{{$sn++}}</h6>
                              </div>
                            </div>
                          </td>
-                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                         <td><span class="badge bg-warning">Choice 2</span></td>
-                         <td><span class="badge bg-success">Choice 3</span></td>
-                       </tr>
-                       <tr>
+                         <td>{{$response->question->question}}</td>
                          <td>
-                           <div class="d-flex px-2 py-1">
-                             <div class="d-flex flex-column justify-content-center">
-                               <h6 class="text-xs text-secondary mb-0">2</h6>
-                             </div>
-                           </div>
-                         </td>
-                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                         
-                         <td><span class="badge bg-warning">Choice 3</span></td>
-                         <td><span class="badge bg-success">Choice 4</span></td>
-                       </tr>
-                       <tr>
+                          @foreach($response->answer as $answer) 
+                            <span class="badge bg-warning">{{$answer}}</span>
+                          @endforeach
+                        </td>
                          <td>
-                           <div class="d-flex px-2 py-1">
-                             <div class="d-flex flex-column justify-content-center">
-                               <h6 class="text-xs text-secondary mb-0">3</h6>
-                             </div>
-                           </div>
-                         </td>
-                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                         
-                         <td><span class="badge bg-warning">Choice 1</span></td>
-                         <td><span class="badge bg-success">Choice 4</span></td>
+                         @foreach($response->question->options as $option)
+                         <span class="badge bg-success">{{$option->is_correct ? $option->label : ''}}</span>
+                         @endforeach
+                        </td>
                        </tr>
-                       <tr>
-                         <td>
-                           <div class="d-flex px-2 py-1">
-                             <div class="d-flex flex-column justify-content-center">
-                               <h6 class="text-xs text-secondary mb-0">4</h6>
-                             </div>
-                           </div>
-                         </td>
-                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                         
-                         <td><span class="badge bg-success">Choice 3</span></td>
-                         <td><span class="badge bg-success">Choice 3</span></td>
-                       </tr>
-                       <tr>
-                         <td>
-                           <div class="d-flex px-2 py-1">
-                             <div class="d-flex flex-column justify-content-center">
-                               <h6 class="text-xs text-secondary mb-0">5</h6>
-                             </div>
-                           </div>
-                         </td>
-                         <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit, <br>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</td>
-                         
-                         <td><span class="badge bg-success">Choice 2</span></td>
-                         <td><span class="badge bg-success">Choice 2</span></td>
-                       </tr>
+                       @endforeach
                      </tbody>
                    </table>
                </div>
