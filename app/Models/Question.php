@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Option;
 use App\Models\Subject;
+use App\Models\Image;
 use App\Models\Test;
 use App\Models\Response;
 use Illuminate\Support\Facades\DB;
@@ -51,6 +52,10 @@ class Question extends Model
         return $this->hasMany(Response::class);
     }
 
+
+    public function images(){
+        return $this->morphMany(Image::class, 'imageable');
+    }
 
     public function getUpdatedAtAttribute($value)
     {

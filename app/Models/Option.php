@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Question;
+use App\Models\Image;
 
 class Option extends Model
 {
@@ -29,9 +30,12 @@ class Option extends Model
         
     }
 
-
     public function question(){
         return $this->belongsTo(Question::class);
+    }
+
+    public function images(){
+        return $this->morphMany(Image::class, 'imageable');
     }
 
 }

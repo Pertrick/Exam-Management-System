@@ -43,7 +43,7 @@ class QuestionController extends Controller
     public function store(StoreQuestionFormRequest $request)
     {
         $request->validated();
-
+        
         $question =  Question::create([
             'question' => $request->question,
             'subject_id' => $request->subject_id,
@@ -110,7 +110,6 @@ class QuestionController extends Controller
         $quest->save();
 
         $retrievedOptions = $quest->options;
-
         foreach ($retrievedOptions as $retrieved_key => $retrievedOption) {
             foreach ($request->option as $key =>  $opt) {
                 if ($retrieved_key == $key) {

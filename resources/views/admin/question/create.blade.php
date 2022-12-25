@@ -75,7 +75,7 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
-                                                    @error('question_type')
+                                                    @error('type')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -85,6 +85,7 @@
                                                 <div class="form-group">
                                                     <label>Question</label>
                                                     <textarea name="question" id="question" class="form-control">{{ old('question') }}</textarea>
+                                                    <input type="file" name="question_image" id="quest-image" class="m-1">
                                                     @error('question')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
@@ -107,11 +108,12 @@
                                                 <div class="form-group">
                                                     <label>Option 1</label>
                                                     <textarea name="option[]" id="option_1" class="form-control">{{ old('option') }}</textarea>
+                                                    <input type="file" name="option_image[0]" id="option-image-1" class="m-1">
                                                     @error('option_1')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                     <input type="checkbox" name="is_correct[0]"
-                                                        id="is_correct_1" class="form-control-sm">
+                                                        id="is_correct_1" class="form-control-sm float-right">
                                                 </div>
                                             </div>
 
@@ -119,11 +121,12 @@
                                                 <div class="form-group">
                                                     <label>Option 2</label>
                                                     <textarea name="option[]" id="option_2" class="form-control">{{ old('option') }}</textarea>
+                                                    <input type="file" name="option_image[1]" id="option_image_1" class="m-1">
                                                     @error('option')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                     <input type="checkbox" name="is_correct[1]" 
-                                                        id="is_correct_2" class="form-control-sm">
+                                                        id="is_correct_2" class="form-control-sm float-right">
                                         
                                                 </div>
                                             </div>
@@ -132,11 +135,12 @@
                                                 <div class="form-group">
                                                     <label>option 3</label>
                                                     <textarea name="option[]" id="option_3" class="form-control">{{ old('option') }}</textarea>
+                                                    <input type="file" name="option_image[2]" id="option_image_2" class="m-1">
                                                     @error('option_3')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                     <input type="checkbox" name="is_correct[2]"
-                                                        id="is_correct_3" class="form-control-sm">
+                                                        id="is_correct_3" class="form-control-sm float-right">
                                                 </div>
                                             </div>
 
@@ -144,11 +148,12 @@
                                                 <div class="form-group">
                                                     <label>option 4</label>
                                                     <textarea name="option[]" id="option_4" class="form-control">{{ old('option') }}</textarea>
+                                                    <input type="file" name="option_image[3]" id="option_image_4" class="m-1">
                                                     @error('option')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                     <input type="checkbox" name="is_correct[3]" 
-                                                        id="is_correct_4" class="form-control-sm">
+                                                        id="is_correct_4" class="form-control-sm float-right">
 
                                                 </div>
                                             </div>

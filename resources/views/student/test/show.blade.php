@@ -48,39 +48,35 @@
 
                                                 @foreach ($test->questions as $quest)
                                                     <div class="card-body">
-                                                        <h4 class="card-title">{{ $sn++ }}.
+                                                        <h4 class="card-title mb-2">{{ $sn++ }}.
                                                             {{ $quest->question }}
                                                         </h4>
                                                         @foreach ($quest->options as $key => $option)
                                                             <p class="card-text">
-                                                                @if($quest->type == $option_type)
-                                                                    <ol type="a">
-                                                                        <li>{{ $option->label }} <input type="radio"
-                                                                                name="{{ $quest->id }}[]" id="answer-id"
-                                                                                value="{{ $option->label }}">
-                                                                        </li>
-                                                                    </ol>
+                                                                @if ($quest->type == $option_type)
+                                                                    <input type="radio"name="{{ $quest->id }}[]"
+                                                                        id="answer-id"
+                                                                        value="{{ $option->label }}">{{ $option->label }}
+
+                                                                    <input type="hidden" name="{{ $quest->id }}[]"
+                                                                        id="answer-id">
                                                                 @elseif($quest->type == $multi_choice_type)
-                                                                    <ol type="a">
-                                                                        <li>{{ $option->label }} <input type="checkbox"
-                                                                                name="{{ $quest->id }}[]" id="answer-id"
-                                                                                value="{{ $option->label }} ">
-                                                                        </li>
-                                                                    </ol>
+                                                                    <input type="checkbox" name="{{ $quest->id }}[]"
+                                                                        id="answer-id" value="{{ $option->label }} ">
+                                                                    {{ $option->label }}
+                                                                    <input type="hidden" name="{{ $quest->id }}[]"
+                                                                        id="answer-id">
                                                                 @endif
-
-                                                         
-
                                                             </p>
                                                         @endforeach
                                                     </div>
                                                 @endforeach
 
-                                                <input type="hidden" value="{{$test->id}}" name="test_id">
+                                                <input type="hidden" value="{{ $test->id }}" name="test_id">
                                             </div>
 
                                         </div>
-                                    
+
                                         <div class="col-md-12 m-3 text-right">
                                             <button type="submit" class="btn btn-success">Submit</button>
                                         </div>
@@ -116,12 +112,17 @@
     <script>
         var value = $('#seconds-left').text();
         var duration = value.split(' ')[0];
-        window.setInterval(function() {
-            if (duration > 0)
+
+        var refreshId = window.setInterval(function() {
+            if (duration > 0) {
                 duration--;
-            document.getElementById("seconds-left").innerHTML = "Time Left : " + duration + " seconds";
-            if (duration <= 0)
-                window.location = '/student/exam'
+            }
+            document.getElementById("seconds-left").innerHTML = "Time Left : <strong>" + duration +
+                "</strong> seconds";
+            if (duration <= 0) {
+                $("form").submit();
+                clearInterval(refreshId);
+            }
         }, 1000);
 
         $(function() {

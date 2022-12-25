@@ -41,10 +41,10 @@
    </a>
 </li>
  <li class="nav-item">
-    <a href="{{route('admin.test.index')}}" class="nav-link {{ request()->is('admin/test') ? 'active' : ''}}">
+    <a href="{{route('admin.test.index')}}" class="nav-link {{ request()->is('admin/exam') ? 'active' : ''}}">
        <i class="nav-icon fa fa-chalkboard-teacher "></i>
        <p>
-          Test
+          Exam
        </p>
     </a>
  </li>

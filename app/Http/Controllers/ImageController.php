@@ -1,27 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Image;
 use Illuminate\Http\Request;
-use App\Models\Subject;
-use App\Models\User;
-use App\Models\Result;
 
-class HomeController extends Controller
+class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $subject_count =  Subject::count();
-        $students =  User::select('name', 'created_at')->where('role_id', '!=', 1)->get();
-        $results = Result::with('test.subject')->latest(6);
-    
-        return view('admin.dashboard', compact('subject_count', 'students', 'results'));
+        //
     }
 
     /**
@@ -37,7 +30,7 @@ class HomeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -48,10 +41,10 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show()
+    public function show(Image $image)
     {
         //
     }
@@ -59,9 +52,10 @@ class HomeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function edit()
+    public function edit(Image $image)
     {
         //
     }
@@ -69,11 +63,11 @@ class HomeController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  
-     * @param  
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update()
+    public function update(Request $request, Image $image)
     {
         //
     }
@@ -81,10 +75,10 @@ class HomeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  
+     * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(Image $image)
     {
         //
     }

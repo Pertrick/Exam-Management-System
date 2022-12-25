@@ -43,6 +43,7 @@ class ResponseController extends Controller
         $test_id = $request->test_id;
         foreach ($request->all() as $question_id => $answers) {
             if (is_numeric($question_id)) {
+                $answers = array_filter($answers);
                 Response::create([
                     'user_id' => auth()->user()->id,
                     'question_id'  => $question_id,
@@ -55,7 +56,6 @@ class ResponseController extends Controller
         }
 
         $score->storeScore($test_id, $total_score);
-
         return redirect()->route('student.test.index');
     }
 

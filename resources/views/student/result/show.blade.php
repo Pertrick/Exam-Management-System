@@ -57,7 +57,7 @@
                          </td>
                          <td>{{$response->question->question}}</td>
                          <td>
-                          @foreach($response->answer as $answer) 
+                          @foreach($response->answer as $answer)
                             <span class="badge bg-warning">{{$answer}}</span>
                           @endforeach
                         </td>

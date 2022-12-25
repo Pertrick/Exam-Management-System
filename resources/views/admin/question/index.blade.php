@@ -58,22 +58,22 @@
                                                 <td>{{ $question->point }}</td>
                                                
                                                 <td class="text-right">
-                                                    <button type="button" class="btn btn-sm btn-info options"  data-id ="{{$question->options}}" data-toggle="modal" data-target="#view-options-modal">
+                                                    <button type="button" class="btn btn-sm btn-info options"  data-id ="{{$question->options}}" data-toggle="modal" data-target="#view-options-modal" title="view options">
                                                      options <i
                                                      class="fa fa-eye"></i>
                                                     </button>
 
-                                                    <a class="btn btn-sm bg3"
-                                                        href="{{ route('admin.question.edit', $question->id) }}"><i
-                                                            class="fa fa-edit"></i>
+                                                    <a class="btn btn-sm bg3 text-white"
+                                                        href="{{ route('admin.question.edit', $question->id) }}" title="edit"><i
+                                                            class="fa fa-edit text-white"></i>
                                                         edit</a>
 
                                                     <form action="{{ route('admin.question.delete', $question->id) }}"
                                                         method="post" class="d-inline">
                                                         @csrf
                                                         @method('delete')
-                                                        <button class="btn btn-sm bg1" type="submit"
-                                                            onclick="return confirm('Are you sure?')" >delete<i class="fa fa-trash-alt"></i></button>
+                                                        <button class="btn btn-sm bg1 text-white" type="submit"
+                                                            onclick="return confirm('Are you sure?')" title="delete">delete<i class="fa fa-trash-alt text-white"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>

@@ -64,7 +64,7 @@
                                                 <td>{{ $test->duration }}</td>
 
                                                 <td class="text-right">
-                                                    <button class="{{$test->is_published ?'btn btn-sm btn-warning' : 'btn btn-sm btn-success' }}" id="{{$test->id}}"
+                                                    <button class="{{$test->is_published ?'btn btn-sm btn-warning text-white' : 'btn btn-sm btn-success text-white' }}" id="{{$test->id}}"
                                                         onclick="publish({{ $test->id }});">
                                                         {{$test->is_published ? "unpublish" : "publish"}}</button>
 
@@ -76,7 +76,7 @@
 
                                                     <a class="btn btn-sm bg4"
                                                         href="{{ route('admin.test.edit', $test->id) }}"><i
-                                                            class="fa fa-edit"></i>
+                                                            class="fa fa-edit text-white"></i>
                                                     </a>
 
                                                     <form action="{{ route('admin.test.delete', $test->id) }}"
@@ -85,7 +85,7 @@
                                                         @method('delete')
                                                         <button class="btn btn-sm bg1" type="submit"
                                                             onclick="return confirm('Are you sure?')"><i
-                                                                class="fa fa-trash-alt"></i></button>
+                                                                class="fa fa-trash-alt text-white"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -163,12 +163,12 @@
                     success: function(response) {
                         if(response == 1){
                             $("#"+testId).text("unpublish");
-                            $("#"+testId).attr("class","btn btn-sm btn-warning");
+                            $("#"+testId).attr("class","btn btn-sm btn-warning text-white");
                            
                            
                         }else{
                             $("#"+testId).text("publish");
-                            $("#"+testId).attr("class","btn btn-sm btn-success");
+                            $("#"+testId).attr("class","btn btn-sm btn-success text-white");
                            
                             
                         }

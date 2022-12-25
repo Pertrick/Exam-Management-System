@@ -29,7 +29,7 @@ class ScoreService
                 $query->where('is_correct', 1);
             }
         ])->findOrFail($question_id);
-
+        
         if (count(array_diff($question->options->pluck('label')->toArray(), $answers))  == 0) {
             $this->points = $this->points + (int)$question->point;
         }

@@ -15,7 +15,7 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = auth()->user()->results()->with('test.subject')->get();
+        $results = auth()->user()->results()->with('test.subject')->latest()->get();
         return view('student.result.index', compact('results'));
     }
 

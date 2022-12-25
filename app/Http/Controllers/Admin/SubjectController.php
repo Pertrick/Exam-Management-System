@@ -16,7 +16,7 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::all();
+        $subjects = Subject::select('id','code','name','description')->get();
         return view('admin.subject.index', compact('subjects'));
     }
 

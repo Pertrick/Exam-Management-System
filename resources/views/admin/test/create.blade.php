@@ -124,10 +124,6 @@ $("select.subject").change(function() {
 
             appendTime();
         });
-        
-        $('.is-select').on('click',function(){
-            alert();
-        });
 
         $(function() {
             $("#example1").DataTable();
