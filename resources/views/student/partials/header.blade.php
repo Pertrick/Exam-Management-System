@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="EMS/asset/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="EMS/asset/css/adminlte.min.css">
     <link rel="stylesheet" href="EMS/asset/css/style.css">
+    <link rel="stylesheet" href="EMS/asset/css/example-styles.css">
     <link rel="stylesheet" href="EMS/asset/tables/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <style type="text/css">
         td a.btn {

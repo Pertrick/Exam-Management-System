@@ -109,8 +109,8 @@
                                                 method="post">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-sm bg1" type="submit"
-                                                    onclick="return confirm('Are you sure?')" >delete<i class="fa fa-trash-alt"></i></button>
+                                                <button class="btn btn-sm bg1 text-white" type="submit"
+                                                    onclick="return confirm('Are you sure?')" >delete<i class="fa fa-trash-alt text-white"></i></button>
                                             </form>
                                             {{-- <a class="btn btn-sm bg1" href="#" data-toggle="modal"
                                             data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a> --}}

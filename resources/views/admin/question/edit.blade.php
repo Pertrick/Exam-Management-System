@@ -36,7 +36,7 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <!-- form start -->
-                        <form action="{{ route('admin.question.update', $question->id) }}" method="POST" id="form-subject">
+                        <form action="{{ route('admin.question.update', $question->id) }}" method="POST" id="form-subject" enctype="multipart/form-data">
                             @csrf
                             @method('put')
                             <div class="card-body">
@@ -69,7 +69,7 @@
                                                             --</option>
                                                         @foreach ($question_types as $type)
                                                             @if ($type == $question->type)
-                                                                <option value="{{ $type }} selected ">
+                                                                <option value="{{ $type }}" selected>
                                                                     {{ $type }}</option>
                                                             @else
                                                                 <option value="{{ $type }}">{{ $type }}
@@ -87,6 +87,12 @@
                                                 <div class="form-group">
                                                     <label>Question</label>
                                                     <textarea name="question" id="question" class="form-control">{{ $question->question }}</textarea>
+                                                    @if(!is_null($question->image))
+                                                    <input type="file" name="question_image" id="question-image">
+                                                    <img src="/storage/images/questions/{{$question->image->name}}" alt="{{$question->image->name}}" class="img-fluid mt-1" width="100" height="50" style="border:1px;">
+                                                    @else
+                                                    <input type="file"  name="question_image" id="question-image" class="">
+                                                    @endif
                                                     @error('question')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
@@ -117,12 +123,18 @@
                                                             </div>
                                                         @enderror
 
+                                                        @if(!is_null($option->image))
+                                                        <input type="file" name="option_image[{{$key}}]" id="option-image" class="m-1">
+                                                        <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" class="img-fluid mt-1" width="100" height="50" style="border:1px;">
+                                                        @else
+                                                        <input type="file"  name="option_image[{{$key}}]" id="option-image" class="m-1">
+                                                        @endif
                                                         <input type="hidden" name="is_correct[{{ $key }}]"
                                                             id="is_correct" 
                                                             class="form-control-sm" value="off">
                                                         <input type="checkbox" name="is_correct[{{ $key }}]"
                                                             id="is_correct" {{ $option->is_correct ? 'checked': ''}}
-                                                            class="form-control-sm">
+                                                            class="form-control-sm float-right">
                                                     </div>
                                                 </div>
                                             @endforeach

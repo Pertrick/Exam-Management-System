@@ -17,14 +17,14 @@ class TestController extends Controller
      */
     public function index()
     {
-        $tests = Test::with(['subject', 'questions.options'])->get();
+        $tests = Test::with(['subject', 'questions.options.image', 'questions.image'])->get();
         return view('admin.test.index', compact('tests'));
     }
 
  
     public function question($id)
     {
-        $questions = Question::with('options')->where('subject_id',$id)->get();
+        $questions = Question::with('options.image', 'image')->where('subject_id',$id)->get();
         return $questions; 
     }
 
@@ -52,6 +52,7 @@ class TestController extends Controller
         $test = Test::create([
             'subject_id' => $request->subject_id,
             'duration' => $request->duration,
+            'pass_mark' => $request->pass_mark
         ]);
 
         $test->questions()->attach($request->question_ids);
@@ -78,10 +79,10 @@ class TestController extends Controller
      */
     public function edit($id)
     {
-        $test = Test::with(['questions.options','subject'])->findOrFail($id);
+        $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
         $test_subject_id = $test->subject_id;
         $test_question_ids = $test->questions->pluck('id');
-        $questions = Question::with('options')->where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
+        $questions = Question::with('options.image', 'image')->where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
         
         return view('admin.test.edit', compact('test', 'questions'));
     }
@@ -97,6 +98,7 @@ class TestController extends Controller
     {
         $test = Test::findOrFail($id);
         $test->duration =  $request->duration ?? $test->duration;
+        $test->pass_mark =  $request->pass_mark ?? $test->pass_mark;
         $test->save();
 
         $test->questions()->sync($request->question_ids);

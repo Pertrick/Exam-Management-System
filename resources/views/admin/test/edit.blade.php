@@ -70,6 +70,16 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Pass Mark</label>
+                                                    <input type='text' placeholder="Enter exam duraton in seconds" value="{{$test->pass_mark}}" class="form-control" name="pass_mark">
+                                                    @error('pass_mark')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
                                             @foreach($test->questions as $quest)
 
                                             <div class="col-md-6">
@@ -77,10 +87,20 @@
                                                     <div class="card-group"> 
                                                         <div class="card">
                                                             <div class="card-body">
-                                                                <h4 class="card-title">{{$quest->question}}</h4>
+                                                                <h4 class="card-title">
+                                                                    {{$quest->question}}
+                                                                   @if($quest->image) 
+                                                                   <img src="/storage/images/questions/{{$quest->image->name}}" class="border" alt="{{$quest->image->name}}" width="100" height="50">
+                                                                   @endif
+                                                                </h4>
                                                                 @foreach($quest->options  as $option)
                                                                 <p class="card-text">
-                                                                    <li>{{$option->label}}</li>
+                                                                    <li>
+                                                                        {{$option->label}}
+                                                                    @if($option->image) 
+                                                                    <img src="/storage/images/options/{{$option->image->name}}" class="border" alt="{{$option->image->name}}" width="100" height="50">
+                                                                    @endif
+                                                                </li>
                                                                 </p>
                                                                 @endforeach
                                                             </div>
@@ -159,66 +179,72 @@
     @include('admin.partials.footer')
     <script>
 
-$("select.subject").change(function() {
-            var subjectId = $(this).children("option:selected").val();
-            var count = 1;
-            $.get('/admin/exam/question/' + subjectId, (data) => {
-                data.forEach(function(item, index) {
-                    var card = `<div class="col-md-6 is-select">
-                                    <div class="card-group"> 
-                                        <div class="card">
-                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
-                    item.options.forEach(function(value, key) {
-                        card += `<h6 class="card-text"><li>${value.label}</li></h6>`
-                    });
-                    card +=`
-                            </div>
-                                    <div class="card-footer"> 
-                                        <div class="text-left">
-                                            <label class="text-right text-xs">*check to select question</label>
-                                            <input type="checkbox" name="question_ids[]" value="${item.id}" >
-                                        </div>
-                                        <div class="text-right">
-                                            <small class="text-muted">Last updated: ${item.updated_at}</small> 
-                                        </div>
-                                    </div>                                 
-                                </div>                             
-                            </div>                     
-                        </div>`
-                    $('#row-id').append(card);
-                });
+// $("select.subject").change(function() {
+//             var subjectId = $(this).children("option:selected").val();
+//             var count = 1;
+//             $.get('/admin/exam/question/' + subjectId, (data) => {
+//                 console.log(item);
+//                 data.forEach(function(item, index) {
+//                     var card = `<div class="col-md-6 is-select">
+//                                     <div class="card-group"> 
+//                                         <div class="card">
+//                                             <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
+//                     item.options.forEach(function(value, key) {
+//                         if(value.image == null){
+//                             card += `<h6 class="card-text"><li>${value.label}</li></h6>`  
+//                         }else{
+//                             card += `<h6 class="card-text"><li>${(value.label)??''}<img src="/storage/images/options/${value.image.name}" alt="${value.image.name}" width="100" height="50"></li></h6>`
+//                         }
+                       
+//                     });
+//                     card +=`
+//                             </div>
+//                                     <div class="card-footer"> 
+//                                         <div class="text-left">
+//                                             <label class="text-right text-xs">*check to select question</label>
+//                                             <input type="checkbox" name="question_ids[]" value="${item.id}" >
+//                                         </div>
+//                                         <div class="text-right">
+//                                             <small class="text-muted">Last updated: ${item.updated_at}</small> 
+//                                         </div>
+//                                     </div>                                 
+//                                 </div>                             
+//                             </div>                     
+//                         </div>`
+//                     $('#row-id').append(card);
+//                 });
 
-            });
+//             });
 
-            appendTime();
-        });
+//             appendTime();
+//         });
         
-        $('.is-select').on('click',function(){
-            alert();
-        });
+//         $('.is-select').on('click',function(){
+//             alert();
+//         });
 
-        $(function() {
-            $("#example1").DataTable();
-        });
+//         $(function() {
+//             $("#example1").DataTable();
+//         });
 
        
 
 
-        function appendTime(){
-            var time = `<div class="col-md-12">
-                            <div class="form-group">
-                                <label>Exam Duration</label>
-                                    <input type='text' placeholder="Enter exam duraton in seconds" class="form-control" name="duration">
-                                        @error('duration')
-                                            <div class="error text-danger text-xs">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            </div>
-                        </div>
-                        `
-                        $('#row-id').append(time);
+//         function appendTime(){
+//             var time = `<div class="col-md-12">
+//                             <div class="form-group">
+//                                 <label>Exam Duration</label>
+//                                     <input type='text' placeholder="Enter exam duraton in seconds" class="form-control" name="duration">
+//                                         @error('duration')
+//                                             <div class="error text-danger text-xs">{{ $message }}</div>
+//                                                 @enderror
+//                                             </div>
+//                             </div>
+//                         </div>
+//                         `
+//                         $('#row-id').append(time);
                     
-        }
+//         }
     
     </script>
 </body>

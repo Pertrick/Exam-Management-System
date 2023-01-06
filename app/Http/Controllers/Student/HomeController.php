@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Test;
+use App\Models\Subject;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -15,10 +16,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $test_count = auth()->user()->tests()->count();
         $passed_count = auth()->user()->results()->where('status',1)->count();
         $failed_count = auth()->user()->results()->where('status',0)->count();
-        return view('student.dashboard', compact('test_count', 'passed_count', 'failed_count'));
+
+        if(count(auth()->user()->subjects) == 0){
+            $subjects = Subject::get(['id', 'name']);
+            return view('student.dashboard', compact('passed_count', 'failed_count', 'subjects'));
+        }
+        return view('student.dashboard', compact('passed_count', 'failed_count'));
     }
 
     /**

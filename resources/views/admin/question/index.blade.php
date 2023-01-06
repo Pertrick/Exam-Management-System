@@ -53,7 +53,12 @@
                                         @foreach ($questions as $question)
                                             <tr>
                                                 <td>{{ $question->subject->name }}</td>
-                                                <td>{{ $question->question }}</td>
+                                                <td>
+                                                    {{ $question->question }}
+                                                    @if(!is_null($question->image))
+                                                       <img src="storage/images/questions/{{$question->image->name}}" alt="{{$question->image->name}}" width="100" height="50">
+                                                    @endif
+                                                </td>
                                                 <td>{{ $question->type }}</td>
                                                 <td>{{ $question->point }}</td>
                                                
@@ -118,14 +123,19 @@
             var label ='';
             options.forEach(element => {
                 console.log(element)
-                if(element.is_correct ==1){
-                    label += `<h6><li class="text-left bg-success rounded-sm p-1 ">${element.label} <i
-                                                     class="fa fa-check"></i></li></h6>` 
+                    if(element.is_correct ==1){
+                    label += `<h6><li class="text-left rounded-sm p-1 ">${(element.label) ?? ''}`
+                        if(element.image != null){
+                            label += `<img  class="border" src="/storage/images/options/${element.image.name}" alt="${element.image.name}" width="100" height="50">`
+                        }
+                        label += `<i class="fa fa-check text-success"></i></li></h6>` 
                 }else{
-                    label += `<h6><li class="text-left">${element.label} <i
-                                                     class="fa fa-times text-danger"></i></li></h6>`;
-                }
-               
+                    label += `<h6><li class="text-left rounded-sm p-1 ">${(element.label) ?? ''}`
+                        if(element.image != null){
+                            label += `<img class="border" src="/storage/images/options/${element.image.name}" alt="${element.image.name}" width="100" height="50">`                          
+                        }
+                        label += `<i class="fa fa-times text-danger"></i></li></h6>` 
+                    }
             });
             $('#option-p').append(label);
         });

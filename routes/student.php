@@ -5,6 +5,8 @@ use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\TestController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\ResponseController;
+use App\Http\Controllers\Student\SubjectController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +28,13 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('subject')->group(function(){
+        Route::get('', [SubjectController::class, 'index'])->name('student.subject.index');
+        Route::post('/store', [SubjectController::class, 'store'])->name('student.subject.store');
+        Route::delete('delete/{id}', [SubjectController::class, 'destroy'])->name('student.subject.delete');
+    });
+
 
     Route::prefix('exam')->group(function(){
         Route::get('', [TestController::class, 'index'])->name('student.test.index');

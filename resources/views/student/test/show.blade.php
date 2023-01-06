@@ -50,20 +50,29 @@
                                                     <div class="card-body">
                                                         <h4 class="card-title mb-2">{{ $sn++ }}.
                                                             {{ $quest->question }}
+                                                            @if($quest->image)
+                                                            <img src="/storage/images/questions/{{$quest->image->name}}" alt="{{$quest->image->name}}" height="50" width="100">
+                                                            @endif
                                                         </h4>
                                                         @foreach ($quest->options as $key => $option)
                                                             <p class="card-text">
                                                                 @if ($quest->type == $option_type)
                                                                     <input type="radio"name="{{ $quest->id }}[]"
                                                                         id="answer-id"
-                                                                        value="{{ $option->label }}">{{ $option->label }}
+                                                                        value="{{ $option->label  ?? $option->image->name ?? ''}}">{{ $option->label }}
+                                                                        @if($option->image)
+                                                                        <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" height="50" width="100">
+                                                                        @endif
 
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
                                                                 @elseif($quest->type == $multi_choice_type)
                                                                     <input type="checkbox" name="{{ $quest->id }}[]"
-                                                                        id="answer-id" value="{{ $option->label }} ">
+                                                                        id="answer-id" value="{{ $option->label  ?? $option->image->name ?? ''}} ">
                                                                     {{ $option->label }}
+                                                                    @if($option->image)
+                                                                    <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" height="50" width="100">
+                                                                    @endif
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
                                                                 @endif

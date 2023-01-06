@@ -53,8 +53,8 @@ class Question extends Model
     }
 
 
-    public function images(){
-        return $this->morphMany(Image::class, 'imageable');
+    public function image(){
+        return $this->morphOne(Image::class, 'imageable');
     }
 
     public function getUpdatedAtAttribute($value)
@@ -67,6 +67,7 @@ class Question extends Model
         DB::transaction(function() 
         {
             $this->options()->delete();
+            $this->image()->delete();
             parent::delete();
         });
     }

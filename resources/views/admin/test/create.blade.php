@@ -95,13 +95,25 @@ $("select.subject").change(function() {
             var subjectId = $(this).children("option:selected").val();
             var count = 1;
             $.get('/admin/exam/question/' + subjectId, (data) => {
+                console.log(data);
                 data.forEach(function(item, index) {
                     var card = `<div class="col-md-6 mb-2 is-select">
                                     <div class="card-group"> 
                                         <div class="card">
-                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
+                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question} `
+                                                if(item.image != null){
+                                                    console.log(item.image);
+                                                    card +=`<img src="/storage/images/questions/${item.image.name}" class="border" alt="${item.image.name}" width="100" height="50"> `
+                                                }
+                                                
+                                               card += `</h4>`;
                     item.options.forEach(function(value, key) {
-                        card += `<p class="card-text"><li>${value.label}</li></p>`
+                        if(value.image == null){
+                            card += `<p class="card-text"><li>${value.label}</li></p>`
+                        }else{
+                            card += `<p class="card-text"><li>${(value.label) ?? ''}<img src="/storage/images/options/${value.image.name}" alt="${value.image.name}" width="100" height="50"></li></p>`
+                        }
+                       
                     });
                     card +=`
                             </div>
@@ -123,6 +135,7 @@ $("select.subject").change(function() {
             });
 
             appendTime();
+            passMark();
         });
 
         $(function() {
@@ -130,8 +143,6 @@ $("select.subject").change(function() {
         });
 
        
-
-
         function appendTime(){
             var time = `<div class="col-md-12">
                             <div class="form-group">
@@ -145,6 +156,22 @@ $("select.subject").change(function() {
                         </div>
                         `
                         $('#row-id').append(time);
+                    
+        }
+
+        function passMark(){
+            var pass_mark = `<div class="col-md-12">
+                            <div class="form-group">
+                                <label>Pass Mark</label>
+                                    <input type='text' placeholder="Enter Pass Mark" class="form-control" name="pass_mark">
+                                        @error('pass_mark')
+                                            <div class="error text-danger text-xs">{{ $message }}</div>
+                                                @enderror
+                                            </div>
+                            </div>
+                        </div>
+                        `
+                        $('#row-id').append(pass_mark);
                     
         }
     

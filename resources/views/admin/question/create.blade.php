@@ -36,7 +36,7 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <!-- form start -->
-                        <form action="{{ route('admin.question.store') }}" method="POST" id="form-subject">
+                        <form action="{{ route('admin.question.store') }}" method="POST" id="form-subject" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="row">

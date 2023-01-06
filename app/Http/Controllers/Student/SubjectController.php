@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Models\Test;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Question;
+use App\Models\Subject;
 use Carbon\Carbon;
 
-class TestController extends Controller
+class SubjectController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,11 +16,9 @@ class TestController extends Controller
      */
     public function index()
     {
-        $subject_ids = auth()->user()->subjects()->get()->pluck('id');
-        $tests = Test::with(['subject', 'questions:question'])
-        ->whereIn('subject_id', $subject_ids)
-        ->where('is_published',Test::PUBLISHED)->get();
-        return view('student.test.index', compact('tests'));
+        $subjects = Subject::all();
+        $user_subjects = auth()->user()->subjects()->get();
+        return view('student.subject.index', compact('subjects', 'user_subjects'));
     }
 
     /**
@@ -42,13 +39,12 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        auth()->user()->tests()->attach($request->test_id, 
-        [
-            'start_time' => Carbon::now(), 
-            'end_time' => Carbon::now()->addSecond($request->duration)
+        $this->validate($request,[
+            'subjects' => 'required|array|min:1'
         ]);
-        
-        return true;
+
+       auth()->user()->subjects()->attach($request->subjects);
+       return redirect()->back()->with('success', 'subject stored successfully!');
     }
 
     /**
@@ -59,11 +55,7 @@ class TestController extends Controller
      */
     public function show($id)
     {
-        $option_type= Question::OPTION;
-        $multi_choice_type = Question::MULTI_CHOICE;
-        $sn =1;
-        $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
-        return view('student.test.show', compact('test', 'option_type', 'multi_choice_type', 'sn'));
+        
     }
 
     /**
@@ -72,7 +64,7 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function edit(Test $test)
+    public function edit($id)
     {
         //
     }
@@ -84,7 +76,7 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Test $test)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -95,8 +87,9 @@ class TestController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Test $test)
+    public function destroy($id)
     {
-        //
+        auth()->user()->subjects()->detach($id);
+        return redirect()->back()->with('message', 'Subject removed successfully!');
     }
 }

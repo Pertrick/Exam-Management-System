@@ -52,6 +52,7 @@
                                             <th>Subject</th>
                                             <th>No of questions</th>
                                             <th>Duration(seconds)</th>
+                                            <th>Pass Mark</th>
                                             <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
@@ -62,6 +63,7 @@
                                                 <td>{{ $test->subject->name }}</td>
                                                 <td>{{ $test->questions->count() }}</td>
                                                 <td>{{ $test->duration }}</td>
+                                                <td>{{ $test->pass_mark }}</td>
 
                                                 <td class="text-right">
                                                     <button class="{{$test->is_published ?'btn btn-sm btn-warning text-white' : 'btn btn-sm btn-success text-white' }}" id="{{$test->id}}"
@@ -132,16 +134,35 @@
                     `<div class="col-md-12 mb-2 is-select">
                                     <div class="card-group"> 
                                         <div class="card">
-                                            <div class="card-body"><h4 class="card-title" style="font-size:x-small"> ${count++}. ${item.question}</h4>`;
+                                            <div class="card-body"><h4 class="card-title" style="font-size:x-small"> ${count++}. ${item.question} `
+                                                if(item.image != null){
+                                                    console.log(item.question.image);
+                                                    card +=`<img src="/storage/images/questions/${item.image.name}" class="border" alt="${item.image.name}" width="100" height="50"> `
+                                                }else{
+                                                    console.log(item);
+                                                }
+                                               card += `</h4>`;
+                                               
                 item.options.forEach(function(value, key) {
 
-                    if(value.is_correct ==1){
-                    card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left bg-success rounded-sm p-1 ">${value.label} <i
-                                                     class="fa fa-check"></i></li></h6>` 
+                    if(value.image == null){
+                        
+                        if(value.is_correct ==1){
+                    card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left rounded-sm p-1 ">${value.label} <i
+                                                     class="fa fa-check text-success"></i></li></h6>` 
                 }else{
                     card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left">${value.label} <i
                                                      class="fa fa-times text-danger"></i></li></h6>`;
                 }
+                    }else{
+                        if(value.is_correct ==1){
+                    card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left  rounded-sm p-1 ">${(value.label) ?? ''}<img src="/storage/images/options/${value.image.name}" alt="${value.image.name}" width="100" height="50"><i
+                                                     class="fa fa-check text-success"></i></li></h6>` 
+                }else{
+                    card += `<h6 class="card-text" style="font-size: x-small"><li class="text-left">${(value.label) ?? ''}<img src="/storage/images/options/${value.image.name}" height="50" width="100"><i
+                                                     class="fa fa-times text-danger"></i></li></h6>`;
+                }
+                    }
                 
                 });
                 card += `

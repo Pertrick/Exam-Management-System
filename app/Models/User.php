@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Test;
 use App\Models\Response;
 use App\Models\Result;
+use App\Models\Subject;
 use Carbon\Carbon;
 
 class User extends Authenticatable
@@ -60,6 +61,11 @@ class User extends Authenticatable
     public function results()
     {
         return $this->hasMany(Result::class);
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class)->withTimestamps();
     }
 
     public function getCreatedAtAttribute($value)

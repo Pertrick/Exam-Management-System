@@ -55,15 +55,31 @@
                              </div>
                            </div>
                          </td>
-                         <td>{{$response->question->question}}</td>
+                         <td>
+                           {{$response->question->question}}
+                           @if($response->question->image)
+                           <img src="/storage/images/questions/{{$response->question->image->name}}" alt="{{$response->question->image->name}}" height="50" width="100">
+                           @endif
+                        </td>
                          <td>
                           @foreach($response->answer as $answer)
-                            <span class="badge bg-warning">{{$answer}}</span>
+                            <span class="badge bg-warning">
+                              {{$answer}}
+                           </span>
                           @endforeach
                         </td>
                          <td>
                          @foreach($response->question->options as $option)
-                         <span class="badge bg-success">{{$option->is_correct ? $option->label : ''}}</span>
+                         @if($option->image)
+                         <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" height="30" width="30">
+                         <span class="badge bg-success">
+                           {{$option->is_correct ? $option->label : ''}}
+                        </span>
+                           @else
+                        <span class="badge bg-success">
+                           {{$option->is_correct ? $option->label : ''}}
+                        </span>
+                           @endif
                          @endforeach
                         </td>
                        </tr>
