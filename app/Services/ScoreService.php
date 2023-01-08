@@ -6,7 +6,7 @@ use App\Models\Image;
 use App\Models\Question;
 use App\Models\Test;
 use App\Models\Result;
-use App\Models\Response;
+use App\Events\ResultEmail;
 
 class ScoreService
 {
@@ -71,6 +71,8 @@ class ScoreService
             'score_percentage' => $percentage,
             'status' => $percentage > $test->pass_mark ? Result::PASSED : Result::FAILED,
         ]);
+
+        ResultEmail::dispatch($result);
 
         $responses = auth()->user()->responses()->where('test_id',$test_id)->whereNull('result_id')->get();
 
