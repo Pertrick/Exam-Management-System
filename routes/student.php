@@ -6,6 +6,7 @@ use App\Http\Controllers\Student\TestController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\ResponseController;
 use App\Http\Controllers\Student\SubjectController;
+use App\Http\Controllers\Student\PaymentController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -56,5 +57,10 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
         Route::post('store', [ResponseController::class, 'store'])->name('student.response.store');
         Route::put('update/{id}', [ResponseController::class, 'update'])->name('student.response.update');
         Route::delete('delete/{id}', [ResponseController::class, 'destroy'])->name('student.response.delete');
+    });
+
+    Route::prefix('payment')->group(function(){
+        Route::get('', [PaymentController::class, 'index'])->name('student.payment.index');
+        Route::post('pay', [PaymentController::class, 'store'])->name('student.payment.store');
     });
 });

@@ -38,6 +38,7 @@
                     <!-- Small boxes (Stat box) -->
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-6">
+                            <a href="{{route('student.subject.index')}}" class="text-dark">
                             <div class="info-box">
                                 <span class="info-box-icon bg1 elevation-1"><i class="fas fa-file-word"
                                         style="color: rgb(211, 209, 207);"></i></span>
@@ -50,6 +51,7 @@
                                 </div>
                                 <!-- /.info-box-content -->
                             </div>
+                        </a>
                             <!-- /.info-box -->
                         </div>
                         <div class="col-6 col-sm-6 col-md-6">
@@ -103,18 +105,29 @@
                                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="staticBackdropLabel">Kindly choose your
-                                                preferred subject</h5>
+                                        <div class="modal-header mx-auto">
+                                            <p class="modal-title" id="staticBackdropLabel">Kindly choose your
+                                                preferred subject*</p>
 
                                         </div>
                                         <div class="modal-body">
                                             <form action="{{ route('student.subject.store') }}" method="post">
                                                 @csrf
                                                 <div class="row">
-                                                    <div class="col-md-6 text-center">
+                                                    <div class="col-md-12">
+                                                        @error('subject')
+                                                        <div class="error text-danger text-bold text-xs text-center">{{ $message }}</div>
+                                                        @enderror
+
                                                         <div class="form-group">
-                                                        <select name="subjects[]" id="subjects" multiple>
+                                                            @if (count(auth()->user()->subjects) == 0)
+                                                                @foreach ($subjects as $subject)
+                                                                <label for="">{{$subject->name}}</label>
+                                                                    <input type="radio" name="subject"
+                                                                        id="{{ $subject->id }}" value="{{ $subject->id }}">
+                                                                @endforeach
+                                                            @endif
+                                                            {{-- <select name="subjects" id="subjects" multiple>
                                                             <option value="" disabled>--choose subject--</option>
                                                             @if (count(auth()->user()->subjects) == 0)
                                                                 @foreach ($subjects as $subject)
@@ -122,10 +135,10 @@
                                                                         {{ $subject->name }}</option>
                                                                 @endforeach
                                                             @endif
-                                                        </select>
+                                                        </select> --}}
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6 text-right">
+                                                    <div class="col-md-12 text-center">
                                                         <button type="submit" class="btn btn-success">Save</button>
                                                     </div>
                                                 </div>
@@ -159,7 +172,7 @@
         $(document).ready(function() {
             @if (count(auth()->user()->subjects) == 0)
                 $("#staticBackdrop").modal('show');
-                $('#subjects').multiSelect();
+                // $('#subjects').multiSelect();
             @endif
 
         });

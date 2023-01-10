@@ -112,6 +112,7 @@
                                                     @error('option_1')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
+                                                   
                                                     <input type="checkbox" name="is_correct[0]"
                                                         id="is_correct_1" class="form-control-sm float-right">
                                                 </div>

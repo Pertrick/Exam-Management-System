@@ -34,7 +34,7 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    <div class="card card-info">
+                    {{-- <div class="card card-info">
                         <!-- form start -->
                         <form action="{{ route('student.subject.store') }}" method="POST" id="form-subject">
                             @csrf
@@ -64,25 +64,25 @@
                                             <button type="submit" class="btn bg3">Save</button>
                                         </div>
                         </form>
-                    </div>
+                    </div> --}}
 
-                    <div class="col-md-8 table-responsive" style="border-left: 1px solid #ddd;">
+                    <div class="col-md-12 table-responsive" style="border-left: 1px solid #ddd;">
                         <table id="example1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Subject Code</th>
                                     <th>Subject Name</th>
                                     <th>Description</th>
-                                    <th class="text-right">Action</th>
+                                    {{-- <th class="text-right">Action</th> --}}
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($user_subjects as $user_subject)
-                                    <tr data-toggle="modal" data-id="{{ $subject }}" data-target="#delete">
+                                    <tr data-toggle="modal" data-id="{{ $user_subject }}" data-target="#delete">
                                         <td>{{ $user_subject->code }}</td>
                                         <td>{{ $user_subject->name }}</td>
                                         <td>{{ $user_subject->description }}</td>
-                                        <td class="text-right">
+                                        {{-- <td class="text-right">
                                             <form action="{{ route('student.subject.delete', $user_subject->id) }}"
                                                 method="post">
                                                 @csrf
@@ -91,7 +91,7 @@
                                                     onclick="return confirm('Are you sure?')">delete<i
                                                         class="fa fa-trash-alt text-white"></i></button>
                                             </form>
-                                        </td>
+                                        </td> --}}
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Question;
 use App\Models\Subject;
 use App\Models\Option;
-use App\Models\Image;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreQuestionFormRequest;
 use App\Services\ImageService;

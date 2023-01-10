@@ -40,10 +40,10 @@ class SubjectController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'subjects' => 'required|array|min:1'
+            'subject' => 'required|min:1|max:1'
         ]);
 
-       auth()->user()->subjects()->attach($request->subjects);
+       auth()->user()->subjects()->attach($request->subject);
        return redirect()->back()->with('success', 'subject stored successfully!');
     }
 

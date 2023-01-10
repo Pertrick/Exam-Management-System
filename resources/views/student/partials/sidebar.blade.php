@@ -40,6 +40,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item" title="Payment">
+                    <a href="{{route('student.payment.index')}}" class="nav-link {{ request()->is('student/payment') ? 'active' : ''}}">
+                        <i class="nav-icon fa fa-credit-card"></i>
+                        <p>
+                            payment
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

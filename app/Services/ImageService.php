@@ -105,7 +105,6 @@ class ImageService
 
     public function updateImage($previous_image_name, $new_image, $path)
     {
-
         $prev_image = public_path($path) . $previous_image_name;
 
         if (file_exists($prev_image)) {

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Test;
 use App\Model\User;
 
+
 class Subject extends Model
 {
     use HasFactory;
@@ -21,5 +22,10 @@ class Subject extends Model
     public function users()
     {
         return $this->belongsToMany(User::class)->withTimestamps();
+    }
+
+    public function students()
+    {
+        return $this->belongsToMany(Student::class)->withTimestamps();
     }
 }

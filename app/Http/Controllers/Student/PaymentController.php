@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Student;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Payment;
+use App\Services\PaymentService;
+use Illuminate\Http\Request;
 
-class StudentController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +16,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = User::with('subjects')->where('role_id',2)->get();
-        return view('admin.student.index',compact('students'));
+        $user_payments = auth()->user()->payments;
+        $sn=1;
+        return view('student.payment.index', compact('user_payments', 'sn'));
     }
 
     /**
@@ -26,7 +28,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+       
     }
 
     /**
@@ -35,9 +37,14 @@ class StudentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PaymentService $paymentService)
     {
-        //
+        $response = $paymentService->storeTransaction();
+        if(!$response->status){
+            return redirect()->back()->with('message', "couldn't initiate payment");
+        }
+
+        return redirect($response->data->authorization_url);
     }
 
     /**

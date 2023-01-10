@@ -11,6 +11,7 @@ use App\Models\Test;
 use App\Models\Response;
 use App\Models\Result;
 use App\Models\Subject;
+use App\Models\Payment;
 use Carbon\Carbon;
 
 class User extends Authenticatable
@@ -61,6 +62,11 @@ class User extends Authenticatable
     public function results()
     {
         return $this->hasMany(Result::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
     }
 
     public function subjects()

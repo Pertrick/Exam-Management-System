@@ -120,7 +120,7 @@
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer text-center">
-                                    <a href="javascript::">View All Users</a>
+                                    <a href="{{route('admin.student.index')}}">View All Students</a>
                                 </div>
                                 <!-- /.card-footer -->
                             </div>
