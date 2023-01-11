@@ -30,6 +30,11 @@ class Option extends Model
         
     }
 
+    public function setLabelAttribute($value){
+        $this->attributes['label'] = strtolower($value); 
+        
+    }
+
     public function question(){
         return $this->belongsTo(Question::class);
     }

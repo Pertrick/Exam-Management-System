@@ -61,9 +61,10 @@ class TestController extends Controller
     {
         $option_type= Question::OPTION;
         $multi_choice_type = Question::MULTI_CHOICE;
+        $no_option = Question::NO_OPTION;
         $sn =1;
         $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
-        return view('student.test.show', compact('test', 'option_type', 'multi_choice_type', 'sn'));
+        return view('student.test.show', compact('test', 'option_type', 'no_option', 'multi_choice_type', 'sn'));
     }
 
     /**

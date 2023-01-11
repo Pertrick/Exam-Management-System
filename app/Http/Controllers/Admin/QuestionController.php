@@ -62,26 +62,37 @@ class QuestionController extends Controller
             $option->question_id = $question->id;
             $option->label = $opt;
 
-            foreach ($request->is_correct as $is_correct_key => $is_correct) {
-                if ($is_correct_key == $key) {
-                    $option->is_correct = $is_correct;
+            if($request->type == 'option'){
+
+                if($request->is_correct == $key){
+                    $option->is_correct = "on";
                 }
                 $option->save();
+            }else if($request->type == 'multiple-choice'){
 
-                
-                if (!is_null($request->option_image)) {
-                    if (!empty(array_filter($request->option_image))) {
-                        foreach (array_filter($request->option_image) as $opt_key =>  $opt_image) {
-                            if ($opt_key == $key) {
-                                if (!is_null($opt_image)) {
-                                    $imageService->storeOptionImage($option, $opt_image);
-                                }
-                            }
-                        };
+                foreach ($request->is_correct as $is_correct_key => $is_correct) {
+                    if ($is_correct_key == $key) {
+                        $option->is_correct = $is_correct;
                     }
+                    $option->save();
                 }
-            
+            }else if($request->type == 'no-option'){
+                $option->is_correct = "on";
+                $option->save();
             }
+               
+        if (!is_null($request->option_image)) {
+            if (!empty(array_filter($request->option_image))) {
+                foreach (array_filter($request->option_image) as $opt_key =>  $opt_image) {
+                    if ($opt_key == $key) {
+                        if (!is_null($opt_image)) {
+                            $imageService->storeOptionImage($option, $opt_image);
+                        }
+                    }
+                };
+            }
+        }
+          
         };
 
         return redirect()->route('admin.question.index')->with('message', 'Question created successfully!');
@@ -135,21 +146,31 @@ class QuestionController extends Controller
         if (!is_null($request->question_image)) {
             $imageService->updateQuestionImage($quest, $request->question_image);
         }
-
+        
         foreach ($retrievedOptions as $retrieved_key => $retrievedOption) {
             foreach ($request->option as $key =>  $opt) {
                 if ($retrieved_key == $key) {
                     $retrievedOption->label = $opt;
+                    $retrievedOption->save();
                 }
 
-                foreach ($request->is_correct as $is_correct_key => $is_correct) {
-                    if ($is_correct_key == $retrieved_key && $is_correct_key == $key) {
-                        $retrievedOption->is_correct = $is_correct;
+                if($request->type == 'option'){
+                    if($request->is_correct == $retrieved_key){
+                        $retrievedOption->is_correct = "on";
+                    }else{
+                        $retrievedOption->is_correct = "off";
                     }
+                    $retrievedOption->save();
                 }
-
-                $retrievedOption->save();
-
+                else if($request->type == 'multiple-choice'){
+                    foreach ($request->is_correct as $is_correct_key => $is_correct) {
+                        if ($is_correct_key == $retrieved_key && $is_correct_key == $key) {
+                            $retrievedOption->is_correct = $is_correct;
+                        }
+                    }
+                    $retrievedOption->save();
+                }
+              
                 if (!is_null($request->option_image)) {
                     if (!empty(array_filter($request->option_image))) {
                         foreach (array_filter($request->option_image) as $opt_key =>  $opt_image) {

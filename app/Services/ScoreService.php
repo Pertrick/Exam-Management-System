@@ -32,6 +32,7 @@ class ScoreService
             }
         ])->findOrFail($question_id);
 
+
         if(In_array(Null,$question->options->pluck('label')->toArray())){
             $option_ids = [];
              foreach($question->options as $option){
@@ -51,8 +52,14 @@ class ScoreService
           
         }else if (count(array_diff($question->options->pluck('label')->toArray(), $answers))  == 0) {
                 $this->points = $this->points + (int)$question->point;
+        
+        }else if($question->type == Question::NO_OPTION){
             
-        }
+            if(!empty($answer) && in_array(strtolower($answers[0]), $question->options->pluck('label')->toArray())){
+                    $this->points = $this->points + (int)$question->point;  
+                }  
+            }
+             
 
         return $this->points;
     }

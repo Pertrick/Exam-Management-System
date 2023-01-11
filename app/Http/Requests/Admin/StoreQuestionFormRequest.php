@@ -24,10 +24,12 @@ class StoreQuestionFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'subject_id' => ['required'],
-            'type' => ['required'],
-            'point' => ['required'],
-            'question' => ['required'],
+            'subject_id' => 'required',
+            'type' => 'required',
+            'point' => 'required',
+            'question' => 'required',
+            'option' => 'required|array|min:1',
+            'is_correct' => 'required|array|min:1'
         ];
     }
 }

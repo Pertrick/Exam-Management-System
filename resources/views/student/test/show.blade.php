@@ -1,5 +1,11 @@
 @include('student.partials.header')
 
+<style>
+     input['text']:focus{
+    outline: none;
+}
+</style>
+
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <!-- Navbar -->
@@ -20,7 +26,7 @@
                         <!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{route('student.dashboard')}}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('student.dashboard') }}">Home</a></li>
                                 <li class="breadcrumb-item active">{{ $test->subject->name }}</li>
                             </ol>
                         </div>
@@ -50,8 +56,10 @@
                                                     <div class="card-body">
                                                         <h4 class="card-title mb-2">{{ $sn++ }}.
                                                             {{ $quest->question }}
-                                                            @if($quest->image)
-                                                            <img src="/storage/images/questions/{{$quest->image->name}}" alt="{{$quest->image->name}}" height="50" width="100">
+                                                            @if ($quest->image)
+                                                                <img src="/storage/images/questions/{{ $quest->image->name }}"
+                                                                    alt="{{ $quest->image->name }}" height="50"
+                                                                    width="100">
                                                             @endif
                                                         </h4>
                                                         @foreach ($quest->options as $key => $option)
@@ -59,22 +67,35 @@
                                                                 @if ($quest->type == $option_type)
                                                                     <input type="radio"name="{{ $quest->id }}[]"
                                                                         id="answer-id"
-                                                                        value="{{ $option->label  ?? $option->image->name ?? ''}}">{{ $option->label }}
-                                                                        @if($option->image)
-                                                                        <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" height="50" width="100">
-                                                                        @endif
+                                                                        value="{{ $option->label ?? ($option->image->name ?? '') }}">{{ $option->label }}
+                                                                    @if ($option->image)
+                                                                        <img src="/storage/images/options/{{ $option->image->name }}"
+                                                                            alt="{{ $option->image->name }}"
+                                                                            height="50" width="100">
+                                                                    @endif
 
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
                                                                 @elseif($quest->type == $multi_choice_type)
                                                                     <input type="checkbox" name="{{ $quest->id }}[]"
-                                                                        id="answer-id" value="{{ $option->label  ?? $option->image->name ?? ''}} ">
+                                                                        id="answer-id"
+                                                                        value="{{ $option->label ?? ($option->image->name ?? '') }} ">
                                                                     {{ $option->label }}
-                                                                    @if($option->image)
-                                                                    <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" height="50" width="100">
+                                                                    @if ($option->image)
+                                                                        <img src="/storage/images/options/{{ $option->image->name }}"
+                                                                            alt="{{ $option->image->name }}"
+                                                                            height="50" width="100">
                                                                     @endif
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
+                                                                @elseif($quest->type == $no_option)
+                                                                    <input type="text" class="border-top-0 border-right-0 border-left-0" name="{{ $quest->id}}[]"
+                                                                        id="answer-id" autocomplete="off">
+                                                                    @if ($option->image)
+                                                                        <img src="/storage/images/options/{{ $option->image->name }}"
+                                                                            alt="{{ $option->image->name }}"
+                                                                            height="50" width="100">
+                                                                    @endif
                                                                 @endif
                                                             </p>
                                                         @endforeach

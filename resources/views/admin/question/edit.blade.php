@@ -50,7 +50,7 @@
                                                 <div class="form-group">
                                                     <label>Subject</label>
                                                     <select name="subject_id" id="" class="form-control">
-                                                        <option value="{{ $question->subject_id }}" selected disabled>
+                                                        <option value="{{ $question->subject_id }}" selected>
                                                             {{ $question->subject->name }}</option>
                                                     </select>
 
@@ -65,15 +65,11 @@
                                                     <label>Question Type</label>
                                                     <select name="type" id="" class="form-control"
                                                         value="{{ old('type') }}">
-                                                        <option value="" disabled>--select question type
-                                                            --</option>
                                                         @foreach ($question_types as $type)
                                                             @if ($type == $question->type)
                                                                 <option value="{{ $type }}" selected>
                                                                     {{ $type }}</option>
                                                             @else
-                                                                <option value="{{ $type }}">{{ $type }}
-                                                                </option>
                                                             @endif
                                                         @endforeach
                                                     </select>
@@ -114,6 +110,31 @@
 
                                             @php $sn =1; @endphp
                                             @foreach ($question->options as $key => $option)
+                                                @if($question->type =="option")
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Option {{ $sn++ }}</label>
+                                                        <textarea name="option[]" id="option_1" class="form-control">{{ $option->label }}</textarea>
+                                                        @error('option_1')
+                                                            <div class="error text-danger text-xs">{{ $message }}
+                                                            </div>
+                                                        @enderror
+
+                                                        @if(!is_null($option->image))
+                                                        <input type="file" name="option_image[{{$key}}]" id="option-image" class="m-1">
+                                                        <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" class="img-fluid mt-1" width="100" height="50" style="border:1px;">
+                                                        @else
+                                                        <input type="file"  name="option_image[{{$key}}]" id="option-image" class="m-1">
+                                                        @endif
+                                                        <input type="radio" name="is_correct"
+                                                            id="is_correct" {{$option->is_correct ? 'checked': ''}}
+                                                            value="{{$key}}"
+                                                            class="form-control-sm float-right">
+                                                    </div>
+                                                </div>
+
+                                                @elseif($question->type =="multiple-choice")
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Option {{ $sn++ }}</label>
@@ -137,6 +158,20 @@
                                                             class="form-control-sm float-right">
                                                     </div>
                                                 </div>
+
+                                                @elseif($question->type =="no-option")
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Answer</label>
+                                                        <textarea name="option[]" id="option_1" class="form-control">{{ $option->label }}</textarea>
+                                                        @error('option_1')
+                                                            <div class="error text-danger text-xs">{{ $message }}
+                                                            </div>
+                                                        @enderror
+                                                       
+                                                    </div>
+                                                </div>
+                                                @endif
                                             @endforeach
 
                                         </div>
