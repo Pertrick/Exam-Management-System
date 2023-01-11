@@ -57,9 +57,12 @@
                                                         <h4 class="card-title mb-2">{{ $sn++ }}.
                                                             {{ $quest->question }}
                                                             @if ($quest->image)
-                                                                <img src="/storage/images/questions/{{ $quest->image->name }}"
-                                                                    alt="{{ $quest->image->name }}" height="50"
-                                                                    width="100">
+                                                                <div class="m-2">
+                                                                    <img src="/storage/images/questions/{{ $quest->image->name }}"
+                                                                    alt="{{ $quest->image->name }}" height="100"
+                                                                    width="200" class="img-fluid border">
+                                                                </div>
+                                                               
                                                             @endif
                                                         </h4>
                                                         @foreach ($quest->options as $key => $option)
@@ -71,7 +74,7 @@
                                                                     @if ($option->image)
                                                                         <img src="/storage/images/options/{{ $option->image->name }}"
                                                                             alt="{{ $option->image->name }}"
-                                                                            height="50" width="100">
+                                                                            height="50" width="100" class="img-fluid border">
                                                                     @endif
 
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
@@ -84,18 +87,13 @@
                                                                     @if ($option->image)
                                                                         <img src="/storage/images/options/{{ $option->image->name }}"
                                                                             alt="{{ $option->image->name }}"
-                                                                            height="50" width="100">
+                                                                            height="50" width="100" class="img-fluid border">
                                                                     @endif
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
                                                                 @elseif($quest->type == $no_option)
                                                                     <input type="text" class="border-top-0 border-right-0 border-left-0" name="{{ $quest->id}}[]"
                                                                         id="answer-id" autocomplete="off">
-                                                                    @if ($option->image)
-                                                                        <img src="/storage/images/options/{{ $option->image->name }}"
-                                                                            alt="{{ $option->image->name }}"
-                                                                            height="50" width="100">
-                                                                    @endif
                                                                 @endif
                                                             </p>
                                                         @endforeach

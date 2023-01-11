@@ -41,7 +41,7 @@ class ScoreService
             };
           
             foreach($option_ids as $id){
-            $imageName = Image::where('imageable_id',$option_ids)->pluck('name')->first();
+            $imageName = Image::where('imageable_id',$id)->pluck('name')->first();
             $option_labels = $question->options->pluck('label')->toArray();
             array_push($option_labels, $imageName);
             }
