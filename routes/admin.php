@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccessPinController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -55,5 +56,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
         Route::delete('delete/{id}', [testController::class, 'destroy'])->name('admin.test.delete');
     });
-   
+
+    Route::prefix('accesspin')->group(function(){
+        Route::get('', [AccessPinController::class, 'index'])->name('admin.accesspin.index');
+        Route::get('/generate', [AccessPinController::class, 'create'])->name('admin.accesspin.create');
+    });
+
 });

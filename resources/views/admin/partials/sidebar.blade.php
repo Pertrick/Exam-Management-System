@@ -40,6 +40,16 @@
       </p>
    </a>
 </li>
+
+<li class="nav-item">
+   <a href="{{route('admin.accesspin.index')}}" class="nav-link {{ request()->is('admin/student') ? 'active' : ''}}">
+      <i class="nav-icon fa fa-user-graduate "></i>
+      <p>
+         Access Pins
+      </p>
+   </a>
+</li>
+
  <li class="nav-item">
     <a href="{{route('admin.test.index')}}" class="nav-link {{ request()->is('admin/exam') ? 'active' : ''}}">
        <i class="nav-icon fa fa-chalkboard-teacher "></i>
