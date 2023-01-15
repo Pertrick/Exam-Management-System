@@ -64,3 +64,4 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
         Route::post('pay', [PaymentController::class, 'store'])->name('student.payment.store');
     });
 });
+
