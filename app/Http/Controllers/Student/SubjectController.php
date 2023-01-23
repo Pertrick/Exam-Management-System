@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\AccessPin;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectController extends Controller
 {
@@ -31,17 +33,29 @@ class SubjectController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $this->validate($request,[
-            'subject' => 'required|min:1|max:1'
+            'subject' => 'required',
+            'code' => 'required'
         ]);
+
+        $input=$request->all();
+
+        $acp=AccessPin::where("pin", $input['code'])->latest()->first();
+
+        if(!$acp){
+            return redirect()->back()->with('error', 'Incorrect pin. Kindly check and try again');
+        }
+
+        if($acp->status == 1){
+            return redirect()->back()->with('error', 'Pin has already been used by '.$acp->used_by);
+        }
+
+        $acp->status=1;
+        $acp->used_by=Auth::id();
+        $acp->save();
 
        auth()->user()->subjects()->attach($request->subject);
        return redirect()->back()->with('success', 'subject stored successfully!');
@@ -55,7 +69,7 @@ class SubjectController extends Controller
      */
     public function show($id)
     {
-        
+
     }
 
     /**

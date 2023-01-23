@@ -34,7 +34,30 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    {{-- <div class="card card-info">
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {!! session('success') !!}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <div class="col-md-12">
                         <!-- form start -->
                         <form action="{{ route('student.subject.store') }}" method="POST" id="form-subject">
                             @csrf
@@ -46,8 +69,8 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <label for="subject">Add Subject</label>
-                                                <select name="subjects[]" id="subjects" multiple>
+                                                <label for="subject">Select Subject</label>
+                                                <select name="subject" id="subjects">
                                                     <option value="" disabled>--choose subject--</option>
                                                     @foreach($subjects as $subject)
                                                         @if(in_array($subject->id, $user_subjects->pluck('id')->toArray()))
@@ -58,15 +81,17 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                           
+
+                                            <input type="text" name="code" class="form-control" />
+
                                         </div>
                                         <div class="col-md-12 m-2">
                                             <button type="submit" class="btn bg3">Save</button>
                                         </div>
                         </form>
-                    </div> --}}
+                    </div>
 
-                    <div class="col-md-12 table-responsive" style="border-left: 1px solid #ddd;">
+                    <div class="col-12 table-responsive" style="border-left: 1px solid #ddd;">
                         <table id="example1" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
