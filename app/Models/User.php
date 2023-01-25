@@ -86,5 +86,18 @@ class User extends Authenticatable
         };
     }
 
+    public function passedResults(){
+        return $this->results()->where('status', 1);
+    }
+
+    public function failedResults(){
+        return $this->results()->where('status', 0);
+    }
+
+
+    public function studentAccessPin(){
+        return $this->hasMany(AccessPin::class, 'used_by');
+    }
+
 
 }

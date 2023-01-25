@@ -11,7 +11,7 @@ class AccessPinController extends Controller
 {
     public function index()
     {
-        $data['pins'] = AccessPin::with('creator')->latest()->get();
+        $data['pins'] = AccessPin::with('creator','usedBy')->latest()->get();
         $data['i']=1;
         return view('admin.access_pin.index', $data);
     }

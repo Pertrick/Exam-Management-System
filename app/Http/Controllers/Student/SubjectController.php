@@ -28,7 +28,8 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        //
+        $subjects = Subject::get(['id', 'name']);
+        return view('student.subject.create',compact('subjects'));
     }
 
     /**
@@ -44,7 +45,7 @@ class SubjectController extends Controller
         ]);
 
        auth()->user()->subjects()->attach($request->subject);
-       return redirect()->back()->with('success', 'subject stored successfully!');
+       return redirect()->route('student.subject.index')->with('success', 'subject stored successfully!');
     }
 
     /**

@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Option;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Resources;
+use App\Models\Subject;
 
-class OptionController extends Controller
+class ResourcesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,9 @@ class OptionController extends Controller
      */
     public function index()
     {
-        //
+        $subjects = Subject::all(['id', 'name']);
+        $resources = Resources::get();
+        return view('admin.resources.index',compact('subjects', 'resources'));
     }
 
     /**
@@ -24,7 +28,7 @@ class OptionController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -35,16 +39,28 @@ class OptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name'=>'required', 
+            'link' => 'required', 
+            'subject' => 'required'
+        ]);
+
+        Resources::updateOrCreate(
+            ['link' => $request->link],
+            ['name' =>$request->name, 'subject_id' => $request->subject]
+        );
+
+
+        return redirect()->back()->with('message', 'Request Successful!');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Option  $option
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Option $option)
+    public function show($id)
     {
         //
     }
@@ -52,10 +68,10 @@ class OptionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Option  $option
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Option $option)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +80,10 @@ class OptionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Option  $option
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Option $option)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +91,10 @@ class OptionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Option  $option
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Option $option)
+    public function destroy($id)
     {
         //
     }

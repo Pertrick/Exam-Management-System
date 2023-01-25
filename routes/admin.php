@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TestController;
+use App\Http\Controllers\Admin\ResourcesController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -60,6 +61,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
     Route::prefix('accesspin')->group(function(){
         Route::get('', [AccessPinController::class, 'index'])->name('admin.accesspin.index');
         Route::get('/generate', [AccessPinController::class, 'create'])->name('admin.accesspin.create');
+    });
+
+    Route::prefix('resources')->group(function(){
+        Route::get('', [ResourcesController::class, 'index'])->name('admin.resources.index');
+        Route::post('store', [ResourcesController::class, 'store'])->name('admin.resources.store');
     });
 
 });
