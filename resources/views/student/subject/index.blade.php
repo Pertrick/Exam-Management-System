@@ -45,17 +45,7 @@
                         </div>
                     @endif
 
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {!! session('success') !!}
-                        </div>
-                    @endif
-
-                    @if (session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+                   @include('student.partials.alert')
 
                     <div class="col-md-12">
                         <!-- form start -->
@@ -85,7 +75,7 @@
                                             <input type="text" name="code" class="form-control" />
 
                                         </div>
-                                        <div class="col-md-12 m-2">
+                                        <div class="col-md-6 m-2 ">
                                             <button type="submit" class="btn bg3">Save</button>
                                         </div>
                         </form>

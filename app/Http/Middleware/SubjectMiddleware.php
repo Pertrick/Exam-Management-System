@@ -17,7 +17,7 @@ class SubjectMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(auth()->user()->subjects->count() == 0){
-            return redirect()->route('student.subject.create');
+            return redirect()->route('student.subject.create')->with('warning','kindly select a subject to continue!');
         }
         return $next($request);
     }

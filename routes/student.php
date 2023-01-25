@@ -8,6 +8,7 @@ use App\Http\Controllers\Student\ResponseController;
 use App\Http\Controllers\Student\SubjectController;
 use App\Http\Controllers\Student\PaymentController;
 use App\Http\Controllers\Student\ExamAuthController;
+use App\Http\Controllers\Student\ResourcesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -69,7 +70,7 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth','subject']],functio
     });
 
     Route::prefix('resources')->group(function(){
-        Route::get('', [ResourceController::class, 'index'])->name('student.exam.auth.index');
+        Route::get('', [ResourcesController::class, 'index'])->name('student.resources.index');
     });
 
 });

@@ -17,6 +17,7 @@ class ExamAuthController extends Controller
         $this->validate($request, [
             'password' => 'required'
         ]);
+        
         $password =$request->password;
         $access_pins = AccessPin::pluck('pin')->toArray();
         if(in_array($password, $access_pins, true)){
@@ -26,9 +27,9 @@ class ExamAuthController extends Controller
            $access_pin->used_on = now();
            $access_pin->save();
 
-           return redirect()->route('student.test.index')->with('message', 'Pin correct!');
+           return redirect()->route('student.test.index')->with('success', 'Pin correct!');
         }
 
-          return redirect()->back()->with('message', 'Incorrect Pin!');
+          return redirect()->back()->with('error', 'Incorrect Pin!');
     }
 }

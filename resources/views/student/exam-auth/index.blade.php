@@ -16,19 +16,22 @@
                 <div class="container-fluid">
                     <div class="card card-info ">
                         <div class="card-body">
+                            @include('student.partials.alert')
                             <div class="col-md-12 table-responsive">
-                                <p class="text-center text-success">Kindly enter your pin to proceed with your exam*</p>
+                                <h2 class="text-center mt-1 mb-3"> Enter Pin </h2>
                                 <form action="{{ route('student.exam.auth.store') }}" method="post">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-12">
-                                            @error('subject')
-                                            <div class="error text-danger text-bold text-xs">{{ $message }}</div>
-                                            @enderror
                                             <div class="col-md-6 mx-auto text-center">
                                                 <div class="form-group">
                                                     <input type="password" class="form-control" name="password" placeholder="Enter Pin">
+                                                    <small><i>Kindly enter the pin associated with <b>{{auth()->user()->subjects[0]->name}}</b> to proceed with your exam*</i></small>
                                                 </div>
+                                                
+                                                @error('password')
+                                                <div class="error text-danger text-bold text-xs">{{ $message }}</div>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-12 text-center" >

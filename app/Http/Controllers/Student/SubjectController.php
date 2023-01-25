@@ -37,6 +37,7 @@ class SubjectController extends Controller
 
     public function store(Request $request)
     {
+       
         $this->validate($request,[
             'subject' => 'required',
             'code' => 'required'
@@ -59,7 +60,7 @@ class SubjectController extends Controller
         $acp->save();
 
        auth()->user()->subjects()->attach($request->subject);
-       return redirect()->route('student.subject.index')->with('success', 'subject stored successfully!');
+       return redirect()->route('student.subject.index')->with('success', 'subject saved successfully!');
     }
 
     /**

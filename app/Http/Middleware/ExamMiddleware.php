@@ -16,7 +16,7 @@ class ExamMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(!auth()->user()->studentAccessPin){
+        if(!auth()->user()->studentAccessPin || !auth()->user()->studentAccessPin[0]->used_on ){
             return redirect()->route('student.exam.auth.index')->with('Enter Pin to proceed');
         }
         return $next($request);
