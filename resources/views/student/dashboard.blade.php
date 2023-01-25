@@ -99,57 +99,6 @@
                             </div>
                             <!-- /.info-box -->
                         </div>
-
-                        <div class="card-body">
-                            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
-                                tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header mx-auto">
-                                            <p class="modal-title" id="staticBackdropLabel">Kindly choose your
-                                                preferred subject*</p>
-
-                                        </div>
-                                        <div class="modal-body">
-                                            <form action="{{ route('student.subject.store') }}" method="post">
-                                                @csrf
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        @error('subject')
-                                                        <div class="error text-danger text-bold text-xs text-center">{{ $message }}</div>
-                                                        @enderror
-
-                                                        <div class="form-group">
-                                                            @if (count(auth()->user()->subjects) == 0)
-                                                                @foreach ($subjects as $subject)
-                                                                <label for="">{{$subject->name}}</label>
-                                                                    <input type="radio" name="subject"
-                                                                        id="{{ $subject->id }}" value="{{ $subject->id }}">
-                                                                @endforeach
-                                                            @endif
-                                                            {{-- <select name="subjects" id="subjects" multiple>
-                                                            <option value="" disabled>--choose subject--</option>
-                                                            @if (count(auth()->user()->subjects) == 0)
-                                                                @foreach ($subjects as $subject)
-                                                                    <option value="{{ $subject->id }}">
-                                                                        {{ $subject->name }}</option>
-                                                                @endforeach
-                                                            @endif
-                                                        </select> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-12 text-center">
-                                                        <button type="submit" class="btn btn-success">Save</button>
-                                                    </div>
-                                                </div>
-
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -170,10 +119,6 @@
 
     <script>
         $(document).ready(function() {
-            @if (count(auth()->user()->subjects) == 0)
-                $("#staticBackdrop").modal('show');
-                // $('#subjects').multiSelect();
-            @endif
 
         });
     </script>

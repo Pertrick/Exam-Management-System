@@ -133,7 +133,6 @@
     @include('student.partials.footer')
     <script>
           $(document).ready(function() {
-                $("#staticBackdrop").modal('show');
         });
 
         function confirm(test) {

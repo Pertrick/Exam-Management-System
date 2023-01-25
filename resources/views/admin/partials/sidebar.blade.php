@@ -59,6 +59,15 @@
     </a>
  </li>
 
+ <li class="nav-item">
+   <a href="{{route('admin.resources.index')}}" class="nav-link {{ request()->is('admin/resource') ? 'active' : ''}}">
+      <i class="nav-icon fa fa-file"></i>
+      <p>
+         Resources
+      </p>
+   </a>
+</li>
+
  {{-- <li class="nav-item">
     <a href="assign-teacher.html" class="nav-link">
        <i class="nav-icon fa fa-file"></i>

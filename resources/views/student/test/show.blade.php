@@ -1,10 +1,11 @@
-@include('student.partials.header')
-
 <style>
-     input['text']:focus{
+    textarea:focus, input:focus{
     outline: none;
 }
+
+
 </style>
+@include('student.partials.header')
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
@@ -92,8 +93,8 @@
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
                                                                 @elseif($quest->type == $no_option)
-                                                                    <input type="text" class="border-top-0 border-right-0 border-left-0" name="{{ $quest->id}}[]"
-                                                                        id="answer-id" autocomplete="off">
+                                                                    <textarea class="border-top-0 border-right-0 border-left-0" style="width:100%" name="{{ $quest->id}}[]"
+                                                                        id="answer-id" autocomplete="off"></textarea>
                                                                 @endif
                                                             </p>
                                                         @endforeach

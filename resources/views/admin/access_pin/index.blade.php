@@ -65,7 +65,7 @@
                                                             <span class="badge-danger badge">Used</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $data->used_by }}</td>
+                                                <td>{{ $data->usedBy?->name }}</td>
                                                 <td>{{ $data->created_at }}</td>
                                                 <td>{{ $data->creator->name }}</td>
 
