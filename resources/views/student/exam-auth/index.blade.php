@@ -24,14 +24,13 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="col-md-6 mx-auto text-center">
+                                                @error('password')
+                                                <div class="error text-danger text-bold text-xs">{{ $message }}</div>
+                                                @enderror
                                                 <div class="form-group">
                                                     <input type="password" class="form-control" name="password" placeholder="Enter Pin">
                                                     <small><i>Kindly enter the pin associated with <b>{{auth()->user()->subjects[0]->name}}</b> to proceed with your exam*</i></small>
                                                 </div>
-                                                
-                                                @error('password')
-                                                <div class="error text-danger text-bold text-xs">{{ $message }}</div>
-                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-12 text-center" >
