@@ -10,7 +10,7 @@ class Resources extends Model
 {
     use HasFactory;
 
-    protected $fillable =['name', 'link', 'subject'];
+    protected $fillable =['name', 'link', 'subject_id'];
 
     public function subject(){
         return $this->belongsTo(Subject::class);

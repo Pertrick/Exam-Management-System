@@ -12,6 +12,7 @@ use App\Models\Response;
 use App\Models\Result;
 use App\Models\Subject;
 use App\Models\Payment;
+use App\Models\Resources;
 use Carbon\Carbon;
 
 class User extends Authenticatable
@@ -71,7 +72,7 @@ class User extends Authenticatable
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)->withTimestamps();
+        return $this->belongsToMany(Subject::class)->with('resources')->withTimestamps();
     }
 
     public function getCreatedAtAttribute($value)

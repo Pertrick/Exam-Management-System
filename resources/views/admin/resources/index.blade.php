@@ -14,7 +14,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Subject
+                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Resources
                             </h1>
                         </div>
                         <!-- /.col -->
@@ -48,13 +48,13 @@
                                             <div class="col-md-12 mt-2">
                                                 <div class="form-group">
                                                     <label>Subject </label>
-                                                    <select name="subject" id="subject">
-                                                        <option value="" disabled>--choose subject--</option>
+                                                    <select name="subject_id" id="subject">
+                                                        <option value="" selected disabled>--choose subject--</option>
                                                         @foreach($subjects as $subject) 
                                                             <option value="{{$subject->id}}">{{$subject->name}}</option>
                                                         @endforeach
                                                     </select>
-                                                    @error('subject')
+                                                    @error('subject_id')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -105,7 +105,7 @@
                                         <td>{{ $resource->subject->name }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn btn-sm btn-info"
-                                                onclick="editSubject({{ $subject }})"><i
+                                                onclick="editResource({{ $resource }})"><i
                                                     class="fa fa-edit"></i></button>
 
                                             <form action="{{ route('admin.subject.delete', $resource->id) }}"
@@ -156,7 +156,7 @@
         });
 
         resetForm();
-        editSubject(subject);
+        editSubject(resource);
 
         function resetForm() {
             $('#cancel').on('click', (e) => {
@@ -167,10 +167,11 @@
             });
         }
 
-        function editSubject(subject) {
-            $('#subject').val(subject.code);
-            $('#name').val(subject.name);
-            $('#link').val(subject.description);
+        function editResource(resource) {
+            $('#subject').val(resource.subject_id).prop({"selected":true});
+            $('#subject').find('option').not(':selected').remove();
+            $('#name').val(resource.name);
+            $('#link').val(resource.link);
 
         }
     </script>

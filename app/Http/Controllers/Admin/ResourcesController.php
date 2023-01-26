@@ -17,7 +17,7 @@ class ResourcesController extends Controller
     public function index()
     {
         $subjects = Subject::all(['id', 'name']);
-        $resources = Resources::get();
+        $resources = Resources::with('subject')->get();
         return view('admin.resources.index',compact('subjects', 'resources'));
     }
 
@@ -42,12 +42,12 @@ class ResourcesController extends Controller
         $this->validate($request,[
             'name'=>'required', 
             'link' => 'required', 
-            'subject' => 'required'
+            'subject_id' => 'required'
         ]);
 
         Resources::updateOrCreate(
-            ['link' => $request->link],
-            ['name' =>$request->name, 'subject_id' => $request->subject]
+            [ 'subject_id' => $request->subject_id],
+            ['name' =>$request->name,'link' => $request->link]
         );
 
 

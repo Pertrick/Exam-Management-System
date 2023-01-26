@@ -16,9 +16,9 @@ class ResourcesController extends Controller
      */
     public function index()
     {
-        // $subjects = Subject::all(['id', 'name']);
-        // $resources = Resources::get();
-        // return view('admin.resources.index',compact('subjects', 'resources'));
+        $subject = auth()->user()->subjects()->first();
+        $resources = $subject->resources;
+        return view('student.resources.index',compact('resources'));
     }
 
     /**
@@ -42,7 +42,7 @@ class ResourcesController extends Controller
         $this->validate($request,[
             'name'=>'required', 
             'link' => 'required', 
-            'subject' => 'required'
+            'subject_id' => 'required'
         ]);
 
         Resources::updateOrCreate(

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Test;
 use App\Model\User;
+use App\Models\Resources;
 
 
 class Subject extends Model
@@ -27,5 +28,10 @@ class Subject extends Model
     public function students()
     {
         return $this->belongsToMany(Student::class)->withTimestamps();
+    }
+
+    public function resources()
+    {
+        return $this->hasMany(Resources::class);
     }
 }
