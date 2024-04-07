@@ -60,6 +60,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::put('update/{id}', [TestController::class, 'update'])->name('admin.test.update');
         Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
         Route::delete('delete/{id}', [testController::class, 'destroy'])->name('admin.test.delete');
+        Route::post('export/{id}', [testController::class, 'export'])->name('admin.test.export');
     });
 
     Route::prefix('accesspin')->group(function(){

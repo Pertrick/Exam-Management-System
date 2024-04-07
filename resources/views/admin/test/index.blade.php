@@ -80,6 +80,12 @@
                                                         href="{{ route('admin.test.edit', $test->id) }}"><i
                                                             class="fa fa-edit text-white"></i>
                                                     </a>
+                                                    <form action="{{ route('admin.test.export', $test->id) }}"
+                                                        method="post" class="d-inline">
+                                                        @csrf
+                                                        <button class="btn btn-sm btn-secondary" type="submit"><i
+                                                                class="fa fa-download text-white"></i></button>
+                                                    </form>
 
                                                     <form action="{{ route('admin.test.delete', $test->id) }}"
                                                         method="post" class="d-inline">

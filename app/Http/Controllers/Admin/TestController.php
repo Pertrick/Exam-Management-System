@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Subject;
-use App\Http\Controllers\Controller;
 use App\Models\Test;
+use App\Models\Subject;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use App\Exports\QuestionExport;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TestController extends Controller
 {
@@ -142,5 +144,16 @@ class TestController extends Controller
         $test->delete();
 
         return redirect()->back()->with('message', 'Test Deleted Successfully!');
+    }
+
+
+    public function export($id){
+        $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
+        $test_subject_id = $test->subject_id;
+        $subjectName = $test->subject->name;
+        $test_question_ids = $test->questions->pluck('id');
+        $questions = Question::with('options.image', 'image')->where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
+        
+        return Excel::download(new QuestionExport($test, $questions),  'test.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
     }
 }

@@ -55,8 +55,9 @@
 
                                                 @foreach ($test->questions as $quest)
                                                     <div class="card-body">
-                                                        <h4 class="card-title mb-2">{{ $sn++ }}.
-                                                            {{ $quest->question }}
+                                                        <h4 class="card-title mb-2">{{ $loop->iteration }}.
+
+                                                            {{ $quest->question }}  
                                                             @if ($quest->image)
                                                                 <div class="m-2">
                                                                     <img src="/storage/images/questions/{{ $quest->image->name }}"
@@ -66,6 +67,7 @@
                                                                
                                                             @endif
                                                         </h4>
+                                                        <small class="float-right font-weight-bold">{{$quest->point}} point(s)</small>
                                                         @foreach ($quest->options as $key => $option)
                                                             <p class="card-text">
                                                                 @if ($quest->type == $option_type)
@@ -93,8 +95,8 @@
                                                                     <input type="hidden" name="{{ $quest->id }}[]"
                                                                         id="answer-id">
                                                                 @elseif($quest->type == $no_option)
-                                                                    <textarea class="border-top-0 border-right-0 border-left-0" style="width:100%" name="{{ $quest->id}}[]"
-                                                                        id="answer-id" autocomplete="off"></textarea>
+                                                                    <input type="text" class="border-top-0 border-right-0 border-left-0" style="width:70%" name="{{ $quest->id}}[]"
+                                                                        id="answer-id" autocomplete="off">
                                                                 @endif
                                                             </p>
                                                         @endforeach
@@ -107,7 +109,7 @@
                                         </div>
 
                                         <div class="col-md-12 m-3 text-right">
-                                            <button type="submit" class="btn btn-success">Submit</button>
+                                            <button type="submit" class="btn btn-success" id="submitButton">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -156,6 +158,12 @@
 
         $(function() {
             $("#example1").DataTable();
+        });
+
+        $("#submitButton").on('click', function() {
+            $(this).text('submitting...'); 
+            this.disabled = true;
+            $('#form-subject').submit();
         });
     </script>
 </body>

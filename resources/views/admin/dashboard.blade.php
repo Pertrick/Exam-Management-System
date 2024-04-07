@@ -36,22 +36,23 @@
                 <div class="container-fluid">
                     <!-- Small boxes (Stat box) -->
                     <div class="row">
-                        {{-- <div class="col-6 col-sm-6 col-md-5 offset-md-1">
+                        <div class="col-xs-12 col-sm-12 col-md-6 ">
                             <div class="info-box">
                                 <span class="info-box-icon bg1 elevation-1"><i class="fas fa-chalkboard-teacher"
                                         style="color: rgb(211, 209, 207);"></i></span>
 
-
+                            <a href="{{ route('admin.program.index') }}" title="students" class="text-dark">
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Number of Teachers</span>
+                                    <span class="info-box-text">Number of Programs</span>
                                     <span class="info-box-number">
-                                        50
+                                        {{$program_count}}
                                     </span>
                                 </div>
+                            </a>
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
-                        </div> --}}
+                        </div>
                         <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="info-box">
                                 <span class="info-box-icon bg2 elevation-1"><i class="fas fa-user-graduate"
@@ -70,19 +71,21 @@
                             <!-- /.info-box -->
                         </div>
                         <!-- /.col -->
-                        {{-- <div class="col-6 col-sm-6 col-md-5 offset-md-1">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="info-box mb-3">
                                 <span class="info-box-icon bg3 elevation-1"><i class="fas fa-certificate"
                                         style="color: rgb(211, 209, 207);"></i></span>
 
+                            <a href="{{ route('admin.course.index') }}" title="students" class="text-dark">
                                 <div class="info-box-content">
                                     <span class="info-box-text">Number of Courses</span>
-                                    <span class="info-box-number">10</span>
+                                    <span class="info-box-number">{{$course_count}}</span>
                                 </div>
+                            </a>
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
-                        </div> --}}
+                        </div>
                         <!-- /.col -->
                         <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="info-box mb-3">
