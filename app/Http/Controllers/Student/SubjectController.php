@@ -30,7 +30,8 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        $subjects = Subject::get(['id', 'name']);
+        $coursesId = auth()->user()->courses->pluck('id');
+        $subjects = Subject::whereHas('courses', fn($q) => $q->whereIn('course_id',$coursesId ))->get();
         return view('student.subject.create',compact('subjects'));
     }
 

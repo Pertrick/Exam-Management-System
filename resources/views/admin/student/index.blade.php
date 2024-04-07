@@ -46,28 +46,30 @@
                                             <th>Profile</th>
                                             <th>Complete Name</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Subject</th>
                                             <th>Account Status</th>
                                             <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                       @foreach($students as $student)
-                                        <tr>
-                                            <td>{{$student->id}}</td>
-                                            <td><img src="EMS/asset/img/avatar.png" width="40"
-                                                    style="border-radius:10px" alt="User Image"></td>
-                                            <td>{{$student->name}}</td>
-                                            <td>{{$student->email}}</td>
-                                            <td>{{$student->subjects[0]->name}}</td>
-                                            <td><span class="badge bg-success">active</span></td>
-                                            <td class="text-right">
-                                                <a class="btn btn-sm bg3" href="#"><i class="fa fa-edit"></i>
-                                                    edit</a>
-                                                <a class="btn btn-sm bg1" href="#" data-toggle="modal"
-                                                    data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
-                                            </td>
-                                        </tr>
+                                    <tbody id="tbodyId">
+                                        @foreach ($students as $student)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td><img src="EMS/asset/img/avatar.png" width="40"
+                                                        style="border-radius:10px" alt="User Image"></td>
+                                                <td>{{ $student->name }}</td>
+                                                <td>{{ $student->email }}</td>
+                                                <td>{{ $student->phone }}</td>
+                                                <td>{{ $student->subjects->implode("name",',') }}</td>
+                                                <td><span class="badge bg-success">active</span></td>
+                                                <td class="text-right">
+                                                    <a class="btn btn-sm bg3" href=""><i class="fa fa-edit"></i>
+                                                        edit</a>
+                                                    <a class="btn btn-sm bg1" href="" data-toggle="modal"
+                                                        data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -105,6 +107,7 @@
             <div class="modal-content">
                 <div class="modal-body text-center">
                     <form id="add_user">
+                        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-12">
@@ -116,54 +119,53 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="name" class="float-left">Username</label>
-                                        <input type="name" class="form-control" id="username" placeholder="username" value="{{old('name')}}" required>
+                                        <input type="name" name="name" class="form-control" id="username"
+                                            placeholder="username" value="{{ old('name') }}">
                                     </div>
                                     @error('name')
-                                    <div class="error text-danger text-xs">{{ $message }}</div>
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Email</label>
-                                        <input type="email"  name="email" class="form-control" id="email" placeholder="ex. john@gmail.com" value="{{old('email')}}" required>
+                                        <label for="email" class="float-left">Email</label>
+                                        <input type="email" name="email" class="form-control" id="email"
+                                            placeholder="ex. john@gmail.com" value="{{ old('email') }}" required>
                                     </div>
                                     @error('email')
-                                    <div class="error text-danger text-xs">{{ $message }}</div>
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="phone" class="float-left">Phone</label>
+                                        <input type="phone" class="form-control" id="phone" name="phone"
+                                            placeholder="Phone" value="{{ old('phone') }}">
+                                    </div>
+                                    @error('phone')
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="password" class="float-left">Password</label>
-                                        <input type="password" name="password" class="form-control" id="password" placeholder="**********" required> 
+                                        <input type="password" name="password" class="form-control" id="password">
                                     </div>
                                     @error('password')
-                                    <div class="error text-danger text-xs">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="password_confirmation" class="float-left">Password</label>
-                                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="**********" required>
-                                    </div>
-                                    @error('password_confirmation')
-                                    <div class="error text-danger text-xs">{{ $message }}</div>
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <input type="submit" id="save_btn" class="btn bg2" value="Save"/>
-                                    <button type="submit" class="btn bg1">Cancel</button>
+                                    <input type="button" id="save_btn" class="btn bg2" value="Save" />
+                                    <button type="button" class="btn bg1" data-dismiss="modal">Cancel</button>
                                 </div>
-                                
+
                             </div>
-                           
 
                         </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer"></div>
                     </form>
                 </div>
             </div>
@@ -172,31 +174,60 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
+        $("#save_btn").click((e) => {
+            e.preventDefault();
 
-        $("#save_btn").on('click',(e) => {
-           e.preventDefault();
-        //    const name = $("#username").val();
-        //    const email = $("#email").val();
-        //    const password = $("#password").val();
-        //    const password_confirm = $("#password_confirmation").val();
-           console.log($("#add_user").serialize());
-           $.ajax({
-                    type: 'POST',
-                    url: '/register',
-                    dataType: "json",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        form_data : $("#add_user").serialize(),
-                    },
-                    success: function(data) {
-                       console.log(data);
 
-                    },
-                    error: function(data){
-                        console.log(data);
-                    }
-                });
+            if (!$('#username').val()) {
+                return;
+            }
 
+            if (!$('#email').val()) {
+                return;
+            }
+
+            if (!$('#password').val()) {
+                return;
+            }
+
+            const password_confirmation = $("#password").val();
+            const serializedData = $("#add_user").serialize() + `&password_confirmation=${password_confirmation}`;
+
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('auth.register') }}',
+                data: serializedData,
+                success: function(response) {
+                    const user = response.data;
+                    console.log(user);
+                    const student = `
+                    <tr>
+                        <td>${ user.id }</td>
+                        <td><img src="EMS/asset/img/avatar.png" width="40"
+                            style="border-radius:10px" alt="User Image"></td>
+                        <td>${user.name }</td>
+                        <td>${user.email }</td>
+                        <td>${user.phone }</td>
+                        <td>${user.subjects ? user.subjects[0].name : '' }</td>
+                        <td><span class="badge bg-success">active</span></td>
+                        <td class="text-right">
+                        <a class="btn btn-sm bg3" href="#"><i class="fa fa-edit"></i>
+                                 edit</a>
+                        <a class="btn btn-sm bg1" href="#" data-toggle="modal"
+                            data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
+                        </td>
+                     </tr>
+                    `;
+
+                    $('#tbodyId').append(student);
+                    $('#add').modal('hide');
+
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
         });
 
         $(function() {

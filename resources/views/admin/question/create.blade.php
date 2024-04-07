@@ -14,7 +14,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Subject
+                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Question
                             </h1>
                         </div>
                         <!-- /.col -->
@@ -200,7 +200,7 @@
                  <div class="col-md-6 option-added">
                         <div class="form-group">
                              <label>option ${count++}</label>
-                                <textarea name="option[]" id="option_4" class="form-control">{{ old('option') }}</textarea>
+                                <textarea name="option[]" id="option_4" class="form-control options">{{ old('option') }}</textarea>
                                     <input type="file" name="option_image[${i}]" id="option_image_${i}" class="m-1">
                                         @error('option')
                                             <div class="error text-danger text-xs">{{ $message }}</div>
@@ -213,7 +213,7 @@
                   $('#row-id').append(option);
                }
                 
-            }else if(question_type == 'multiple-choice'){
+            }else if(question_type == 'multiple choice'){
                 $('.option-added').remove();
                 $('.no-option').remove();
                 for(var i = 0;  i <4; i++){
@@ -237,7 +237,7 @@
 
             }
     
-            }else if(question_type == 'no-option'){
+            }else if(question_type == 'no option'){
 
                 $('.choice-added').remove();
                 $('.option-added').remove();
@@ -245,7 +245,7 @@
                 <div class="col-md-12 no-option">
                         <div class="form-group">
                             <label>Answer</label>
-                                <textarea name="option" id="option" placeholder=""type the answer" class="form-control">{{ old('answer') }}</textarea>
+                                <textarea name="option[]" id="option" placeholder=""type the answer" class="form-control">{{ old('answer') }}</textarea>
                                         @error('option')
                                             <div class="error text-danger text-xs">{{ $message }}</div>
                                         @enderror  

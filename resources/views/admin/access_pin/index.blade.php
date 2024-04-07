@@ -59,19 +59,30 @@
                                                 <td>{{ $data->pin }}</td>
                                                 <td>{{ $data->serial }}</td>
                                                 <td>
-                                                    @if($data->status == 0)
-                                                            <span class="badge-success badge">Active</span>
+                                                    @if ($data->status == 0)
+                                                        <span class="badge-success badge">Active</span>
                                                     @else
-                                                            <span class="badge-danger badge">Used</span>
+                                                        <span class="badge-danger badge">Used</span>
                                                     @endif
                                                 </td>
-                                                <td>{{ $data->usedBy?->name }}</td>
+                                                @if ($data->usedBy)
+                                                    <td onclick="showModal({{ $data->usedBy }})" 
+                                                        style="text-decoration: underline; cusor:pointer"
+                                                        >
+                                                        {{ $data->usedBy?->name }}</td>
+                                                @else
+                                                    <td>{{ $data->usedBy?->name }}</td>
+                                                @endif
+
+
                                                 <td>{{ $data->created_at }}</td>
                                                 <td>{{ $data->creator->name }}</td>
 
                                                 <td class="text-right">
-                                                    @if($data->status == 0)
-                                                        <button type="button" class="btn btn-sm btn-info options"  data-toggle="modal" data-target="#view-options-modal" title="Print Access Pin">
+                                                    @if ($data->status == 0)
+                                                        <button type="button" class="btn btn-sm btn-info options"
+                                                            data-toggle="modal" data-target="#view-options-modal"
+                                                            title="Print Access Pin">
                                                             <i class="fa fa-print"></i> Print
                                                         </button>
                                                     @endif
@@ -85,44 +96,47 @@
                         </div>
                     </div>
                 </div>
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
         </div>
-
-    </div>
-    <!-- /.card-body -->
-    </div>
-    </div>
-    <!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+        <!-- /.content-wrapper -->
     </div>
     <!-- ./wrapper -->
-    <div id="view-options-modal" class="modal animated rubberBand delete-modal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <h6>Options</h6>
-                    <p id="option-p"></p>
+
+    <div class="modal fade" id="view-user-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">User Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
     @include('admin.partials.footer')
     <script>
-
-        $('.options').on('click', function(){
+        $('.options').on('click', function() {
             $('#option-p').html('');
             var data = $(this).attr('data-id');
             console.log(data);
-            var options =JSON.parse(data);
-            var label ='';
+            var options = JSON.parse(data);
+            var label = '';
             options.forEach(element => {
                 console.log(element)
-                if(element.is_correct ==1){
+                if (element.is_correct == 1) {
                     label += `<h6><li class="text-left bg-success rounded-sm p-1 ">${element.label} <i
                                                      class="fa fa-check"></i></li></h6>`
-                }else{
+                } else {
                     label += `<h6><li class="text-left">${element.label} <i
                                                      class="fa fa-times text-danger"></i></li></h6>`;
                 }
@@ -136,6 +150,17 @@
         });
 
 
+        function showModal(user) {
+            $('#userDetails').text('');
+            const userDetails = `
+                <p> Name : <span class="font-weight-bold">${user.name}<span> </p>
+                <p> Email : <span class="font-weight-bold">${user.email}<span> </p>
+                <p> Phone :  <span class="font-weight-bold">${user.phone ?? ''}<span> </p>
+            `;
+            $('#userDetails').append(userDetails);
+            const options = 'show';
+            $('#view-user-modal').modal(options)
+        }
     </script>
 </body>
 

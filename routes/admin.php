@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AccessPinController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\TestController;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\ProgramController;
+use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\QuestionController;
-use App\Http\Controllers\Admin\StudentController;
-use App\Http\Controllers\Admin\TestController;
+use App\Http\Controllers\Admin\AccessPinController;
 use App\Http\Controllers\Admin\ResourcesController;
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::post('store', [QuestionController::class, 'store'])->name('admin.question.store');
         Route::put('update/{id}', [QuestionController::class, 'update'])->name('admin.question.update');
         Route::delete('delete/{id}', [QuestionController::class, 'destroy'])->name('admin.question.delete');
+        Route::get('import', [QuestionController::class, 'import'])->name('admin.question.import');
+        Route::post('upload', [QuestionController::class, 'uploadExcel'])->name('admin.question.upload-excel');
     });
 
     Route::prefix('student')->group(function(){
@@ -67,5 +71,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function (
         Route::get('', [ResourcesController::class, 'index'])->name('admin.resources.index');
         Route::post('store', [ResourcesController::class, 'store'])->name('admin.resources.store');
     });
+
+
+
+    Route::resource('programs', ProgramController::class)
+          ->name('index','admin.program.index')
+          ->name('store', 'admin.program.store')
+          ->name('destroy','admin.program.delete');
+
+
+    Route::resource('courses', CourseController::class)
+          ->name('index','admin.course.index')
+          ->name('store', 'admin.course.store')
+          ->name('destroy','admin.course.delete');
 
 });

@@ -42,7 +42,7 @@
 </li>
 
 <li class="nav-item">
-   <a href="{{route('admin.accesspin.index')}}" class="nav-link {{ request()->is('admin/student') ? 'active' : ''}}">
+   <a href="{{route('admin.accesspin.index')}}" class="nav-link {{ request()->is('admin/accesspin') ? 'active' : ''}}">
       <i class="nav-icon fa fa-user-graduate "></i>
       <p>
          Access Pins
@@ -60,10 +60,19 @@
  </li>
 
  <li class="nav-item">
-   <a href="{{route('admin.resources.index')}}" class="nav-link {{ request()->is('admin/resource') ? 'active' : ''}}">
+   <a href="{{route('admin.program.index')}}" class="nav-link {{ request()->is('admin/programs') ? 'active' : ''}}">
       <i class="nav-icon fa fa-file"></i>
       <p>
-         Resources
+        Programs
+      </p>
+   </a>
+</li>
+
+<li class="nav-item">
+   <a href="{{route('admin.course.index')}}" class="nav-link {{ request()->is('admin/courses') ? 'active' : ''}}">
+      <i class="nav-icon fa fa-book"></i>
+      <p>
+        Courses
       </p>
    </a>
 </li>

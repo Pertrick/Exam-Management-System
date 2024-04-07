@@ -48,8 +48,10 @@ class ResultController extends Controller
      */
     public function show($result_id)
     {
-        $responses = auth()->user()->responses()->with('question.options.image')->with(['question.options' => function($query){
-            $query->where('is_correct', 1);
+        $responses = auth()->user()->responses()
+                            ->with('question.options.image')
+                            ->with(['question.options' => function($query){
+                                $query->where('is_correct', 1);
         }])->with('question.image')->where('result_id', $result_id)->get();
         $sn =1;
         

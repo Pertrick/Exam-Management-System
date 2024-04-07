@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
+use Exception;
 use App\Models\Role;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Registered;
+use App\Models\User;
+use App\Models\Program;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
 
 class RegisteredUserController extends Controller
 {
@@ -21,7 +24,8 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        $programs = Program::with('courses')->get();
+        return view('auth.register', compact('programs'));
     }
 
     /**
@@ -34,22 +38,33 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->ajax()){
-            dd($request->all());
-        }
-        
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'phone' => ['required', 'nullable', 'string', 'numeric:max:11'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'course' => ['required', 'string'],
+            'program' => ['required', 'string']
         ]);
-        
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role_id' => Role::USER,
-            'password' => Hash::make($request->password),
-        ]);
+
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'role_id' => Role::USER,
+                'password' => Hash::make($request->password),
+            ]);
+
+            $user->courses()->attach($request->course);
+            DB::commit();
+        } catch (Exception $ex) {
+            dd($ex->getMessage());
+            DB::rollback();
+            return back()->with(['message' =>  'Registration failed']);
+        }
+
 
         event(new Registered($user));
 

@@ -17,8 +17,8 @@ class Question extends Model
     use HasFactory;
 
     const OPTION = 'option';
-    const MULTI_CHOICE = 'multiple-choice';
-    const NO_OPTION = 'no-option';
+    const MULTI_CHOICE = 'multiple choice';
+    const NO_OPTION = 'no option';
 
     protected $fillable = [
         'subject_id',

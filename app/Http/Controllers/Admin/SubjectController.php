@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Course;
 use App\Models\Subject;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreSubjectFormRequest;
-use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
@@ -16,8 +17,9 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::select('id','code','name','description')->get();
-        return view('admin.subject.index', compact('subjects'));
+        $courses = Course::get();
+        $subjects = Subject::with('courses:id,name')->select('id','code','name','description')->get();
+        return view('admin.subject.index', compact('subjects','courses'));
     }
 
     /**
@@ -40,11 +42,13 @@ class SubjectController extends Controller
     {
         $request->validated();
 
-        Subject::updateOrCreate(
+        $subject =   Subject::updateOrCreate(
             ['code' => $request->code],
             ['name' =>$request->name, 'description' => $request->description]
         );
 
+
+        $subject->courses()->attach($request->course);
 
         return redirect()->back()->with('message', 'Request Successful!');
         

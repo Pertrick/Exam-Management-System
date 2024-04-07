@@ -29,7 +29,7 @@ class AccessPinController extends Controller
             $sh2 = str_shuffle($st);
 
             AccessPin::create([
-                "pin"=> substr($sh2, 0,16),
+                "pin"=> substr($sh2, 0,7),
                 "serial"=> $batch.$i,
                 "created_by" => Auth::id()
             ]);

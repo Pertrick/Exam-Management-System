@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Question;
-use App\Models\Subject;
 use App\Models\Option;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\StoreQuestionFormRequest;
-use App\Services\ImageService;
+use App\Models\Subject;
+use App\Models\Question;
 use Illuminate\Http\Request;
+use App\Services\ImageService;
+use App\Imports\QuestionImport;
+use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\Admin\StoreQuestionFormRequest;
 
 class QuestionController extends Controller
 {
@@ -43,8 +45,6 @@ class QuestionController extends Controller
      */
     public function store(Request $request, ImageService $imageService)
     {
-        // dd($request->all());
-        // $request->validated();
 
         $question =  Question::create([
             'question' => $request->question,
@@ -62,13 +62,13 @@ class QuestionController extends Controller
             $option->question_id = $question->id;
             $option->label = $opt;
 
-            if($request->type == 'option'){
+            if ($request->type == Question::OPTION) {
 
-                if($request->is_correct == $key){
+                if ($request->is_correct == $key) {
                     $option->is_correct = "on";
                 }
                 $option->save();
-            }else if($request->type == 'multiple-choice'){
+            } else if ($request->type == Question::MULTI_CHOICE) {
 
                 foreach ($request->is_correct as $is_correct_key => $is_correct) {
                     if ($is_correct_key == $key) {
@@ -76,23 +76,22 @@ class QuestionController extends Controller
                     }
                     $option->save();
                 }
-            }else if($request->type == 'no-option'){
+            } else if ($request->type == Question::NO_OPTION) {
                 $option->is_correct = "on";
                 $option->save();
             }
-               
-        if (!is_null($request->option_image)) {
-            if (!empty(array_filter($request->option_image))) {
-                foreach (array_filter($request->option_image) as $opt_key =>  $opt_image) {
-                    if ($opt_key == $key) {
-                        if (!is_null($opt_image)) {
-                            $imageService->storeOptionImage($option, $opt_image);
+
+            if (!is_null($request->option_image)) {
+                if (!empty(array_filter($request->option_image))) {
+                    foreach (array_filter($request->option_image) as $opt_key =>  $opt_image) {
+                        if ($opt_key == $key) {
+                            if (!is_null($opt_image)) {
+                                $imageService->storeOptionImage($option, $opt_image);
+                            }
                         }
-                    }
-                };
+                    };
+                }
             }
-        }
-          
         };
 
         return redirect()->route('admin.question.index')->with('message', 'Question created successfully!');
@@ -146,7 +145,8 @@ class QuestionController extends Controller
         if (!is_null($request->question_image)) {
             $imageService->updateQuestionImage($quest, $request->question_image);
         }
-        
+
+     
         foreach ($retrievedOptions as $retrieved_key => $retrievedOption) {
             foreach ($request->option as $key =>  $opt) {
                 if ($retrieved_key == $key) {
@@ -154,15 +154,14 @@ class QuestionController extends Controller
                     $retrievedOption->save();
                 }
 
-                if($request->type == 'option'){
-                    if($request->is_correct == $retrieved_key){
+                if ($request->type == Question::OPTION) {
+                    if ($request->is_correct == $retrieved_key) {
                         $retrievedOption->is_correct = "on";
-                    }else{
+                    } else {
                         $retrievedOption->is_correct = "off";
                     }
                     $retrievedOption->save();
-                }
-                else if($request->type == 'multiple-choice'){
+                } else if ($request->type == Question::MULTI_CHOICE) {
                     foreach ($request->is_correct as $is_correct_key => $is_correct) {
                         if ($is_correct_key == $retrieved_key && $is_correct_key == $key) {
                             $retrievedOption->is_correct = $is_correct;
@@ -170,7 +169,7 @@ class QuestionController extends Controller
                     }
                     $retrievedOption->save();
                 }
-              
+
                 if (!is_null($request->option_image)) {
                     if (!empty(array_filter($request->option_image))) {
                         foreach (array_filter($request->option_image) as $opt_key =>  $opt_image) {
@@ -183,6 +182,7 @@ class QuestionController extends Controller
                     }
                 }
             }
+            
         };
 
         // foreach ($retrievedOptions as $retrieved_key => $retrievedOption) {
@@ -214,4 +214,30 @@ class QuestionController extends Controller
         $question->delete();
         return redirect()->route('admin.question.index')->with('message', 'Question deleted successfully!');
     }
+
+
+    public function import()
+    {
+
+        $subjects = Subject::get();
+        return view('admin.question.import', compact('subjects'));
+    }
+
+
+
+    public function uploadExcel(Request $request)
+    {
+        $valiated =  $this->validate($request, [
+            'subject_id' => ['required', 'string'],
+            'file' => ['required', 'file']
+        ]);
+
+        $file = $valiated['file'];
+        $subjectId = $valiated['subject_id'];
+
+       $excel =  Excel::import(new QuestionImport($subjectId), $file);
+       return response()->json(['message' =>'success'],200);
+       
+    }
+
 }

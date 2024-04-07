@@ -33,7 +33,7 @@
             <!-- /.content-header -->
             <!-- Main content -->
             <section class="content">
-                <div class="container-fluid">
+                <div class="container">
                     <div class="card card-info">
                         <div class="card-body">
                             @include('student.partials.alert')

@@ -82,7 +82,9 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Question</label>
-                                                    <textarea name="question" id="question" class="form-control">{{ $question->question }}</textarea>
+                                                    <textarea name="question" id="question" class="form-control">
+                                                        {{ $question->question}}
+                                                    </textarea>
                                                     @if(!is_null($question->image))
                                                     <input type="file" name="question_image" id="question-image">
                                                     <img src="/storage/images/questions/{{$question->image->name}}" alt="{{$question->image->name}}" class="img-fluid mt-1" width="100" height="50" style="border:1px;">
@@ -159,7 +161,7 @@
                                                     </div>
                                                 </div>
 
-                                                @elseif($question->type =="no-option")
+                                                @elseif($question->type =="no-option" || $question->type == "no option")
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label>Answer</label>

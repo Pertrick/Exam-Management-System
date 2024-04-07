@@ -36,8 +36,19 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            <a class="btn btn-sm btn-success" href="{{ route('admin.question.create') }}"><i
-                                    class="fa fa-plus"></i> Add Question</a><br><br>
+                            <div class="">
+                                <a class="btn btn-sm btn-success" href="{{ route('admin.question.create') }}">
+                                    <i class="fa fa-plus"></i> Add Question
+                                    </a>
+                                
+                                    <a class="btn btn-sm btn-info d-inline float-right" href="{{ route('admin.question.import') }}">
+                                        <i class="fa fa-download"></i>
+                                        import
+                                    </a>  
+                            </div>
+
+
+                            <br><br>
                             <div class="col-md-12 table-responsive">
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
@@ -55,22 +66,25 @@
                                                 <td>{{ $question->subject->name }}</td>
                                                 <td>
                                                     {{ $question->question }}
-                                                    @if(!is_null($question->image))
-                                                       <img src="storage/images/questions/{{$question->image->name}}" alt="{{$question->image->name}}" width="100" height="50">
+                                                    @if (!is_null($question->image))
+                                                        <img src="storage/images/questions/{{ $question->image->name }}"
+                                                            alt="{{ $question->image->name }}" width="100"
+                                                            height="50">
                                                     @endif
                                                 </td>
                                                 <td>{{ $question->type }}</td>
                                                 <td>{{ $question->point }}</td>
-                                               
+
                                                 <td class="text-right">
-                                                    <button type="button" class="btn btn-sm btn-info options"  data-id ="{{$question->options}}" data-toggle="modal" data-target="#view-options-modal" title="view options">
-                                                     options <i
-                                                     class="fa fa-eye"></i>
+                                                    <button type="button" class="btn btn-sm btn-info options"
+                                                        data-id ="{{ $question->options }}" data-toggle="modal"
+                                                        data-target="#view-options-modal" title="view options">
+                                                        options <i class="fa fa-eye"></i>
                                                     </button>
 
                                                     <a class="btn btn-sm bg3 text-white"
-                                                        href="{{ route('admin.question.edit', $question->id) }}" title="edit"><i
-                                                            class="fa fa-edit text-white"></i>
+                                                        href="{{ route('admin.question.edit', $question->id) }}"
+                                                        title="edit"><i class="fa fa-edit text-white"></i>
                                                         edit</a>
 
                                                     <form action="{{ route('admin.question.delete', $question->id) }}"
@@ -78,7 +92,9 @@
                                                         @csrf
                                                         @method('delete')
                                                         <button class="btn btn-sm bg1 text-white" type="submit"
-                                                            onclick="return confirm('Are you sure?')" title="delete">delete<i class="fa fa-trash-alt text-white"></i></button>
+                                                            onclick="return confirm('Are you sure?')"
+                                                            title="delete">delete<i
+                                                                class="fa fa-trash-alt text-white"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -114,28 +130,29 @@
     </div>
     @include('admin.partials.footer')
     <script>
-
-        $('.options').on('click', function(){
+        $('.options').on('click', function() {
             $('#option-p').html('');
             var data = $(this).attr('data-id');
             console.log(data);
-            var options =JSON.parse(data);
-            var label ='';
+            var options = JSON.parse(data);
+            var label = '';
             options.forEach(element => {
                 console.log(element)
-                    if(element.is_correct ==1){
+                if (element.is_correct == 1) {
                     label += `<h6><li class="text-left rounded-sm p-1 ">${(element.label) ?? ''}`
-                        if(element.image != null){
-                            label += `<img  class="border" src="/storage/images/options/${element.image.name}" alt="${element.image.name}" width="100" height="50">`
-                        }
-                        label += `<i class="fa fa-check text-success"></i></li></h6>` 
-                }else{
-                    label += `<h6><li class="text-left rounded-sm p-1 ">${(element.label) ?? ''}`
-                        if(element.image != null){
-                            label += `<img class="border" src="/storage/images/options/${element.image.name}" alt="${element.image.name}" width="100" height="50">`                          
-                        }
-                        label += `<i class="fa fa-times text-danger"></i></li></h6>` 
+                    if (element.image != null) {
+                        label +=
+                            `<img  class="border" src="/storage/images/options/${element.image.name}" alt="${element.image.name}" width="100" height="50">`
                     }
+                    label += `<i class="fa fa-check text-success"></i></li></h6>`
+                } else {
+                    label += `<h6><li class="text-left rounded-sm p-1 ">${(element.label) ?? ''}`
+                    if (element.image != null) {
+                        label +=
+                            `<img class="border" src="/storage/images/options/${element.image.name}" alt="${element.image.name}" width="100" height="50">`
+                    }
+                    label += `<i class="fa fa-times text-danger"></i></li></h6>`
+                }
             });
             $('#option-p').append(label);
         });
@@ -144,7 +161,6 @@
             $("#example1").DataTable();
         });
 
-      
     </script>
 </body>
 

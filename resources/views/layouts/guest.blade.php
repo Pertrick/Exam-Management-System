@@ -17,5 +17,6 @@
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
+        <script src="EMS/asset/jquery/jquery.min.js"></script>
     </body>
 </html>
