@@ -56,7 +56,6 @@
                                                 @foreach ($test->questions as $quest)
                                                     <div class="card-body">
                                                         <h4 class="card-title mb-2">{{ $loop->iteration }}.
-
                                                             {{ $quest->question }}  
                                                             @if ($quest->image)
                                                                 <div class="m-2">

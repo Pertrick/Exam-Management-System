@@ -16,12 +16,16 @@ class AdminSeeder extends Seeder
      */
     public function run()
     {
-        $role= Role::where('name', 'admin')->firstOrFail();
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@admin.com',
-            'password' => bcrypt('12345678'),
-            'role_id' => $role->id
-        ]);
+        $role = Role::where('name', 'admin')->firstOrFail();
+        $user = User::where('role_id', Role::ADMIN)->first();
+
+        if (!$user) {
+            User::create([
+                'name' => 'Admin',
+                'email' => 'admin@admin.com',
+                'password' => bcrypt('12345678'),
+                'role_id' => $role->id
+            ]);
+        }
     }
 }

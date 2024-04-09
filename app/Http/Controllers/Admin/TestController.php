@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Test;
 use App\Models\Subject;
 use App\Models\Question;
+use App\Models\TestType;
 use Illuminate\Http\Request;
 use App\Exports\QuestionExport;
 use App\Http\Controllers\Controller;
@@ -19,7 +20,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        $tests = Test::with(['subject', 'questions.options.image', 'questions.image'])->get();
+        $tests = Test::with(['subject', 'questions.options.image', 'questions.image','testType'])->get();
         return view('admin.test.index', compact('tests'));
     }
 
@@ -39,7 +40,8 @@ class TestController extends Controller
     public function create()
     {
         $subjects = subject::all();
-        return view('admin.test.create', compact('subjects'));
+        $testTypes = TestType::get();
+        return view('admin.test.create', compact('subjects','testTypes'));
     }
 
     /**
@@ -54,6 +56,9 @@ class TestController extends Controller
         $test = Test::create([
             'subject_id' => $request->subject_id,
             'duration' => $request->duration,
+            'test_type_id' => $request->test_type,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
             'pass_mark' => $request->pass_mark
         ]);
 
@@ -81,12 +86,13 @@ class TestController extends Controller
      */
     public function edit($id)
     {
-        $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
+        $test = Test::with(['questions.options.image','subject', 'questions.image','testType'])->findOrFail($id);
         $test_subject_id = $test->subject_id;
         $test_question_ids = $test->questions->pluck('id');
+        $testTypes = TestType::get();
         $questions = Question::with('options.image', 'image')->where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
         
-        return view('admin.test.edit', compact('test', 'questions'));
+        return view('admin.test.edit', compact('test', 'questions','testTypes'));
     }
 
     /**
@@ -101,6 +107,7 @@ class TestController extends Controller
         $test = Test::findOrFail($id);
         $test->duration =  $request->duration ?? $test->duration;
         $test->pass_mark =  $request->pass_mark ?? $test->pass_mark;
+        $test->test_type_id = $request->test_type_id ?? $test->test_type_id;
         $test->save();
 
         $test->questions()->sync($request->question_ids);

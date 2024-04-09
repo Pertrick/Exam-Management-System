@@ -48,10 +48,12 @@
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            {{-- <th>Name</th> --}}
-                                            <th>Subject</th>
+                                            <th>Subjects</th>
+                                            <th>Types</th>
                                             <th>No of questions</th>
-                                            <th>Duration(seconds)</th>
+                                            <th>Duration(secs)</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Pass Mark</th>
                                             <th class="text-right">Action</th>
                                         </tr>
@@ -61,8 +63,11 @@
                                         @foreach ($tests as $test)
                                             <tr>
                                                 <td>{{ $test->subject->name }}</td>
+                                                <td>{{$test->testType->name}}</td>
                                                 <td>{{ $test->questions->count() }}</td>
                                                 <td>{{ $test->duration }}</td>
+                                                <td>{{$test->start_date }}</td>
+                                                <td>{{$test->end_date }}</td>
                                                 <td>{{ $test->pass_mark }}</td>
 
                                                 <td class="text-right">

@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Subject;
 use App\Models\Question;
-use App\Models\User;
 use App\Models\Response;
+use App\Models\TestType;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Test extends Model
 {
@@ -19,14 +21,19 @@ class Test extends Model
 
     protected $fillable = [
         'subject_id',
+        'test_type_id',
         'duration',
-        'pass_mark'
+        'pass_mark',
+        'start_date',
+        'end_date'
+
     ];
 
 
     protected $cast =[
         'is_published' => 'boolean'
     ];
+
 
 
     public function subject()
@@ -41,7 +48,7 @@ class Test extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot(['start_time','end_time'])->withTimestamps();
     }
 
     public function responses()
@@ -63,5 +70,17 @@ class Test extends Model
             $this->questions()->detach();
             parent::delete();
         });
+    }
+
+    public function testType(){
+        return $this->belongsTo(TestType::class);
+    }
+
+    public function getStartDateAttribute($value){
+        return Carbon::parse($value)->format('M D Y H:i:s');
+    }
+
+    public function getEndDateAttribute($value){
+        return Carbon::parse($value)->format('M D Y H:i:s');
     }
 }

@@ -36,7 +36,43 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
+                            @foreach($tests as $key => $test)
+                            <h4 class="text-center bg-1 text-white p-2">{{ ucFirst($key)}}</h4>
                             <div class="col-md-12 table-responsive">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Subject</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Duration</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                </th>
+                                            <th class="text-secondary opacity-7"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($test as $value)
+                                            <tr>
+                                                <td>{{ $value->subject->name }}</td>
+                                                <td>{{ $value->duration }} seconds</td>
+                                                <td>
+                                                    <button type="button" data-target="#confirm" data-toggle="modal"
+                                                        class="btn btn-sm btn-link text-success" onclick="confirm({{ $value}});">
+                                                        <i class="fa fa-file-word"></i> Take {{$key}}</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            @endforeach
+                            
+                            {{-- <div class="col-md-12 table-responsive">
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
@@ -66,7 +102,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>

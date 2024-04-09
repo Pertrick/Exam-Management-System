@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Test;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,8 @@ Route::post('auth/register', [RegisteredUserController::class, 'store'])->name('
 
 Route::get('courses/programs/{program}', function($programId){
     return Course::whereHas('programs', fn($q) => $q->where('program_id', $programId))->get();
+});
+
+Route::get('exams', function(){
+    return Test::with(['results', 'subject'])->Has('results')->get();
 });

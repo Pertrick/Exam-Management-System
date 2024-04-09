@@ -18,9 +18,20 @@ class TestController extends Controller
     public function index()
     {
         $subject_ids = auth()->user()->subjects()->get()->pluck('id');
-        $tests = Test::with(['subject', 'questions:question'])
-        ->whereIn('subject_id', $subject_ids)
-        ->where('is_published',Test::PUBLISHED)->get();
+        $tests = Test::with(['subject', 'questions:question', 'testType'])
+            ->whereIn('subject_id', $subject_ids)
+            ->where('is_published', Test::PUBLISHED)
+            ->where(function ($query) {
+                $query->whereNull('start_date')
+                      ->orWhereNull('end_date');
+            })
+            ->orWhere(function ($query) {
+                $query->where('start_date', '<=', now())
+                      ->where('end_date', '>=', now());
+            })
+            ->get()
+            ->groupBy('testType.name');
+
         return view('student.test.index', compact('tests'));
     }
 
@@ -42,12 +53,14 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        auth()->user()->tests()->attach($request->test_id, 
-        [
-            'start_time' => Carbon::now(), 
-            'end_time' => Carbon::now()->addSecond($request->duration)
-        ]);
-        
+        auth()->user()->tests()->attach(
+            $request->test_id,
+            [
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addSecond($request->duration)
+            ]
+        );
+
         return true;
     }
 
@@ -59,11 +72,11 @@ class TestController extends Controller
      */
     public function show($id)
     {
-        $option_type= Question::OPTION;
+        $option_type = Question::OPTION;
         $multi_choice_type = Question::MULTI_CHOICE;
         $no_option = Question::NO_OPTION;
-        $sn =1;
-        $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
+        $sn = 1;
+        $test = Test::with(['questions.options.image', 'subject', 'questions.image'])->findOrFail($id);
         return view('student.test.show', compact('test', 'option_type', 'no_option', 'multi_choice_type', 'sn'));
     }
 
@@ -100,5 +113,4 @@ class TestController extends Controller
     {
         //
     }
-
 }
