@@ -84,7 +84,7 @@ class User extends Authenticatable
 
     public function getRedirectRouteName(): string{
         return match((int)$this->role_id){
-          Role::ADMIN => 'admin.dashboard',
+          Role::ADMIN => 'admin.dashboard.index',
           Role::USER => 'student.dashboard'
         };
     }

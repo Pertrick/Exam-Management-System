@@ -10,7 +10,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}"
+                    <a href="{{ route('admin.dashboard.index') }}"
                         class="nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-tachometer-alt "></i>
                         <p>
@@ -68,7 +68,7 @@
                 <li class="nav-item">
                     <a href="{{ route('admin.accesspin.index') }}"
                         class="nav-link {{ request()->is('admin/accesspin') ? 'active' : '' }}">
-                        <i class="nav-icon fa fa-user-graduate "></i>
+                        <i class="nav-icon fa fa-universal-access "></i>
                         <p>
                             Access Pins
                         </p>

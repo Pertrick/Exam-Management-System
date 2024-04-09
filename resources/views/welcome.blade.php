@@ -40,7 +40,7 @@
 
                 <div style="display:flex; justify-content:center;">
                     @auth
-                        <a class="btn-link" href="{{ route('student.dashboard') }}">Dashboard</a>
+                        <a class="btn-link" href="{{ route('dashboard') }}">Dashboard</a>
                     @endauth
                     @guest
                         <a class="btn-link" href="{{ route('login') }}">LOGIN</a>

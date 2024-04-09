@@ -23,8 +23,7 @@ use App\Http\Controllers\Admin\ResourcesController;
 
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth','admin']], function () {
-    Route::get('', [HomeController::class, 'index'])->name('admin.dashboard.index');
-    Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+    Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard.index');
     Route::prefix('subject')->group(function(){
         Route::get('', [SubjectController::class, 'index'])->name('admin.subject.index');
         Route::post('store', [SubjectController::class, 'store'])->name('admin.subject.store');

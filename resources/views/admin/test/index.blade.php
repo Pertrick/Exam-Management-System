@@ -71,7 +71,7 @@
                                                 <td>{{ $test->pass_mark }}</td>
 
                                                 <td class="text-right">
-                                                    <button class="{{$test->is_published ?'btn btn-sm btn-warning text-white' : 'btn btn-sm btn-success text-white' }}" id="{{$test->id}}"
+                                                    <button class="{{$test->is_published ?'btn btn-sm btn-warning text-white text-xs' : 'btn btn-sm btn-success text-white text-xs' }}" id="{{$test->id}}"
                                                         onclick="publish({{ $test->id }});">
                                                         {{$test->is_published ? "unpublish" : "publish"}}</button>
 
