@@ -63,7 +63,8 @@
 
 
                                         <div class="col-md-12 text-center">
-                                            <a  class="btn btn-text " href="{{asset('assets/exam-ques.xlsx')}}" target="_blank">click to download sample excel</a>
+                                            <a class="btn btn-text " href="{{ asset('assets/exam-ques.xlsx') }}"
+                                                target="_blank">click to download sample excel</a>
                                         </div>
 
                                     </div>
@@ -125,13 +126,26 @@
                 contentType: false,
                 processData: false,
                 beforeSend: function(xhr) {
-                    $('#uploadBtn').text('Uploading...').attr('disabled', true);
+                    // $('#uploadBtn').text('Uploading...').attr('disabled', true);
+                    Swal.showLoading();
                 },
                 success: function(response) {
                     console.log("Success:", response);
+
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Upload Completed!',
+                        icon: 'success',
+                    })
+
                 },
                 error: function(error) {
                     console.error("Error:", error);
+                    Swal.fire({
+                        title: "Error!",
+                        text: "Question Upload Failed",
+                        icon: "error"
+                    });
                 },
                 complete: function(response) {
                     $('#uploadBtn').text('Upload').attr('disabled', false);
