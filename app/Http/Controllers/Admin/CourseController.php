@@ -42,7 +42,7 @@ class CourseController extends Controller
         $this->validate($request, [
             'name' => ['required','string'],
             'programs' => ['required','array'],
-            'description' => ['nullable','string']
+            'description' => ['string']
         ]);
 
        $course =  Course::updateOrCreate(
