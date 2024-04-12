@@ -11,6 +11,7 @@
  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.3/dist/quill.js"></script>
  <script src="filter-multi-select-main/dist/filter-multi-select-bundle.min.js"></script>
  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
  <script>
