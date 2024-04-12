@@ -21,7 +21,6 @@
 
             <div class="navbar">
                 <ul>
-                    <li><a href="index.php">Home</a></li>
                     @guest
                         <li><a class="" href="{{ route('login') }}">Login</a></li>
                         <li><a class="" href="{{ route('register') }}">Register</a></li>

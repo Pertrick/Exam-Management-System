@@ -70,8 +70,6 @@ class ScoreService
 
         $totalPoint = $test->questions->sum('point');
 
-        // $total_question = $test->questions_count;
-
         $percentage = ($totalScore / $totalPoint) * 100;
 
        $result =  Result::create([
