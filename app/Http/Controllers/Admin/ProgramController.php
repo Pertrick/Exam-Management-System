@@ -39,7 +39,7 @@ class ProgramController extends Controller
     {
        $validated =  $this->validate($request, [
             'name' => ['required','string', ],
-            'description' => ['nullable','string']
+            'description' => ['string']
         ]);
 
         Program::updateOrCreate(

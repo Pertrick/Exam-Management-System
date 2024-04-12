@@ -235,37 +235,37 @@
         });
 
 
-        function appendTime() {
-            var time = `<div class="col-md-12">
-                            <div class="form-group">
-                                <label>Exam Duration</label>
-                                    <input type='text' placeholder="Enter exam duraton in seconds" class="form-control" name="duration">
-                                        @error('duration')
-                                            <div class="error text-danger text-xs">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            </div>
-                        </div>
-                        `
-            $('#row-id').append(time);
+        // function appendTime() {
+        //     var time = `<div class="col-md-12">
+        //                     <div class="form-group">
+        //                         <label>Exam Duration</label>
+        //                             <input type='text' placeholder="Enter exam duraton in seconds" class="form-control" name="duration">
+        //                                 @error('duration')
+        //                                     <div class="error text-danger text-xs">{{ $message }}</div>
+        //                                         @enderror
+        //                                     </div>
+        //                     </div>
+        //                 </div>
+        //                 `
+        //     $('#row-id').append(time);
 
-        }
+        // }
 
-        function passMark() {
-            var pass_mark = `<div class="col-md-12">
-                            <div class="form-group">
-                                <label>Pass Mark</label>
-                                    <input type='text' placeholder="Enter Pass Mark" class="form-control" name="pass_mark">
-                                        @error('pass_mark')
-                                            <div class="error text-danger text-xs">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            </div>
-                        </div>
-                        `
-            $('#row-id').append(pass_mark);
+        // function passMark() {
+        //     var pass_mark = `<div class="col-md-12">
+        //                     <div class="form-group">
+        //                         <label>Pass Mark</label>
+        //                             <input type='text' placeholder="Enter Pass Mark" class="form-control" name="pass_mark">
+        //                                 @error('pass_mark')
+        //                                     <div class="error text-danger text-xs">{{ $message }}</div>
+        //                                         @enderror
+        //                                     </div>
+        //                     </div>
+        //                 </div>
+        //                 `
+        //     $('#row-id').append(pass_mark);
 
-        }
+        // }
 
 
 
