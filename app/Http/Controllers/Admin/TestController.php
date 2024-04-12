@@ -158,8 +158,11 @@ class TestController extends Controller
     public function destroy($id)
     {
         $test = Test::findOrFail($id);
-        $test->delete();
 
+        if($test->users()->detach()){
+            $test->delete();
+        }
+        
         return redirect()->back()->with('message', 'Test Deleted Successfully!');
     }
 

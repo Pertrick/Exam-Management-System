@@ -55,7 +55,7 @@ class QuestionImport implements ToCollection, WithHeadingRow
             foreach ($optionKeys as $item) {
                 $option = new Option();
                 $option->question_id = $question->id;
-                $option->label = $item;
+                $option->label = $this->removeBreaks($item);
 
                 if ($answer == $collectionAnswer) {
                     $option->is_correct = true;
@@ -91,7 +91,7 @@ class QuestionImport implements ToCollection, WithHeadingRow
             foreach ($optionKeys as $item) {
                 $option = new Option();
                 $option->question_id = $question->id;
-                $option->label = $item;
+                $option->label = $this->removeBreaks($item);
 
                 $answerArray = explode(',', $collectionAnswer);
 
@@ -124,7 +124,7 @@ class QuestionImport implements ToCollection, WithHeadingRow
 
             $option = new Option();
             $option->question_id = $question->id;
-            $option->label = $collection['answers'];
+            $option->label = $this->removeBreaks($collection['answers']);
             $option->is_correct = true;
             $option->save();
 
@@ -143,5 +143,11 @@ class QuestionImport implements ToCollection, WithHeadingRow
             'type' => $collection['types'],
             'point' => $collection['points'],
         ]);
+    }
+
+
+    private function removeBreaks(String $str){
+       $newstr = str_replace("\r\n","", $str);
+       return trim($newstr, "\r\n");
     }
 }

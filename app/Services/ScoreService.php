@@ -65,23 +65,26 @@ class ScoreService
     }
 
 
-    public function storeScore($test_id, $total_score){
-        $test =  Test::withCount('questions')->findOrFail($test_id);
-        $total_question = $test->questions_count;
+    public function storeScore($testId, $totalScore){
+        $test =  Test::withCount('questions')->findOrFail($testId);
 
-        $percentage = ($total_score / $total_question) * 100;
+        $totalPoint = $test->questions->sum('point');
+
+        // $total_question = $test->questions_count;
+
+        $percentage = ($totalScore / $totalPoint) * 100;
 
        $result =  Result::create([
             'user_id' => auth()->user()->id,
-            'test_id' => $test_id,
-            'score' => $total_score,
+            'test_id' => $testId,
+            'score' => $totalScore,
             'score_percentage' => $percentage,
             'status' => $percentage > $test->pass_mark ? Result::PASSED : Result::FAILED,
         ]);
 
         ResultEmail::dispatch($result);
 
-        $responses = auth()->user()->responses()->where('test_id',$test_id)->whereNull('result_id')->get();
+        $responses = auth()->user()->responses()->where('test_id',$testId)->whereNull('result_id')->get();
 
         foreach($responses as $response){
             $response->result_id = $result->id;
