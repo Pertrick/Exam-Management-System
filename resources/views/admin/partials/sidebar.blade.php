@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: rgba(39,93,43);">
     <!-- Brand Logo -->
-    <a href="index.html" class="brand-link animated swing">
-        <img src="EMS/asset/img/logo.png" alt="DSMS Logo" width="200" style="margin-bottom: -50px;">
+    <a href="{{route('admin.dashboard.index')}}" class="brand-link animated swing">
+        <img src="{{ asset('assets/images/logo.jpeg') }}" alt="DSMS Logo" width="100" style="margin-top: 50px; margin-left:50px">
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -48,7 +48,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.course.index') }}"
-                        class="nav-link {{ request()->is('admin/courses') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/courses*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-book"></i>
                         <p>
                             Courses
@@ -57,7 +57,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.student.index') }}"
-                        class="nav-link {{ request()->is('admin/student') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/student*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-user-graduate "></i>
                         <p>
                             Student
@@ -67,7 +67,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.accesspin.index') }}"
-                        class="nav-link {{ request()->is('admin/accesspin') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/accesspin*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-universal-access "></i>
                         <p>
                             Access Pins
@@ -77,7 +77,7 @@
 
                 <li class="nav-item">
                     <a href="{{ route('admin.test.index') }}"
-                        class="nav-link {{ request()->is('admin/exam') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/exam*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-chalkboard-teacher "></i>
                         <p>
                             Exams
@@ -86,7 +86,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="" class="nav-link {{ request()->is('admin/results') ? 'active' : '' }}">
+                    <a href="{{route('admin.result.index')}}" class="nav-link {{ request()->is('admin/results') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-list-alt "></i>
                         <p>
                             Results
@@ -94,7 +94,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                  <a href="" class="nav-link {{ request()->is('admin/settings') ? 'active' : '' }}">
+                  <a href="{{route('admin.settings.index')}}" class="nav-link {{ request()->is('admin/settings') ? 'active' : '' }}">
                       <i class="nav-icon fa fa-cog "></i>
                       <p>
                           Settings

@@ -20,7 +20,7 @@
                         <!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{route('student.dashboard')}}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('student.dashboard') }}">Home</a></li>
                                 <li class="breadcrumb-item active">Subject</li>
                             </ol>
                         </div>
@@ -34,84 +34,95 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
+                    <div class="card card-info">
+                        <div class="card-body">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
 
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                            @include('student.partials.alert')
+
+                            <div class="m-3">
+                                <span class="fa fa-book"> Subject Information</span>
+                            </div>
+                            <div class="col-md-12 mb-5">
+                                <!-- form start -->
+                                <form action="{{ route('student.subject.store') }}" method="POST" id="form-subject">
+                                    @csrf
+                                    <div class="form-row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="subject">Subjects</label>
+                                            <select name="subject" id="subjects" class="form-control">
+                                                <option value="" selected disabled>--choose subject--
+                                                </option>
+                                                @foreach ($subjects as $subject)
+                                                    @if (in_array($subject->id, $user_subjects->pluck('id')->toArray()))
+                                                        <option value="{{ $subject->id }}" disabled>
+                                                            {{ $subject->name }}</option>
+                                                    @else
+                                                        <option value="{{ $subject->id }}">
+                                                            {{ $subject->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="col-md-4 mb-3">
+                                            <label for="subject">Pin</label>
+                                            <input type="password" name="code" class="form-control"
+                                                placeholder="Enter pin" />
+                                        </div>
+                                        <div class="col-md-4" style="margin-top: 32px">
+                                            <input type="submit" class="btn btn-success" value="Save" />
+                                        </div>
+                                          
+                                       
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-12 table-responsive" style="border-left: 1px solid #ddd;">
+                                <table id="example1" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Subject Code</th>
+                                            <th>Subject Name</th>
+                                            <th>Description</th>
+                                            {{-- <th class="text-right">Action</th> --}}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($user_subjects as $user_subject)
+                                            <tr data-toggle="modal" data-id="{{ $user_subject }}" data-target="#delete">
+                                                <td>{{ $user_subject->code }}</td>
+                                                <td>{{ $user_subject->name }}</td>
+                                                <td>{{ $user_subject->description }}</td>
+                                                {{-- <td class="text-right">
+                                                <form action="{{ route('student.subject.delete', $user_subject->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-sm bg1 text-white" type="submit"
+                                                        onclick="return confirm('Are you sure?')">delete<i
+                                                            class="fa fa-trash-alt text-white"></i></button>
+                                                </form>
+                                            </td> --}}
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
                         </div>
-                    @endif
-
-                   @include('student.partials.alert')
-
-                    <div class="col-md-12">
-                        <!-- form start -->
-                        <form action="{{ route('student.subject.store') }}" method="POST" id="form-subject">
-                            @csrf
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="card-header">
-                                            <span class="fa fa-book"> Subject Information</span>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <label for="subject">Select Subject</label>
-                                                <select name="subject" id="subjects">
-                                                    <option value="" disabled>--choose subject--</option>
-                                                    @foreach($subjects as $subject)
-                                                        @if(in_array($subject->id, $user_subjects->pluck('id')->toArray()))
-                                                        <option value="{{$subject->id}}" selected disabled>{{$subject->name}}</option>
-                                                        @else
-                                                        <option value="{{$subject->id}}">{{$subject->name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <input type="text" name="code" class="form-control" />
-
-                                        </div>
-                                        <div class="col-md-6 m-2 ">
-                                            <button type="submit" class="btn bg3">Save</button>
-                                        </div>
-                        </form>
                     </div>
 
-                    <div class="col-12 table-responsive" style="border-left: 1px solid #ddd;">
-                        <table id="example1" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Subject Code</th>
-                                    <th>Subject Name</th>
-                                    <th>Description</th>
-                                    {{-- <th class="text-right">Action</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($user_subjects as $user_subject)
-                                    <tr data-toggle="modal" data-id="{{ $user_subject }}" data-target="#delete">
-                                        <td>{{ $user_subject->code }}</td>
-                                        <td>{{ $user_subject->name }}</td>
-                                        <td>{{ $user_subject->description }}</td>
-                                        {{-- <td class="text-right">
-                                            <form action="{{ route('student.subject.delete', $user_subject->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-sm bg1 text-white" type="submit"
-                                                    onclick="return confirm('Are you sure?')">delete<i
-                                                        class="fa fa-trash-alt text-white"></i></button>
-                                            </form>
-                                        </td> --}}
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
         </div>
 

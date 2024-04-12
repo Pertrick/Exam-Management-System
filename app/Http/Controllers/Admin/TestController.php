@@ -8,6 +8,7 @@ use App\Models\Question;
 use App\Models\TestType;
 use Illuminate\Http\Request;
 use App\Exports\QuestionExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -52,11 +53,19 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request,[
+            'subject_id' => ['required'],
+            'duration' => ['required'],
+            'test_type' => ['required'],
+            'instruction' => ['required','string'],
+            'pass_mark' => ['required', 'string']
+        ]);
 
         $test = Test::create([
             'subject_id' => $request->subject_id,
             'duration' => $request->duration,
             'test_type_id' => $request->test_type,
+            'instruction' => $request->instruction,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'pass_mark' => $request->pass_mark
@@ -108,6 +117,7 @@ class TestController extends Controller
         $test->duration =  $request->duration ?? $test->duration;
         $test->pass_mark =  $request->pass_mark ?? $test->pass_mark;
         $test->test_type_id = $request->test_type_id ?? $test->test_type_id;
+        $test->instruction = $request->instruction ?? $test->instruction;
         $test->save();
 
         $test->questions()->sync($request->question_ids);
@@ -156,11 +166,15 @@ class TestController extends Controller
 
     public function export($id){
         $test = Test::with(['questions.options.image','subject', 'questions.image'])->findOrFail($id);
-        $test_subject_id = $test->subject_id;
         $subjectName = $test->subject->name;
         $test_question_ids = $test->questions->pluck('id');
-        $questions = Question::with('options.image', 'image')->where('subject_id', $test_subject_id)->whereNotIn('id',$test_question_ids)->get();
+        $questions = Question::with('options.image', 'image')->where('subject_id', $test->subject_id)->whereNotIn('id',$test_question_ids)->get();
         
-        return Excel::download(new QuestionExport($test, $questions),  'test.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+        $option_type = Question::OPTION;
+        $multi_choice_type = Question::MULTI_CHOICE;
+        $no_option = Question::NO_OPTION;
+
+        $pdf = Pdf::loadView('admin.test.export', compact('test','questions','option_type','multi_choice_type','no_option'))->setPaper('a4', 'portrait')->setWarnings(false);
+        return $pdf->download("$subjectName test.pdf");
     }
 }

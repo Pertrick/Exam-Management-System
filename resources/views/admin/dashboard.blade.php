@@ -113,9 +113,9 @@
                                     <ul class="users-list clearfix">
                                         @foreach ($students as $student)
                                             <li>
-                                                <img src="EMS/asset/img/user1-128x128.jpg" alt="User Image">
-                                                <a class="users-list-name" href="#">{{ $student->name }}</a>
-                                                <span class="users-list-date">{{ $student->created_at }}</span>
+                                                <img src="assets/images/user.jpg" alt="User Image" width="50" height="50">
+                                                <p class="users-list-name text-xs">{{ $student->name }}</p>
+                                                <span class="users-list-date text-xs">{{ $student->created_at }}</span>
                                             </li>
                                         @endforeach
                                     </ul>

@@ -56,7 +56,7 @@
                                         @foreach ($students as $student)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td><img src="EMS/asset/img/avatar.png" width="40"
+                                                <td><img src="assets/images/user.jpg" width="40"
                                                         style="border-radius:10px" alt="User Image"></td>
                                                 <td>{{ $student->name }}</td>
                                                 <td>{{ $student->email }}</td>

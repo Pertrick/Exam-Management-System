@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,5 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Model::preventLazyLoading(! app()->isProduction());
+
+        view()->composer('*', function ($view) {
+            $settings = Setting::first();
+            $view->with('settings',$settings);
+        });
     }
 }

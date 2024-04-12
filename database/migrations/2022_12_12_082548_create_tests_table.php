@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('duration')->nullable();
             $table->boolean('pass_mark');
             $table->boolean('is_published')->default(0);
+            $table->text('instruction')->nullable();
             $table->dateTime('start_date')->nullable();  
             $table->dateTime('end_date')->nullable();
             $table->timestamps();

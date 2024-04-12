@@ -178,8 +178,8 @@
 
                                         </div>
                                         <div class="col-md-12">
-                                            <button type="submit" class="btn bg2">Save</button>
-                                            <button class="btn bg1" id="cancel">Cancel</button>
+                                            <button type="submit" class="btn bg2 text-white">Save</button>
+                                            <a href="{{url()->previous()}}" class="btn bg1 text-white" id="cancel">Cancel</a>
                                         </div>
                         </form>
                     </div>

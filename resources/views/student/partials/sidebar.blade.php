@@ -1,7 +1,7 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: rgba(22,34,57,0.99);">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: {{$settings->primary_color}};">
     <!-- Brand Logo -->
-    <a href="/" class="brand-link animated swing">
-        <img src="EMS/asset/img/logo.png" alt="DSMS Logo" width="200" style="margin-bottom: -50px;">
+    <a href="{{route('student.dashboard')}}" class="brand-link animated swing">
+        <img src="{{ asset('assets/images/logo.jpeg') }}" alt="DSMS Logo" width="100" style="margin-top: 50px; margin-left:50px">
     </a>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -18,7 +18,7 @@
                 </li>
                 <li class="nav-item" title="Dashboard">
                     <a href="{{route('student.subject.index')}}" class="nav-link {{ request()->is('student/subject') ? 'active' : ''}}">
-                        <i class="nav-icon fa fa-tachometer-alt"></i>
+                        <i class="nav-icon fa fa-book"></i>
                         <p>
                             Subjects
                         </p>
@@ -33,7 +33,9 @@
                     </a>
                 </li>
                 <li class="nav-item" title="Result">
-                    <a href="{{route('student.result.index')}}" class="nav-link {{ request()->is('student/result') ? 'active' : ''}}">
+                    <a href="{{route('student.result.index')}}" class="nav-link {{ 
+                        request()->is('student/result*') ? 'active' : ''
+                        }}">
                         <i class="nav-icon fa fa-star"></i>
                         <p>
                             Result

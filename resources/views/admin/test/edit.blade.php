@@ -11,6 +11,9 @@
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <div class="content-header">
+                {{-- <div>
+                    <a href="{{url()->previous()}}"><<< back</a>
+                </div> --}}
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -81,7 +84,7 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>Exam Duration</label>
+                                                    <label>Exam Duration (seconds)</label>
                                                     <input type='text' placeholder="Enter exam duraton in seconds"
                                                         value="{{ $test->duration }}" class="form-control"
                                                         name="duration">
@@ -93,7 +96,7 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>Pass Mark</label>
+                                                    <label>Pass Mark (in percentage)</label>
                                                     <input type='text' placeholder="Enter exam duraton in seconds"
                                                         value="{{ $test->pass_mark }}" class="form-control"
                                                         name="pass_mark">
@@ -103,8 +106,38 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Exam Instruction</label>
+                                                    <textarea id="" name="instruction" class="form-control" placeholder="enter exam instruction">{{$test->instruction}}</textarea>
+                                                    @error('instruction')
+                                                    <div class="error text-danger text-xs">{{ $message }}</div>
+                                                @enderror
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Start Date</label>
+                                                    <input type="datetime-local" name="start_date"
+                                                        class="form-control"  value="{{($test->start_date) ? \Carbon\Carbon::parse($test->start_date) : ''}}"/>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>End Date</label>
+                                                    <input type="datetime-local" name="end_date"  value="{{($test->end_date) ? \Carbon\Carbon::parse($test->end_date) : ''}}" class="form-control" />
+                                                </div>
+                                            </div>
+
+
+
                                             <div class="col-md-12 mt-3">
-                                                <p class="font-weight-bold text-center">Select Questions</p>
+                                                <p class="font-weight-bold text-center">Selected Questions</p>
                                                 <small class="font-weight-bold">select all* </small>
                                                 <input type="checkbox" name="select-all" onclick="check()"
                                                     id="select-id" />
@@ -200,8 +233,8 @@
 
                                 </div>
                                 <div class="col-md-12 mt-3">
-                                    <button type="submit" class="btn bg2">Save</button>
-                                    <button class="btn bg1" id="cancel">Cancel</button>
+                                    <button type="submit" class="btn bg2 text-white">Save</button>
+                                    <a href="{{url()->previous()}}" class="btn bg1 text-white" id="cancel">Cancel</a>
                                 </div>
                         </form>
                     </div>
@@ -245,7 +278,6 @@
 
 
         $('.option-check').on('click', function(e) {
-            console.log(e);
             areAllChecked();
         });
 

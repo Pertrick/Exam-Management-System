@@ -16,13 +16,14 @@ class Test extends Model
 {
     use HasFactory;
 
-    const PUBLISHED = 1, UNPUBLISHED =0;
+    const PUBLISHED = 1, UNPUBLISHED = 0;
 
 
     protected $fillable = [
         'subject_id',
         'test_type_id',
         'duration',
+        'instruction',
         'pass_mark',
         'start_date',
         'end_date'
@@ -30,7 +31,7 @@ class Test extends Model
     ];
 
 
-    protected $cast =[
+    protected $cast = [
         'is_published' => 'boolean'
     ];
 
@@ -48,7 +49,7 @@ class Test extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot(['start_time','end_time'])->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot(['start_time', 'end_time'])->withTimestamps();
     }
 
     public function responses()
@@ -72,15 +73,24 @@ class Test extends Model
         });
     }
 
-    public function testType(){
+    public function testType()
+    {
         return $this->belongsTo(TestType::class);
     }
 
-    public function getStartDateAttribute($value){
-        return Carbon::parse($value)->format('M D Y H:i:s');
+    public function getStartDateAttribute($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        return Carbon::parse($value)->format('M d Y H:i:s');
     }
 
-    public function getEndDateAttribute($value){
-        return Carbon::parse($value)->format('M D Y H:i:s');
+    public function getEndDateAttribute($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        return Carbon::parse($value)->format('M d Y H:i:s');
     }
 }

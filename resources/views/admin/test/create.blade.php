@@ -76,9 +76,41 @@
                                                         @endforeach
                                                     </select>
 
-                                                    @error('subject_id')
+                                                    @error('test_type')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Exam Duration (seconds)</label>
+                                                    <input type='text' placeholder="Enter exam duraton in seconds" class="form-control"
+                                                        name="duration">
+                                                    @error('duration')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Pass Mark (%)</label>
+                                                    <input type='text' placeholder="Enter exam duraton in seconds" class="form-control"  name="pass_mark">
+                                                    @error('pass_mark')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Exam Instruction</label>
+                                                    <textarea id="" name="instruction" class="form-control" placeholder="enter exam instruction"></textarea>
+                                                    @error('instruction')
+                                                    <div class="error text-danger text-xs">{{ $message }}</div>
+                                                @enderror
                                                 </div>
                                             </div>
 
@@ -103,8 +135,8 @@
 
                                         </div>
                                         <div class="col-md-12 mt-3">
-                                            <button type="submit" class="btn bg2">Save</button>
-                                            <button class="btn bg1" id="cancel">Cancel</button>
+                                            <button type="submit" class="btn bg2 text-white">Save</button>
+                                            <a href="{{url()->previous()}}" class="btn bg1 text-white" id="cancel">Cancel</a>
                                         </div>
                         </form>
                     </div>
