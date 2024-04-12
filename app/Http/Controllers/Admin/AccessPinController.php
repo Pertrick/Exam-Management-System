@@ -11,7 +11,7 @@ class AccessPinController extends Controller
 {
     public function index()
     {
-        $data['pins'] = AccessPin::with('creator')->latest()->get();
+        $data['pins'] = AccessPin::with('creator','usedBy')->latest()->get();
         $data['i']=1;
         return view('admin.access_pin.index', $data);
     }
@@ -29,7 +29,7 @@ class AccessPinController extends Controller
             $sh2 = str_shuffle($st);
 
             AccessPin::create([
-                "pin"=> substr($sh2, 0,16),
+                "pin"=> substr($sh2, 0,7),
                 "serial"=> $batch.$i,
                 "created_by" => Auth::id()
             ]);

@@ -15,7 +15,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = User::where('role_id',2)->get();
+        $students = User::with('subjects')->where('role_id',2)->get();
         return view('admin.student.index',compact('students'));
     }
 

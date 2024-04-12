@@ -11,6 +11,9 @@
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
             <div class="content-header">
+                {{-- <div>
+                    <a href="{{url()->previous()}}"><<< back</a>
+                </div> --}}
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
@@ -62,82 +65,177 @@
 
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label>Exam Duration</label>
-                                                    <input type='text' placeholder="Enter exam duraton in seconds" value="{{$test->duration}}" class="form-control" name="duration">
+                                                    <label>Type</label>
+                                                    <select name="test_type_id" id="" class="form-control">
+                                                        <option value="" disabled> --select type --</option>
+                                                        @foreach ($testTypes as $type)
+                                                            <option value="{{ $type->id }}"
+                                                                {{ $test->testType->id == $type->id ? 'selected' : '' }}>
+                                                                {{ $type->name }}</option>
+                                                        @endforeach
+
+                                                    </select>
+
+                                                    @error('subject_id')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Exam Duration (seconds)</label>
+                                                    <input type='text' placeholder="Enter exam duraton in seconds"
+                                                        value="{{ $test->duration }}" class="form-control"
+                                                        name="duration">
                                                     @error('duration')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                 </div>
                                             </div>
 
-                                            @foreach($test->questions as $quest)
-
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <div class="card-group"> 
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <h4 class="card-title">{{$quest->question}}</h4>
-                                                                @foreach($quest->options  as $option)
-                                                                <p class="card-text">
-                                                                    <li>{{$option->label}}</li>
-                                                                </p>
-                                                                @endforeach
-                                                            </div>
-                                                            <div class="card-footer"> 
-                                                                <div class="text-left">
-                                                                    <label class="text-right text-xs">*check to select question</label>
-                                                                    <input type="checkbox" {{$quest->id ? 'checked' : ''}} name="question_ids[]" value="{{$quest->id}}" >
-                                                                </div>
-                                                                <div class="text-right">
-                                                                    <small class="text-muted">Last updated:{{$option->updated_at}}</small> 
-                                                                </div>
-                                                            </div>
-                                                        
-                                                        </div>
-                                                    </div>                             
-                                                </div> 
-                                            </div> 
-                                            @endforeach         
-                                            
-                                            @foreach($questions as $new_quest)
+                                                    <label>Pass Mark (in percentage)</label>
+                                                    <input type='text' placeholder="Enter exam duraton in seconds"
+                                                        value="{{ $test->pass_mark }}" class="form-control"
+                                                        name="pass_mark">
+                                                    @error('pass_mark')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <div class="card-group"> 
-                                                        <div class="card">
-                                                            <div class="card-body">
-                                                                <h4 class="card-title">{{$new_quest->question}}</h4>
-                                                                @foreach($new_quest->options  as $new_option)
-                                                                <p class="card-text">
-                                                                    <li>{{$new_option->label}}</li>
-                                                                </p>
-                                                                @endforeach
-                                                            </div>
-                                                            <div class="card-footer"> 
-                                                                <div class="text-left">
-                                                                    <label class="text-right text-xs">*check to select question</label>
-                                                                    <input type="checkbox" name="question_ids[]" value="{{$new_quest->id}}" >
+                                                    <label>Exam Instruction</label>
+                                                    <textarea id="" name="instruction" class="form-control" placeholder="enter exam instruction">{{$test->instruction}}</textarea>
+                                                    @error('instruction')
+                                                    <div class="error text-danger text-xs">{{ $message }}</div>
+                                                @enderror
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Start Date</label>
+                                                    <input type="datetime-local" name="start_date"
+                                                        class="form-control"  value="{{($test->start_date) ? \Carbon\Carbon::parse($test->start_date) : ''}}"/>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>End Date</label>
+                                                    <input type="datetime-local" name="end_date"  value="{{($test->end_date) ? \Carbon\Carbon::parse($test->end_date) : ''}}" class="form-control" />
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="col-md-12 mt-3">
+                                                <p class="font-weight-bold text-center">Selected Questions</p>
+                                                <small class="font-weight-bold">select all* </small>
+                                                <input type="checkbox" name="select-all" onclick="check()"
+                                                    id="select-id" />
+                                            </div>
+
+                                            @foreach ($test->questions as $quest)
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="card-group">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title">
+                                                                        {{ $quest->question }}
+                                                                        @if ($quest->image)
+                                                                            <img src="/storage/images/questions/{{ $quest->image->name }}"
+                                                                                class="border"
+                                                                                alt="{{ $quest->image->name }}"
+                                                                                width="100" height="50">
+                                                                        @endif
+                                                                    </h4>
+                                                                    @foreach ($quest->options as $option)
+                                                                        <p class="card-text">
+                                                                            <li>
+                                                                                {{ $option->label }}
+                                                                                @if ($option->image)
+                                                                                    <img src="/storage/images/options/{{ $option->image->name }}"
+                                                                                        class="border"
+                                                                                        alt="{{ $option->image->name }}"
+                                                                                        width="100" height="50">
+                                                                                @endif
+                                                                            </li>
+                                                                        </p>
+                                                                    @endforeach
                                                                 </div>
-                                                                <div class="text-right">
-                                                                    <small class="text-muted">Last updated:{{$new_option->updated_at}}</small> 
+                                                                <div class="card-footer">
+                                                                    <div class="text-left">
+                                                                        <label class="text-right text-xs">*check to
+                                                                            select question</label>
+                                                                        <input type="checkbox"
+                                                                            {{ $quest->id ? 'checked' : '' }}
+                                                                            name="question_ids[]"
+                                                                            value="{{ $quest->id }}"
+                                                                            class="option-check">
+                                                                    </div>
+                                                                    <div class="text-right">
+                                                                        <small class="text-muted">Last
+                                                                            updated:{{ $quest->updated_at }}</small>
+                                                                    </div>
                                                                 </div>
+
                                                             </div>
-                                                        
                                                         </div>
-                                                    </div>                             
-                                                </div> 
-                                            </div> 
-                                            @endforeach        
-                                        </div>                     
+                                                    </div>
+                                                </div>
+                                            @endforeach
+
+                                            @foreach ($questions as $new_quest)
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="card-group">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title">{{ $new_quest->question }}
+                                                                    </h4>
+                                                                    @foreach ($new_quest->options as $new_option)
+                                                                        <p class="card-text">
+                                                                            <li>{{ $new_option->label }}</li>
+                                                                        </p>
+                                                                    @endforeach
+                                                                </div>
+                                                                <div class="card-footer">
+                                                                    <div class="text-left">
+                                                                        <label class="text-right text-xs">*check to
+                                                                            select question</label>
+                                                                        <input type="checkbox" name="question_ids[]"
+                                                                            value="{{ $new_quest->id }}"
+                                                                            class="option-check">
+                                                                    </div>
+                                                                    <div class="text-right">
+                                                                        <small class="text-muted">Last
+                                                                            updated:{{ $new_option->updated_at }}</small>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>`
 
 
-                                        </div>
-                                        <div class="col-md-12 mt-3">
-                                            <button type="submit" class="btn bg2">Save</button>
-                                            <button class="btn bg1" id="cancel">Cancel</button>
-                                        </div>
+                                </div>
+                                <div class="col-md-12 mt-3">
+                                    <button type="submit" class="btn bg2 text-white">Save</button>
+                                    <a href="{{url()->previous()}}" class="btn bg1 text-white" id="cancel">Cancel</a>
+                                </div>
                         </form>
                     </div>
                 </div>
@@ -158,68 +256,32 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
+        areAllChecked();
 
-$("select.subject").change(function() {
-            var subjectId = $(this).children("option:selected").val();
-            var count = 1;
-            $.get('/admin/exam/question/' + subjectId, (data) => {
-                data.forEach(function(item, index) {
-                    var card = `<div class="col-md-6 is-select">
-                                    <div class="card-group"> 
-                                        <div class="card">
-                                            <div class="card-body"><h4 class="card-title"> ${count++}. ${item.question}</h4>`;
-                    item.options.forEach(function(value, key) {
-                        card += `<h6 class="card-text"><li>${value.label}</li></h6>`
-                    });
-                    card +=`
-                            </div>
-                                    <div class="card-footer"> 
-                                        <div class="text-left">
-                                            <label class="text-right text-xs">*check to select question</label>
-                                            <input type="checkbox" name="question_ids[]" value="${item.id}" >
-                                        </div>
-                                        <div class="text-right">
-                                            <small class="text-muted">Last updated: ${item.updated_at}</small> 
-                                        </div>
-                                    </div>                                 
-                                </div>                             
-                            </div>                     
-                        </div>`
-                    $('#row-id').append(card);
-                });
-
-            });
-
-            appendTime();
-        });
-        
-        $('.is-select').on('click',function(){
-            alert();
-        });
-
-        $(function() {
-            $("#example1").DataTable();
-        });
-
-       
-
-
-        function appendTime(){
-            var time = `<div class="col-md-12">
-                            <div class="form-group">
-                                <label>Exam Duration</label>
-                                    <input type='text' placeholder="Enter exam duraton in seconds" class="form-control" name="duration">
-                                        @error('duration')
-                                            <div class="error text-danger text-xs">{{ $message }}</div>
-                                                @enderror
-                                            </div>
-                            </div>
-                        </div>
-                        `
-                        $('#row-id').append(time);
-                    
+        function areAllChecked() {
+            let allChecked = $('.option-check').filter(':not(:checked)').length === 0;
+            if (allChecked) {
+                $("#select-id").prop('checked', true);
+            } else {
+                $("#select-id").prop('checked', false);
+            }
         }
-    
+
+        function check() {
+            var checkBox = document.getElementById("select-id");
+            if (checkBox.checked) {
+                $('.option-check').prop('checked', true);
+            } else {
+                $('.option-check').prop('checked', false);
+            }
+        }
+
+
+        $('.option-check').on('click', function(e) {
+            areAllChecked();
+        });
+
+
     </script>
 </body>
 

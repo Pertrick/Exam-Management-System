@@ -50,7 +50,7 @@
                                                     <label>Subject Code</label>
                                                     <input type="text" name="code" id="subject-code"
                                                         class="form-control" placeholder="ex. SBJCT-101-21"
-                                                        value="{{old('code')}}">
+                                                        value="{{ old('code') }}">
                                                     @error('code')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
@@ -61,8 +61,23 @@
                                                     <label>Subject Name</label>
                                                     <input type="text" name="name" id="subject-name"
                                                         class="form-control" placeholder="ex. Mathematics"
-                                                        value="{{old('name')}}">
+                                                        value="{{ old('name') }}">
                                                     @error('name')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Course</label>
+                                                    <select name="course" class="form-control" id="course-id">
+                                                        <option disabled selected> Select Course</option>
+                                                        @foreach ($courses as $course)
+                                                            <option value="{{ $course->id }}">{{ $course->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('course')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -78,8 +93,8 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <button type="submit" class="btn bg2">Save</button>
-                                            <button class="btn bg1" id="cancel">Cancel</button>
+                                            <button type="submit" class="btn bg2 text-white">Save</button>
+                                            <button type="button" onclick="resetForm()" class="btn bg1  text-white" id="cancel">Cancel</button>
                                         </div>
                         </form>
                     </div>
@@ -90,15 +105,17 @@
                                 <tr>
                                     <th>Subject Code</th>
                                     <th>Subject Name</th>
+                                    <th>Course</th>
                                     <th>Description</th>
                                     <th class="text-right">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($subjects as $subject)
-                                    <tr data-toggle="modal" data-id="{{$subject}}" data-target="#delete">
+                                    <tr data-toggle="modal" data-id="{{ $subject }}" data-target="#delete">
                                         <td>{{ $subject->code }}</td>
                                         <td>{{ $subject->name }}</td>
+                                        <td>{{$subject->courses ? $subject->courses->implode('name') : ''}}</td>
                                         <td>{{ $subject->description }}</td>
                                         <td class="text-right">
                                             <button type="button" class="btn btn-sm btn-info"
@@ -106,11 +123,12 @@
                                                     class="fa fa-edit"></i></button>
 
                                             <form action="{{ route('admin.subject.delete', $subject->id) }}"
-                                                method="post">
+                                                method="post" style="display: inline-block">
                                                 @csrf
                                                 @method('delete')
-                                                <button class="btn btn-sm bg1" type="submit"
-                                                    onclick="return confirm('Are you sure?')" >delete<i class="fa fa-trash-alt"></i></button>
+                                                <button class="btn btn-sm bg1 text-white" type="submit"
+                                                    onclick="return confirm('Are you sure?')">delete<i
+                                                        class="fa fa-trash-alt text-white"></i></button>
                                             </form>
                                             {{-- <a class="btn btn-sm bg1" href="#" data-toggle="modal"
                                             data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a> --}}
@@ -154,22 +172,23 @@
             $("#example1").DataTable();
         });
 
-        resetForm();
-        editSubject(subject);
-
         function resetForm() {
-            $('#cancel').on('click', (e) => {
-                e.preventDefault();
+         
                 $('#subject-code').val('');
                 $('#subject-name').val('');
                 $('#subject-desc').val('');
-            });
+                $('#course-id').val(' ');
         }
 
         function editSubject(subject) {
+            resetForm();
             $('#subject-code').val(subject.code);
             $('#subject-name').val(subject.name);
             $('#subject-desc').val(subject.description);
+            if(subject.courses){
+                $('#course-id').val(subject.courses[0].id);
+            }
+            
 
         }
     </script>

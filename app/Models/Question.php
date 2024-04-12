@@ -17,8 +17,8 @@ class Question extends Model
     use HasFactory;
 
     const OPTION = 'option';
-    const MULTI_CHOICE = 'multiple-choice';
-    const NO_OPTION = 'no-option';
+    const MULTI_CHOICE = 'multiple choice';
+    const NO_OPTION = 'no option';
 
     protected $fillable = [
         'subject_id',
@@ -53,8 +53,8 @@ class Question extends Model
     }
 
 
-    public function images(){
-        return $this->morphMany(Image::class, 'imageable');
+    public function image(){
+        return $this->morphOne(Image::class, 'imageable');
     }
 
     public function getUpdatedAtAttribute($value)
@@ -67,8 +67,15 @@ class Question extends Model
         DB::transaction(function() 
         {
             $this->options()->delete();
+            $this->image()->delete();
             parent::delete();
         });
+    }
+
+
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->diffForHumans();
     }
 
 }

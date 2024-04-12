@@ -18,7 +18,7 @@
                   <!-- /.col -->
                   <div class="col-sm-6">
                      <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('student.dashboard')}}">Home</a></li>
                         <li class="breadcrumb-item active">Exam Result Details</li>
                      </ol>
                   </div>
@@ -34,7 +34,89 @@
             <div class="container-fluid">
                <div class="card card-info">
                   <div class="card-body">
-               <div class="col-md-12 table-responsive">
+                     <div class="m-1 float-left font-weight-bold text-xs">
+                        <p>Subject : {{$test->subject->name}}</p> 
+                        <p>Type: {{$test->testType->name}}</p>
+                        <p>Duration: {{$test->duration}} seconds</p>                      
+                     </div>
+                     <div class=" m-1 text-right font-weight-bold text-xs">
+                        <p>Start Date: {{\Carbon\Carbon::parse($testPivot->start_time)->format('M d Y ,  H:i:s')}}</p>
+                        <p>End date : {{\Carbon\Carbon::parse($testPivot->end_time)->format('M d Y ,  H:i:s')}}</p>
+                        <p>Score : {{$result->score_percentage}}% {{$result->status ? '(passed)' : '(failed)'}}</p>
+                     </div>
+                     <div style="float:none; clear:both"></div>
+                      <div class="col-md-12 border">
+                        @foreach ($test->questions as $quest)
+                        <div class="card-body mx-3">
+                           <p class="mx-3">Your Answer : <span class="font-weight-bold">{{ 
+                              (collect($quest->responses[0]->answer)->isEmpty() )? 'No answer' :
+                              collect($quest->responses[0]->answer)->values()->implode(",") }}</span>
+                           
+                           @if($quest->type !== $no_option)
+                                @if (count(array_diff($quest->options->where('is_correct',1)->pluck('label')->toArray(), collect($quest->responses[0]->answer)->values()->toArray())) == 0)
+                                <i class='fa fa-check text-success'></i>
+                                 @else
+                                 <i class='fa fa-times text-danger'></i>
+                                 @endif
+                           @else
+                           @if(!collect($quest->responses[0]->answer)->isEmpty() && in_array(strtolower(collect($quest->responses[0]->answer)->values()->implode(',')),$quest->options->where('is_correct',1)->pluck('label')->toArray()))
+                              <i class='fa fa-check text-success'></i> 
+                          @else
+                          <i class='fa fa-times text-danger'></i>
+                          @endif
+                           @endif
+                               </p>
+                            <h4 class="card-title mb-2">
+                              {{ $loop->iteration }}.
+
+                                {{ $quest->question }}  
+                                @if ($quest->image)
+                                    <div class="m-2">
+                                        <img src="/storage/images/questions/{{ $quest->image->name }}"
+                                        alt="{{ $quest->image->name }}" height="100"
+                                        width="200" class="img-fluid border">
+                                    </div>
+                                   
+                                @endif
+                            </h4>
+                            <small class="float-right font-weight-bold">{{$quest->point}} point(s)</small>
+                            @foreach ($quest->options as $key => $option)
+                                <p class="card-text ml-3">
+                                    @if ($quest->type == $option_type)
+                                        <input type="radio" {{ ($option->is_correct) ? 'checked' : 'disabled'}}>
+                                        {{ $option->label }}
+                                         @if($option->is_correct) <i class='fa fa-check text-success'></i>@endif
+                                        @if ($option->image)
+                                            <img src="/storage/images/options/{{ $option->image->name }}"
+                                                alt="{{ $option->image->name }}"
+                                                height="50" width="100" class="img-fluid border">
+                                        @endif
+
+                                    @elseif($quest->type == $multi_choice_type)
+                                        <input type="checkbox" name="{{ $quest->id }}[]"
+                                            id="answer-id"
+                                            {{ ($option->is_correct) ? 'checked' : 'disabled'}}>
+                                        {{ $option->label }}
+                                        @if($option->is_correct) <i class='fa fa-check text-success'></i>@endif
+                                        @if ($option->image)
+                                            <img src="/storage/images/options/{{ $option->image->name }}"
+                                                alt="{{ $option->image->name }}"
+                                                height="50" width="100" class="img-fluid border">
+                                        @endif
+                                    @elseif($quest->type == $no_option)
+                                        <input type="text"  value="{{$option->label}}" disabled 
+                                        class="border-top-0 border-right-0 border-left-0" style="width:70%" 
+                                            id="answer-id" autocomplete="off">
+                                            @if($option->is_correct) <i class='fa fa-check text-success'></i>@endif
+                                    @endif
+                                </p>
+                            @endforeach
+                        </div>
+                        <hr>
+                    @endforeach
+                       
+                     </div>
+               {{-- <div class="col-md-12 table-responsive">
                   <table class="table align-items-center mb-0">
                      <thead>
                        <tr>
@@ -51,26 +133,42 @@
                          <td>
                            <div class="d-flex px-2 py-1">
                              <div class="d-flex flex-column justify-content-center">
-                               <h6 class="text-xs text-secondary mb-0">{{$sn++}}</h6>
+                               <h6 class="text-xs text-secondary mb-0">{{$loop->iteration}}</h6>
                              </div>
                            </div>
                          </td>
-                         <td>{{$response->question->question}}</td>
+                         <td>
+                           {{$response->question->question}}
+                           @if($response->question->image)
+                           <img src="/storage/images/questions/{{$response->question->image->name}}" alt="{{$response->question->image->name}}" height="50" width="100">
+                           @endif
+                        </td>
                          <td>
                           @foreach($response->answer as $answer)
-                            <span class="badge bg-warning">{{$answer}}</span>
+                            <span class="badge bg-warning">
+                              {{$answer}}
+                           </span>
                           @endforeach
                         </td>
                          <td>
                          @foreach($response->question->options as $option)
-                         <span class="badge bg-success">{{$option->is_correct ? $option->label : ''}}</span>
+                         @if($option->image)
+                         <img src="/storage/images/options/{{$option->image->name}}" alt="{{$option->image->name}}" height="30" width="30">
+                         <span class="badge bg-success">
+                           {{$option->is_correct ? $option->label : ''}}
+                        </span>
+                           @else
+                        <span class="badge bg-success">
+                           {{$option->is_correct ? $option->label : ''}}
+                        </span>
+                           @endif
                          @endforeach
                         </td>
                        </tr>
                        @endforeach
                      </tbody>
                    </table>
-               </div>
+               </div> --}}
             </div>
             </div>
       </div>

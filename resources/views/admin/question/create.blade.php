@@ -14,7 +14,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Subject
+                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Question
                             </h1>
                         </div>
                         <!-- /.col -->
@@ -36,7 +36,7 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <!-- form start -->
-                        <form action="{{ route('admin.question.store') }}" method="POST" id="form-subject">
+                        <form action="{{ route('admin.question.store') }}" method="POST" id="form-subject" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
@@ -44,7 +44,7 @@
                                         <div class="card-header">
                                             <span class="fa fa-book"> Add Question</span>
                                         </div>
-                                        <div class="row">
+                                        <div class="row" id="row-id">
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label>Subject</label>
@@ -58,24 +58,6 @@
                                                     </select>
 
                                                     @error('subject_id')
-                                                        <div class="error text-danger text-xs">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Question Type</label>
-                                                    <select name="type" id="" class="form-control"
-                                                        value="{{ old('type') }}">
-                                                        <option value="" selected disabled>--select question type
-                                                            --</option>
-                                                        @foreach ($question_types as $type)
-                                                            <option value="{{ $type }}">{{ $type }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('type')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
                                                 </div>
@@ -104,7 +86,26 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Question Type</label>
+                                                    <select name="type" id="" class="question-type form-control"
+                                                        value="{{ old('type') }}">
+                                                        <option value="" selected disabled>--select question type
+                                                            --</option>
+                                                        @foreach ($question_types as $type)
+                                                            <option value="{{ $type }}">{{ $type }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @error('type')
+                                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                                    @enderror
+                                                </div>
+                                            </div>
+
+                                            {{-- <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>Option 1</label>
                                                     <textarea name="option[]" id="option_1" class="form-control">{{ old('option') }}</textarea>
@@ -112,6 +113,7 @@
                                                     @error('option_1')
                                                         <div class="error text-danger text-xs">{{ $message }}</div>
                                                     @enderror
+                                                   
                                                     <input type="checkbox" name="is_correct[0]"
                                                         id="is_correct_1" class="form-control-sm float-right">
                                                 </div>
@@ -156,13 +158,13 @@
                                                         id="is_correct_4" class="form-control-sm float-right">
 
                                                 </div>
-                                            </div>
+                                            </div> --}}
 
 
                                         </div>
                                         <div class="col-md-12">
-                                            <button type="submit" class="btn bg2">Save</button>
-                                            <button class="btn bg1" id="cancel">Cancel</button>
+                                            <button type="submit" class="btn bg2 text-white">Save</button>
+                                            <a href="{{url()->previous()}}" class="btn bg1 text-white" id="cancel">Cancel</a>
                                         </div>
                         </form>
                     </div>
@@ -184,6 +186,77 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
+        $("select.question-type").change(function() {
+            var question_type = $(this).children("option:selected").val();
+            var count = 1;
+            $('.option-added').remove();
+           
+            if(question_type == 'option'){
+                $('.choice-added').remove();
+                $('.no-option').remove();
+               for(var i = 0;  i <4; i++){
+
+                var option = ` 
+                 <div class="col-md-6 option-added">
+                        <div class="form-group">
+                             <label>option ${count++}</label>
+                                <textarea name="option[]" id="option_4" class="form-control options">{{ old('option') }}</textarea>
+                                    <input type="file" name="option_image[${i}]" id="option_image_${i}" class="m-1">
+                                        @error('option')
+                                            <div class="error text-danger text-xs">{{ $message }}</div>
+                                         @enderror
+                                        <input type="radio" name="is_correct" value="${i}" id="is_correct_${i}" class="form-control-sm float-right">
+                        </div>
+
+                  </div>`
+
+                  $('#row-id').append(option);
+               }
+                
+            }else if(question_type == 'multiple choice'){
+                $('.option-added').remove();
+                $('.no-option').remove();
+                for(var i = 0;  i <4; i++){
+
+                    var option = ` 
+                    <div class="col-md-6 choice-added">
+                            <div class="form-group">
+                                <label>option ${count++}</label>
+                                    <textarea name="option[]" id="option_4" class="form-control">{{ old('option') }}</textarea>
+                                        <input type="file" name="option_image[${i}]" id="option_image_${i}" class="m-1">
+                                            @error('option')
+                                                <div class="error text-danger text-xs">{{ $message }}</div>
+                                            @enderror
+                                            <input type="checkbox" name="is_correct[${i}]" 
+                                                id="is_correct_${i}" class="form-control-sm float-right">
+                            </div>
+
+                    </div>`
+
+                    $('#row-id').append(option);
+
+            }
+    
+            }else if(question_type == 'no option'){
+
+                $('.choice-added').remove();
+                $('.option-added').remove();
+                var option = ` 
+                <div class="col-md-12 no-option">
+                        <div class="form-group">
+                            <label>Answer</label>
+                                <textarea name="option[]" id="option" placeholder=""type the answer" class="form-control">{{ old('answer') }}</textarea>
+                                        @error('option')
+                                            <div class="error text-danger text-xs">{{ $message }}</div>
+                                        @enderror  
+                        </div>                 
+                </div>`
+
+                $('#row-id').append(option);
+            }
+          
+        });
+
         $(function() {
             $("#example1").DataTable();
         });

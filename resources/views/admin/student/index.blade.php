@@ -46,26 +46,30 @@
                                             <th>Profile</th>
                                             <th>Complete Name</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
+                                            <th>Subject</th>
                                             <th>Account Status</th>
                                             <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                       @foreach($students as $student)
-                                        <tr>
-                                            <td>{{$student->id}}</td>
-                                            <td><img src="EMS/asset/img/avatar.png" width="40"
-                                                    style="border-radius:10px" alt="User Image"></td>
-                                            <td>{{$student->name}}</td>
-                                            <td>{{$student->email}}</td>
-                                            <td><span class="badge bg-success">active</span></td>
-                                            <td class="text-right">
-                                                <a class="btn btn-sm bg3" href="#"><i class="fa fa-edit"></i>
-                                                    edit</a>
-                                                <a class="btn btn-sm bg1" href="#" data-toggle="modal"
-                                                    data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
-                                            </td>
-                                        </tr>
+                                    <tbody id="tbodyId">
+                                        @foreach ($students as $student)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td><img src="assets/images/user.jpg" width="40"
+                                                        style="border-radius:10px" alt="User Image"></td>
+                                                <td>{{ $student->name }}</td>
+                                                <td>{{ $student->email }}</td>
+                                                <td>{{ $student->phone }}</td>
+                                                <td>{{ $student->subjects->implode("name",',') }}</td>
+                                                <td><span class="badge bg-success">active</span></td>
+                                                <td class="text-right">
+                                                    <a class="btn btn-sm bg3" href=""><i class="fa fa-edit"></i>
+                                                        edit</a>
+                                                    <a class="btn btn-sm bg1" href="" data-toggle="modal"
+                                                        data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
+                                                </td>
+                                            </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -102,55 +106,10 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <form>
+                    <form id="add_user">
+                        <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
                         <div class="card-body">
                             <div class="row">
-                                {{-- <div class="col-md-12 float-left">
-                                    <div class="float-left">
-                                        <span class="fa fa-user"> Profile Information</span>
-                                    </div>
-                                </div> --}}
-
-                                {{-- <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">ID No.</label>
-                                        <input type="email" class="form-control" placeholder="ex. 123-23432-12">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">First Name</label>
-                                        <input type="email" class="form-control" placeholder="first name">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Middle Name</label>
-                                        <input type="email" class="form-control" placeholder="middle name">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Last Name</label>
-                                        <input type="email" class="form-control" placeholder="last name">
-                                    </div>
-                                </div> --}}
-                                {{-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="float-left">Course</label>
-                                        <select class="form-control">
-                                            <option>Course 1</option>
-                                            <option>Course 2</option>
-                                        </select>
-                                    </div>
-                                </div> --}}
-                                {{-- <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Profile</label>
-                                        <input type="file" class="form-control">
-                                    </div>
-                                </div> --}}
-
                                 <div class="col-md-12">
                                     <div class="float-left">
                                         <span class="fa fa-user-lock"> Account</span>
@@ -159,30 +118,53 @@
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Username</label>
-                                        <input type="email" class="form-control" placeholder="username">
+                                        <label for="name" class="float-left">Username</label>
+                                        <input type="name" name="name" class="form-control" id="username"
+                                            placeholder="username" value="{{ old('name') }}">
                                     </div>
+                                    @error('name')
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Email</label>
-                                        <input type="email" class="form-control" placeholder="ex. john@gmail.com">
+                                        <label for="email" class="float-left">Email</label>
+                                        <input type="email" name="email" class="form-control" id="email"
+                                            placeholder="ex. john@gmail.com" value="{{ old('email') }}" required>
                                     </div>
+                                    @error('email')
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1" class="float-left">Password</label>
-                                        <input type="email" class="form-control" placeholder="**********">
+                                        <label for="phone" class="float-left">Phone</label>
+                                        <input type="phone" class="form-control" id="phone" name="phone"
+                                            placeholder="Phone" value="{{ old('phone') }}">
                                     </div>
+                                    @error('phone')
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="password" class="float-left">Password</label>
+                                        <input type="password" name="password" class="form-control" id="password">
+                                    </div>
+                                    @error('password')
+                                        <div class="error text-danger text-xs">{{ $message }}</div>
+                                    @enderror
                                 </div>
                             </div>
 
-                        </div>
-                        <!-- /.card-body -->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="button" id="save_btn" class="btn bg2" value="Save" />
+                                    <button type="button" class="btn bg1" data-dismiss="modal">Cancel</button>
+                                </div>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn bg2">Save</button>
-                            <button type="submit" class="btn bg1">Cancel</button>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -192,6 +174,62 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
+        $("#save_btn").click((e) => {
+            e.preventDefault();
+
+
+            if (!$('#username').val()) {
+                return;
+            }
+
+            if (!$('#email').val()) {
+                return;
+            }
+
+            if (!$('#password').val()) {
+                return;
+            }
+
+            const password_confirmation = $("#password").val();
+            const serializedData = $("#add_user").serialize() + `&password_confirmation=${password_confirmation}`;
+
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route('auth.register') }}',
+                data: serializedData,
+                success: function(response) {
+                    const user = response.data;
+                    console.log(user);
+                    const student = `
+                    <tr>
+                        <td>${ user.id }</td>
+                        <td><img src="EMS/asset/img/avatar.png" width="40"
+                            style="border-radius:10px" alt="User Image"></td>
+                        <td>${user.name }</td>
+                        <td>${user.email }</td>
+                        <td>${user.phone }</td>
+                        <td>${user.subjects ? user.subjects[0].name : '' }</td>
+                        <td><span class="badge bg-success">active</span></td>
+                        <td class="text-right">
+                        <a class="btn btn-sm bg3" href="#"><i class="fa fa-edit"></i>
+                                 edit</a>
+                        <a class="btn btn-sm bg1" href="#" data-toggle="modal"
+                            data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
+                        </td>
+                     </tr>
+                    `;
+
+                    $('#tbodyId').append(student);
+                    $('#add').modal('hide');
+
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        });
+
         $(function() {
             $("#example1").DataTable();
         });

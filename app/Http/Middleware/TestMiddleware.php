@@ -16,6 +16,9 @@ class TestMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        // if(auth()->user()->tes){
+
+        // }
         return $next($request);
     }
 }

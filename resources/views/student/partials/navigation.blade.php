@@ -1,5 +1,5 @@
    <!-- Navbar -->
-   <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-color: rgba(22,34,57,0.99);">
+   <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-color:{{$settings->primary_color}};">
        <!-- Left navbar links -->
        <ul class="navbar-nav">
            <li class="nav-item">
@@ -30,3 +30,4 @@
            </li>
        </ul>
    </nav>
+

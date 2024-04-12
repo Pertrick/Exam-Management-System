@@ -30,12 +30,26 @@ class Option extends Model
         
     }
 
+    public function setLabelAttribute($value){
+        $this->attributes['label'] = strtolower($value); 
+        
+    }
+
     public function question(){
         return $this->belongsTo(Question::class);
     }
 
-    public function images(){
-        return $this->morphMany(Image::class, 'imageable');
+    public function image(){
+        return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function delete()    
+    {
+        DB::transaction(function() 
+        {
+            $this->image()->delete();
+            parent::delete();
+        });
     }
 
 }

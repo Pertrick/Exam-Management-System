@@ -15,9 +15,14 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('test_type_id')->constrained();
             $table->foreignId('subject_id')->constrained();
             $table->string('duration')->nullable();
+            $table->boolean('pass_mark');
             $table->boolean('is_published')->default(0);
+            $table->text('instruction')->nullable();
+            $table->dateTime('start_date')->nullable();  
+            $table->dateTime('end_date')->nullable();
             $table->timestamps();
         });
     }

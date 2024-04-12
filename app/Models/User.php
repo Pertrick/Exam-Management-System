@@ -3,14 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Carbon\Carbon;
+use App\Models\Test;
+use App\Models\Course;
+use App\Models\Result;
+use App\Models\Payment;
+use App\Models\Subject;
+use App\Models\Response;
+use App\Models\Resources;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use App\Models\Test;
-use App\Models\Response;
-use App\Models\Result;
-use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -24,6 +28,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'password',
         'role_id'
     ];
@@ -62,6 +67,16 @@ class User extends Authenticatable
         return $this->hasMany(Result::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function subjects()
+    {
+        return $this->belongsToMany(Subject::class)->with('resources')->withTimestamps();
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return Carbon::createFromTimeStamp(strtotime($value))->diffForHumans();
@@ -69,9 +84,27 @@ class User extends Authenticatable
 
     public function getRedirectRouteName(): string{
         return match((int)$this->role_id){
-          Role::ADMIN => 'admin.dashboard',
+          Role::ADMIN => 'admin.dashboard.index',
           Role::USER => 'student.dashboard'
         };
+    }
+
+    public function passedResults(){
+        return $this->results()->where('status', 1);
+    }
+
+    public function failedResults(){
+        return $this->results()->where('status', 0);
+    }
+
+
+    public function studentAccessPin(){
+        return $this->hasMany(AccessPin::class, 'used_by');
+    }
+
+
+    public function courses(){
+        return $this->belongsToMany(Course::class)->withTimestamps();
     }
 
 

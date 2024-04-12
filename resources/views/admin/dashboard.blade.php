@@ -36,22 +36,23 @@
                 <div class="container-fluid">
                     <!-- Small boxes (Stat box) -->
                     <div class="row">
-                        {{-- <div class="col-6 col-sm-6 col-md-5 offset-md-1">
+                        <div class="col-xs-12 col-sm-12 col-md-6 ">
                             <div class="info-box">
                                 <span class="info-box-icon bg1 elevation-1"><i class="fas fa-chalkboard-teacher"
                                         style="color: rgb(211, 209, 207);"></i></span>
 
-
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Number of Teachers</span>
-                                    <span class="info-box-number">
-                                        50
-                                    </span>
-                                </div>
+                                <a href="{{ route('admin.program.index') }}" title="students" class="text-dark">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Number of Programs</span>
+                                        <span class="info-box-number">
+                                            {{ $program_count }}
+                                        </span>
+                                    </div>
+                                </a>
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
-                        </div> --}}
+                        </div>
                         <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="info-box">
                                 <span class="info-box-icon bg2 elevation-1"><i class="fas fa-user-graduate"
@@ -70,19 +71,21 @@
                             <!-- /.info-box -->
                         </div>
                         <!-- /.col -->
-                        {{-- <div class="col-6 col-sm-6 col-md-5 offset-md-1">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="info-box mb-3">
                                 <span class="info-box-icon bg3 elevation-1"><i class="fas fa-certificate"
                                         style="color: rgb(211, 209, 207);"></i></span>
 
-                                <div class="info-box-content">
-                                    <span class="info-box-text">Number of Courses</span>
-                                    <span class="info-box-number">10</span>
-                                </div>
+                                <a href="{{ route('admin.course.index') }}" title="students" class="text-dark">
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Number of Courses</span>
+                                        <span class="info-box-number">{{ $course_count }}</span>
+                                    </div>
+                                </a>
                                 <!-- /.info-box-content -->
                             </div>
                             <!-- /.info-box -->
-                        </div> --}}
+                        </div>
                         <!-- /.col -->
                         <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="info-box mb-3">
@@ -110,9 +113,9 @@
                                     <ul class="users-list clearfix">
                                         @foreach ($students as $student)
                                             <li>
-                                                <img src="EMS/asset/img/user1-128x128.jpg" alt="User Image">
-                                                <a class="users-list-name" href="#">{{ $student->name }}</a>
-                                                <span class="users-list-date">{{ $student->created_at }}</span>
+                                                <img src="assets/images/user.jpg" alt="User Image" width="50" height="50">
+                                                <p class="users-list-name text-xs">{{ $student->name }}</p>
+                                                <span class="users-list-date text-xs">{{ $student->created_at }}</span>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -120,7 +123,7 @@
                                 </div>
                                 <!-- /.card-body -->
                                 <div class="card-footer text-center">
-                                    <a href="javascript::">View All Users</a>
+                                    <a href="{{ route('admin.student.index') }}">View All Students</a>
                                 </div>
                                 <!-- /.card-footer -->
                             </div>
@@ -152,38 +155,90 @@
     @include('admin.partials.footer')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Bar Chart
-            var barChartData = {
-                labels: ["Exam 1", "Exam 2", "Exam 3", "Exam 4", "Exam 5"],
-                datasets: [{
-                        label: 'Passed',
+            $.get(`api/exams`).done(function(data) {
+                let exams = data;
+                let subjects = exams.map((exam) => exam.subject.name);
+                let results = exams.map((exam) => exam.results);
+
+                let datasets = [];
+
+                for (let i = 0; i < subjects.length; i++) {
+                    const subjectName = subjects[i];
+                    const scoresForSubject = results[i];
+
+                    const passedScores = scoresForSubject
+                        .filter((score) => score.status === 1)
+                        .map((score) => score.score);
+                    const failedScores = scoresForSubject
+                        .filter((score) => score.status === 0)
+                        .map((score) => score.score);
+
+                        console.log(passedScores);
+                        console.log(failedScores);
+
+                    // Create dataset objects for passed and failed scores
+                    datasets.push({
+                        label: `passed`,
                         backgroundColor: 'rgb(79,129,189)',
                         borderColor: 'rgba(0, 158, 251, 1)',
                         borderWidth: 1,
-                        data: [30, 25, 30, 33, 41]
-                    },
-                    {
-                        label: 'Failed',
+                        data: passedScores,
+                    });
+                    datasets.push({
+                        label: `failed`,
                         backgroundColor: 'rgb(192,80,77)',
                         borderColor: 'rgba(0, 158, 251, 1)',
                         borderWidth: 1,
-                        data: [5, 10, 5, 2, 4]
-                    }
-                ]
-            };
-
-            var ctx = document.getElementById('bargraph').getContext('2d');
-            window.myBar = new Chart(ctx, {
-                type: 'bar',
-                data: barChartData,
-                options: {
-                    responsive: true,
-                    legend: {
-                        display: true,
-                    }
+                        data: failedScores,
+                    });
                 }
-            });
 
+                // Assemble the complete barChartData object
+                var barChartData = {
+                    labels: subjects,
+                    datasets: datasets,
+                    legend: { 
+                        display: true,
+                        labels: { 
+                            formatter: (context) =>
+                                `${context.datasetIndex === 0 ? 'Passed' : 'Failed'}`,
+                        },
+                    },
+                };
+
+                // // Bar Chart
+                // var barChartData = {
+                //     labels: subjects,
+                //     datasets: [{
+                //             label: 'Passed',
+                //             backgroundColor: 'rgb(79,129,189)',
+                //             borderColor: 'rgba(0, 158, 251, 1)',
+                //             borderWidth: 1,
+                //             data: [30, 25, 30, 33, 41]
+                //         },
+                //         {
+                //             label: 'Failed',
+                //             backgroundColor: 'rgb(192,80,77)',
+                //             borderColor: 'rgba(0, 158, 251, 1)',
+                //             borderWidth: 1,
+                //             data: [50, 10, 5, 2, 30]
+                //         }
+                //     ]
+                // };
+
+                var ctx = document.getElementById('bargraph').getContext('2d');
+                window.myBar = new Chart(ctx, {
+                    type: 'bar',
+                    data: barChartData,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            display: true,
+                        }
+                    }
+                });
+
+            });
         });
     </script>
 </body>

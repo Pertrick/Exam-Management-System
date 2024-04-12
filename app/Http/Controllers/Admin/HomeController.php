@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Subject;
 use App\Models\User;
+use App\Models\Course;
 use App\Models\Result;
+use App\Models\Program;
+use App\Models\Subject;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -18,10 +20,12 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $subject_count =  Subject::count();
+        $program_count = Program::count();
+        $course_count = Course::count();
         $students =  User::select('name', 'created_at')->where('role_id', '!=', 1)->get();
         $results = Result::with('test.subject')->latest(6);
     
-        return view('admin.dashboard', compact('subject_count', 'students', 'results'));
+        return view('admin.dashboard', compact('subject_count','program_count','course_count', 'students', 'results'));
     }
 
     /**

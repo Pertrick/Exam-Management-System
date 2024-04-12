@@ -17,7 +17,7 @@
                   <!-- /.col -->
                   <div class="col-sm-6">
                      <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('student.dashboard')}}">Home</a></li>
                         <li class="breadcrumb-item active">Exam Result</li>
                      </ol>
                   </div>
@@ -38,6 +38,7 @@
                      <thead>
                        <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Exam Name</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Score(%)</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Status</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">View Score</th>
@@ -48,6 +49,7 @@
                         @foreach($results as $result)
                        <tr>
                         <td>{{$result->test->subject->name}}</td>
+                        <td>{{$result->test->testType->name}}</td>
                          <td>{{number_format($result->score_percentage,2)}}</td>
                          <td><span class="{{$result->status ? 'badge bg-success' : 'badge bg-danger'}}">{{$result->status? 'passed' : 'failed'}}</span></td> 
                          <td>

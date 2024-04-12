@@ -5,6 +5,10 @@ use App\Http\Controllers\Student\HomeController;
 use App\Http\Controllers\Student\TestController;
 use App\Http\Controllers\Student\ResultController;
 use App\Http\Controllers\Student\ResponseController;
+use App\Http\Controllers\Student\SubjectController;
+use App\Http\Controllers\Student\PaymentController;
+use App\Http\Controllers\Student\ExamAuthController;
+use App\Http\Controllers\Student\ResourcesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
+Route::group(['prefix' => 'student', 'middleware' => ['auth','subject']],function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('student.dashboard');
     Route::get('/result', [ResultController::class, 'index'])->name('student.result.index');
     Route::get('/result-show/{id}', [ResultController::class, 'show'])->name('student.result.show');
@@ -27,7 +31,13 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::prefix('exam')->group(function(){
+    Route::prefix('subject')->group(function(){
+        Route::get('', [SubjectController::class, 'index'])->name('student.subject.index');
+        Route::delete('delete/{id}', [SubjectController::class, 'destroy'])->name('student.subject.delete');
+    });
+
+
+    Route::group(['prefix' => 'exam', 'middleware' => ['exam']],function(){
         Route::get('', [TestController::class, 'index'])->name('student.test.index');
         Route::get('/question/{id}', [TestController::class, 'question'])->name('student.test.questions');
         Route::get('create', [TestController::class, 'create'])->name('student.test.create');
@@ -48,4 +58,25 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth']],function () {
         Route::put('update/{id}', [ResponseController::class, 'update'])->name('student.response.update');
         Route::delete('delete/{id}', [ResponseController::class, 'destroy'])->name('student.response.delete');
     });
+
+    Route::prefix('payment')->group(function(){
+        Route::get('', [PaymentController::class, 'index'])->name('student.payment.index');
+        Route::post('pay', [PaymentController::class, 'store'])->name('student.payment.store');
+    });
+
+    Route::prefix('exam-auth')->group(function(){
+        Route::get('', [ExamAuthController::class, 'index'])->name('student.exam.auth.index');
+        Route::post('store', [ExamAuthController::class, 'store'])->name('student.exam.auth.store');
+    });
+
+    Route::prefix('resources')->group(function(){
+        Route::get('', [ResourcesController::class, 'index'])->name('student.resources.index');
+    });
+
 });
+
+Route::group(['prefix' => 'student/subject', 'middleware' => ['auth']],function () {
+    Route::get('select', [SubjectController::class, 'create'])->name('student.subject.create');
+    Route::post('/store', [SubjectController::class, 'store'])->name('student.subject.store');
+});
+

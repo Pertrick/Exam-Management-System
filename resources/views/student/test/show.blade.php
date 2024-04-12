@@ -1,3 +1,10 @@
+<style>
+    textarea:focus, input:focus{
+    outline: none;
+}
+
+
+</style>
 @include('student.partials.header')
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -20,7 +27,7 @@
                         <!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('student.dashboard') }}">Home</a></li>
                                 <li class="breadcrumb-item active">{{ $test->subject->name }}</li>
                             </ol>
                         </div>
@@ -43,32 +50,68 @@
                                     <div class="form-group">
                                         <div class="card-group">
                                             <div class="card">
+                                                <div class="text-center mt-2">
+                                                    <p class="font-weight-bold">
+                                                        {{ $test->subject->name }}
+                                                        ({{$test->testType->name}})
+                                                    </p>
+                                                    <p>Instruction: <span class="font-weight-bold">{{$test->instruction}}</span></p>
+                                                </div>
                                                 <p id="seconds-left" class="text-right pr-3">{{ $test->duration }}
                                                     seconds</p>
 
                                                 @foreach ($test->questions as $quest)
                                                     <div class="card-body">
-                                                        <h4 class="card-title mb-2">{{ $sn++ }}.
-                                                            {{ $quest->question }}
-                                                        </h4>
-                                                        @foreach ($quest->options as $key => $option)
-                                                            <p class="card-text">
-                                                                @if ($quest->type == $option_type)
-                                                                    <input type="radio"name="{{ $quest->id }}[]"
-                                                                        id="answer-id"
-                                                                        value="{{ $option->label }}">{{ $option->label }}
-
-                                                                    <input type="hidden" name="{{ $quest->id }}[]"
-                                                                        id="answer-id">
-                                                                @elseif($quest->type == $multi_choice_type)
-                                                                    <input type="checkbox" name="{{ $quest->id }}[]"
-                                                                        id="answer-id" value="{{ $option->label }} ">
-                                                                    {{ $option->label }}
-                                                                    <input type="hidden" name="{{ $quest->id }}[]"
-                                                                        id="answer-id">
-                                                                @endif
-                                                            </p>
-                                                        @endforeach
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <h4 class="card-title mb-2">
+                                                                    {{ $loop->iteration }}. {!! $quest->question !!} 
+                                                                    @if ($quest->image)
+                                                                        <div class="m-2">
+                                                                            <img src="/storage/images/questions/{{ $quest->image->name }}"
+                                                                            alt="{{ $quest->image->name }}" height="100"
+                                                                            width="200" class="img-fluid border">
+                                                                        </div>
+                                                                       
+                                                                    @endif
+                                                                </h4>
+                                                                <small class="float-right font-weight-bold">{{$quest->point}} point(s)</small>
+                                                                @foreach ($quest->options as $key => $option)
+                                                                    <p class="card-text pl-3">
+                                                                        @if ($quest->type == $option_type)
+                                                                            <input type="radio"name="{{ $quest->id }}[]"
+                                                                                id="answer-id"
+                                                                                value="{{ $option->label ?? ($option->image->name ?? '') }}">{{ $option->label }}
+                                                                            @if ($option->image)
+                                                                                <img src="/storage/images/options/{{ $option->image->name }}"
+                                                                                    alt="{{ $option->image->name }}"
+                                                                                    height="50" width="100" class="img-fluid border">
+                                                                            @endif
+        
+                                                                            <input type="hidden" name="{{ $quest->id }}[]"
+                                                                                id="answer-id">
+                                                                        @elseif($quest->type == $multi_choice_type)
+                                                                            <input type="checkbox" name="{{ $quest->id }}[]"
+                                                                                id="answer-id"
+                                                                                value="{{ $option->label ?? ($option->image->name ?? '') }} ">
+                                                                            {{ $option->label }}
+                                                                            @if ($option->image)
+                                                                                <img src="/storage/images/options/{{ $option->image->name }}"
+                                                                                    alt="{{ $option->image->name }}"
+                                                                                    height="50" width="100" class="img-fluid border">
+                                                                            @endif
+                                                                            <input type="hidden" name="{{ $quest->id }}[]"
+                                                                                id="answer-id">
+                                                                        @elseif($quest->type == $no_option)
+                                                                            <input type="text" class="border-top-0 border-right-0 border-left-0" style="width:70%" name="{{ $quest->id}}[]"
+                                                                                id="answer-id" autocomplete="off">
+                                                                        @endif
+                                                                    </p>
+                                                                    @endforeach
+                                                            </div>
+                                                        </div>
+                                                        
+                                                      
                                                     </div>
                                                 @endforeach
 
@@ -78,7 +121,7 @@
                                         </div>
 
                                         <div class="col-md-12 m-3 text-right">
-                                            <button type="submit" class="btn btn-success">Submit</button>
+                                            <button type="submit" class="btn btn-success" id="submitButton">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -127,6 +170,12 @@
 
         $(function() {
             $("#example1").DataTable();
+        });
+
+        $("#submitButton").on('click', function() {
+            $(this).text('submitting...'); 
+            this.disabled = true;
+            $('#form-subject').submit();
         });
     </script>
 </body>

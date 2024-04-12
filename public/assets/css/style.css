@@ -1,0 +1,404 @@
+*{
+	margin:0 0;
+	padding:0 0;
+	font-family: Helvetica, Arial;
+}
+
+.background{
+	background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(../images/cbt-exam.jpg) no-repeat;
+	background-size: cover;
+	background-position: center;
+	height: 100vh;
+
+}
+
+h1{
+	letter-spacing: 3px;
+}
+
+.navbar a{
+	text-decoration: none;
+	color:#fff;
+	letter-spacing: 2px;
+}
+
+
+.navbar a:hover{
+	text-decoration: underline;
+	text-decoration-color: #b39700;
+	text-decoration-thickness: 2px;
+
+}
+
+.green{
+	background-color: #5bc0de;
+	color:white;
+	padding:1%;
+	margin:1%;
+}
+
+.success{
+	background-color: #22bb33;
+	color:white;
+	padding:1%;
+	margin:1%;
+}
+
+.failed{
+	background-color: #bb2124;
+	color:white;
+	padding:1%;
+	margin:1%;
+}
+
+.img-responsive{
+	width:100%;
+}
+
+
+
+.header{
+	display: grid;
+	grid-template-columns: repeat(2, 2fr);
+	padding:1% 10% 1% 10%;
+	color:white;
+	
+}
+
+.navbar ul{
+	display: grid;
+	grid-template-columns: repeat(3, auto);
+	justify-content: right;
+	grid-gap: 1em;
+	list-style: none;
+	padding: 2%;
+
+}
+
+.container{
+	display: grid;
+	grid-template-columns: 1fr;
+	margin: 4% auto;
+	width:70%;
+	justify-content: center;
+	align-items: center;
+}
+
+.main{
+	float: left;
+	margin-top:70px;
+	padding:5%;
+	
+}
+
+.main h1{
+	font-size: 3rem;
+	color:rgb(134, 17, 230);
+	text-align: center;
+}
+
+.btn{
+	
+	background-color: #b39700;
+	color:black;
+	margin: 6% auto;
+	display: block;
+	font-weight: bold;
+	padding:2%;
+	text-align: center;
+	border-radius: 20px;
+	width:20%;
+	text-decoration: none;
+	
+}
+
+
+.btn-link{
+	color:white;
+	margin: 3%;
+	display: block;
+	font-weight: bold;
+	padding:2%;
+	text-align: center;
+	text-decoration: none;
+	
+}
+
+
+.main p{
+	color: #ccc;
+	text-align: center;
+	padding: 1%;
+	letter-spacing: 1px;
+
+}
+
+
+
+/* .main a:hover{
+	background-color: teal;
+	text-decoration: none;
+} */
+
+.clear-float{
+	clear: both;
+	float: none;
+}
+
+
+.img{
+	width: 300px;
+	float: right;
+}
+footer{
+	background-color: #000;
+	font-size: 9px;
+	color:white;
+	padding:1%;
+	text-align: center;
+	
+}
+
+.form{
+	margin:2% auto;
+	width:80%;
+	padding: 1%;
+	background-color: teal;
+	color:#000;
+	text-align: left;
+	
+}
+
+.form p{
+	background-color: #b39700;
+	padding:1%;
+	font-size: 1.2rem;
+	margin:2% 0 2% 0;
+	color: #fff;
+}
+
+.form ul{
+	width: 100%;
+}
+
+.form ul li{
+	width:49%;
+	display: inline-block;
+}
+
+.form ul li *{
+	width: 90%;
+}
+
+.form ul li label{
+	display: block;
+	
+}
+label{
+	font-weight: bold;
+}
+
+.form h1{
+	text-align: center;
+	margin:1% 0 1% 0;
+	letter-spacing: 3px;
+	word-spacing: 2px;
+	font-size: 2rem;
+}
+
+.text-center{
+	text-align: center;
+}
+
+
+i{
+	color:crimson;
+}
+
+
+.form input[type="text"], .form input[type="email"],  .form input[type="date"],  .form select,  .form textarea{
+	border:none;
+	outline:1;
+	outline-color: #006400;
+	padding:10px;
+	background-color: #d6ecce;
+	box-shadow: 0 1px 0 rgba(0,0,0,0.3) inset;
+	box-sizing: border-box;
+	font-size:15px;
+	color:#000;
+	margin:15px 0 15px 0;
+	width:90%;
+}
+
+.form input[type="file"]{
+	border:none;
+	outline:1;
+	outline-color: darkcyan;
+	padding:10px;
+	background-color: #d6ecce;
+	box-shadow: 0 1px 0 rgba(0,0,0,0.3) inset;
+	box-sizing: border-box;
+	font-size:15px;
+	color:#8a97a4;
+	margin:15px 0 10px 0;
+	width:44%;
+}
+
+
+.form input[type="text"]:focus, .form input[type="password"]:focus, .form input[type="email"]:focus{
+	background: #d2d9dd;
+	color:#495c70;
+}
+
+.form input[type="submit"]{
+	margin:4% auto;
+	font-size:15px;
+	display:block;
+	letter-spacing: 2;
+	padding:9px 20px 9px 20px;
+	width:25%;
+	background-color:#006400;
+	color:#fff;
+	border:none;
+	border-radius:10px;
+	cursor: pointer;
+
+}
+
+.content input[type="text"], .content select{
+	border:none;
+	outline:1;
+	outline-color: #123456;
+	padding:10px;
+	background-color: rgb(240, 240, 245);
+	box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
+	box-sizing: border-box;
+	font-size:15px;
+	color:#000;
+	margin:15px 0 15px 10px;
+	width:20%;
+	border-radius: 2px;
+
+}
+
+
+.content input[type="text"]:focus, .container select:focus{
+	background: #d2d9dd;
+	color:#495c70;
+}
+
+
+
+.content input[type="submit"]{
+	font-size:15px;
+	letter-spacing: 2;
+	padding:9px 10px 9px 10px;
+	color: #fff;
+	background-color: #123456;
+	width:13%;
+	border:none;
+	border-radius:2px;
+	cursor: pointer;
+	margin-left:15px;
+
+}
+
+.content{
+	margin:1% auto;
+	width:90%;
+}
+
+table{
+	width:100%;
+	text-align: center;
+	border-collapse: collapse;
+	color:#123456;
+	border-top: 10px solid #123456;
+	border-bottom: 10px solid #123456;
+	margin: 1% 0;
+}
+ th{
+
+	font-size: 1.3rem;
+}
+
+td, th{
+	border:1px solid #123456;
+	padding:8px;
+}
+
+tr:nth-child(even){
+	background-color: #dddddd;
+}
+
+table tr td a{
+	color:green;
+}
+
+.image{
+	background-color: burlywood;
+	border-radius: 2px;
+	padding: 10%;
+	margin-bottom: 3%;
+}
+
+.data{
+	margin: 2% 4% 2% 4%;
+	color: rgb(8, 8, 8);
+	font-size:15px;
+	font-weight: bold;
+}
+
+
+.wrapper{
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	grid-gap: 0.5rem;
+}
+
+.inline{
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	margin:1%;
+	padding:1% 2% 1% 2%;
+}
+
+.personal p{
+	color:#ccc;
+}
+
+.text-center{
+	text-align: center;
+}
+
+.status-form form{
+	display: inline-block;
+}
+
+.status-form select{
+	
+	outline:1;
+	outline-color: #123456;
+	background-color: rgb(240, 240, 245);
+	box-shadow: 0 1px 0 rgba(0,0,0,0.5) inset;
+	box-sizing: border-box;
+	font-size:15px;
+	color:#000;
+	border-radius: 2px;
+}
+
+.info{
+	padding:15px 30px 15px 30px;
+
+}
+.status{
+	padding: 1%;
+	background-color: #b39700;
+	margin:5px;
+	border-radius: 5px;
+}
+
+
+@media screen and (max-width:600px){
+
+}

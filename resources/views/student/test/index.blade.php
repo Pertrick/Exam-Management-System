@@ -20,7 +20,7 @@
                         <!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{route('student.dashboard')}}">Home</a></li>
                                 <li class="breadcrumb-item active">Upcoming Exams</li>
                             </ol>
                         </div>
@@ -36,7 +36,43 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
+                            @foreach($tests as $key => $test)
+                            <h4 class="text-center bg-1 text-white p-2">{{ ucFirst($key)}}</h4>
                             <div class="col-md-12 table-responsive">
+                                <table class="table align-items-center mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Subject</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                Duration</th>
+                                            <th
+                                                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                                </th>
+                                            <th class="text-secondary opacity-7"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($test as $value)
+                                            <tr>
+                                                <td>{{ $value->subject->name }}</td>
+                                                <td>{{ $value->duration }} seconds</td>
+                                                <td>
+                                                    <button type="button" data-target="#confirm" data-toggle="modal"
+                                                        class="btn btn-sm btn-link text-success" onclick="confirm({{ $value}});">
+                                                        <i class="fa fa-file-word"></i> Take {{$key}}</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            @endforeach
+                            
+                            {{-- <div class="col-md-12 table-responsive">
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
@@ -66,7 +102,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -95,9 +131,46 @@
             </div>
         </div>
     </div>
+
+    <div class="card-body">
+        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Kindly Enter your pin
+                            to proceed</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <form action="" method="post">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    <div class="form-group">
+                                        <input type="password" class="form-control" name="password" placeholder="Enter Pin">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <button type="submit" class="btn btn-success">Proceed</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer"></div>
+                </div>
+            </div>
+        </div>
     <!-- jQuery -->
     @include('student.partials.footer')
     <script>
+          $(document).ready(function() {
+        });
+
         function confirm(test) {
             $('.start').on('click', (e) => {
                 e.preventDefault();
