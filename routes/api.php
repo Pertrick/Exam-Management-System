@@ -2,7 +2,9 @@
 
 use App\Models\Test;
 use App\Models\Course;
+use App\Models\Result;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\Api\RegisteredUserController;
 
@@ -30,5 +32,16 @@ Route::get('courses/programs/{program}', function($programId){
 });
 
 Route::get('exams', function(){
-    return Test::with(['results', 'subject'])->Has('results')->get();
+    return Test::with(['results', 'subject'])->Has('results')->get()->groupBy('subject.name');
+});
+
+
+Route::get('results/{test}', function($testId){
+    return DB::select('
+      SELECT u.id AS user_id, u.name AS user_name, ROUND(AVG(r.score),2) AS average_result,  ROUND(AVG(r.score_percentage),2) AS average_percentage
+      FROM results r
+      INNER JOIN users u ON r.user_id = u.id
+      WHERE r.test_id = ?
+      GROUP BY u.id
+    ', [$testId]);
 });

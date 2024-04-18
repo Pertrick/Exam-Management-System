@@ -44,7 +44,6 @@
                                             <tr>
                                                 <th>sn.</th>
                                                 <th>Exams</th>
-                                                <th></th>
                                                 <th class="text-right">Action</th>
                                             </tr>
                                         </thead>
@@ -53,10 +52,10 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $test->subject->name }}</td>
-                                                    <td>--</td>
-                                                    <td><button class="btn btn-outline-success">
+                                                    <td>
+                                                        <a href="{{route('admin.result.show', $test->id)}}" class="btn btn-outline-success">
                                                         <i class="fa fa-eye"></i>
-                                                    </button>
+                                                        </a>
                                                 </td>
                                                 </tr>
                                             @endforeach

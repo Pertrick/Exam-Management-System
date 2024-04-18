@@ -86,7 +86,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('admin.result.index')}}" class="nav-link {{ request()->is('admin/results') ? 'active' : '' }}">
+                    <a href="{{route('admin.result.index')}}" class="nav-link {{ request()->is('admin/results*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-list-alt "></i>
                         <p>
                             Results

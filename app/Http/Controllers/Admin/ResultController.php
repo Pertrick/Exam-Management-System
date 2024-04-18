@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Test;
 use Illuminate\Http\Request;
+use App\Models\Result;
 
 class ResultController extends Controller
 {
@@ -49,9 +50,10 @@ class ResultController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($testId)
     {
-        //
+        $results = Result::with(['user','test'])->where('test_id', $testId)->get();
+        return view('admin.results.show', compact('results','testId'));
     }
 
     /**
