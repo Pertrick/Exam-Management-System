@@ -42,6 +42,6 @@ Route::get('results/{test}', function($testId){
       FROM results r
       INNER JOIN users u ON r.user_id = u.id
       WHERE r.test_id = ?
-      GROUP BY u.id
+      GROUP BY u.id,u.name
     ', [$testId]);
 });
