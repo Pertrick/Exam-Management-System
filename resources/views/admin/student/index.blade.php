@@ -42,9 +42,9 @@
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>ID No.</th>
-                                            <th>Profile</th>
-                                            <th>Complete Name</th>
+                                            <th>Sn.</th>
+                                            <th>Avatar</th>
+                                            <th>Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
                                             <th>Subject</th>

@@ -89,6 +89,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::resource('results', ResultController::class)
         ->name('index', 'admin.result.index')
+        ->name('show', 'admin.result.show')
         ->name('store', 'admin.result.store')
         ->name('destroy', 'admin.result.delete');
 

@@ -113,7 +113,8 @@
                                     <ul class="users-list clearfix">
                                         @foreach ($students as $student)
                                             <li>
-                                                <img src="assets/images/user.jpg" alt="User Image" width="50" height="50">
+                                                <img src="assets/images/user.jpg" alt="User Image" width="50"
+                                                    height="50">
                                                 <p class="users-list-name text-xs">{{ $student->name }}</p>
                                                 <span class="users-list-date text-xs">{{ $student->created_at }}</span>
                                             </li>
@@ -155,51 +156,76 @@
     @include('admin.partials.footer')
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            $.get(`api/exams`).done(function(data) {
-                let exams = data;
-                let subjects = exams.map((exam) => exam.subject.name);
-                let results = exams.map((exam) => exam.results);
+            $.get(`api/exams`).done(function(data, status) {
 
-                let datasets = [];
+                let passedScores = [];
+                let failedScores = [];
 
-                for (let i = 0; i < subjects.length; i++) {
-                    const subjectName = subjects[i];
-                    const scoresForSubject = results[i];
+                let subjects = [];
 
-                    const passedScores = scoresForSubject
-                        .filter((score) => score.status === 1)
-                        .map((score) => score.score);
-                    const failedScores = scoresForSubject
-                        .filter((score) => score.status === 0)
-                        .map((score) => score.score);
+                Object.entries(data).forEach(([key, value]) => {
+                    subjects.push(key);
+                    console.log(key, value);
 
-                        console.log(passedScores);
-                        console.log(failedScores);
+                    value.forEach(val => {
+                        const scoresForSubject = val.results;
+                        console.log(val);
+                        const scores = val.results.map((result) => result.score);
 
-                    // Create dataset objects for passed and failed scores
-                    datasets.push({
-                        label: `passed`,
+                        console.log(scores);
+
+                        //    scoresForSubject
+                        //         .filter((score) => score.status === 1)
+                        //         .map((score) => score.score));
+
+                        const passedScore = scoresForSubject
+                            .filter((score) => score.status === 1)
+                            .map((score) => score.score)
+                            .reduce((acc, score) => acc + score, 0) / scores.length;
+
+                        passedScores.push(passedScore);
+
+
+                        const failedScore = scoresForSubject
+                            .filter((score) => score.status === 0)
+                            .map((score) => score.score)
+                            .reduce((acc, score) => acc + score, 0) / scores.length;
+
+                        failedScores.push(failedScore);
+
+
+                    });
+                });
+
+
+                console.log(passedScores);
+                console.log(failedScores);
+
+                let datasets = [
+                    {
+                        label: 'passed',
                         backgroundColor: 'rgb(79,129,189)',
                         borderColor: 'rgba(0, 158, 251, 1)',
                         borderWidth: 1,
-                        data: passedScores,
-                    });
-                    datasets.push({
-                        label: `failed`,
+                        data: passedScores
+                    },
+
+                    {
+                        label: 'failed',
                         backgroundColor: 'rgb(192,80,77)',
                         borderColor: 'rgba(0, 158, 251, 1)',
                         borderWidth: 1,
-                        data: failedScores,
-                    });
-                }
+                        data: failedScores
+                    }
+                ];
 
                 // Assemble the complete barChartData object
                 var barChartData = {
                     labels: subjects,
                     datasets: datasets,
-                    legend: { 
+                    legend: {
                         display: true,
-                        labels: { 
+                        labels: {
                             formatter: (context) =>
                                 `${context.datasetIndex === 0 ? 'Passed' : 'Failed'}`,
                         },
