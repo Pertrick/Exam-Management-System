@@ -97,84 +97,93 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
-        $(function() {
-                    $("#example1").DataTable();
+        function generateRandomColors(numberOfUsers) {
+            const colors = [];
+            for (let i = 0; i < numberOfUsers; i++) {
+                const red = Math.floor(Math.random() * 256);
+                const green = Math.floor(Math.random() * 256);
+                const blue = Math.floor(Math.random() * 256);
+                const color = `rgb(${red}, ${green}, ${blue})`;
+                colors.push(color);
+            }
 
-                    const ctx = document.getElementById('myBarChart');
-                    const pie = document.getElementById('myPieChart');
+            return colors;
 
-                    const id = $('#testId').val();
+        }
 
+            $(function() {
+                $("#example1").DataTable();
 
-                    $.get(`api/results/${id}`).done(function(response, status) {
-                            const results = [];
-                            const users = [];
-                            const percent = [];
-                            response.forEach(element => {
-                                results.push(element.average_result);
-                                users.push(element.user_name);
-                                percent.push(element.average_percentage);
-                            });
+                const ctx = document.getElementById('myBarChart');
+                const pie = document.getElementById('myPieChart');
 
-                            new Chart(ctx, {
-                                    type: 'bar',
-                                    data: {
-                                        labels: users,
-                                        datasets: [{
-                                            label: '#scores',
-                                            data: results,
-                                            borderWidth: 1,
-                                            backgroundColor: 'rgb(79,129,189)',
-                                        }]
-                                    },
-                                    options: {
-                                        animations: {
-                                            tension: {
-                                                duration: 1000,
-                                                easing: 'linear',
-                                                from: 1,
-                                                to: 0,
-                                                loop: true
-                                            }
-                                        },
-                                            scales: {
-                                                y: {
-                                                    beginAtZero: true,
-                                                    min: 0,
-                                                    max: 100
-                                                }
-                                            }
-                                        }
-                                    });
+                const id = $('#testId').val();
 
 
-                                new Chart(pie, {
-                                    type: 'pie',
-                                    data: {
-                                        labels: users,
-                                        datasets: [{
-                                            label: '# percentage scores',
-                                            data: percent,
-                                            borderWidth: 1,
-                                            backgroundColor: [
-                                            'rgb(255, 99, 132)',
-                                            'rgb(54, 162, 235)',
-                                            'rgb(255, 205, 86)',
-                                            'rgb(79,129,189)'
-                                        ]
-
-                                        }]
-                                    },
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        }
-                                    }
-                                });
-                            });
+                $.get(`api/results/${id}`).done(function(response, status) {
+                    const results = [];
+                    const users = [];
+                    const percent = [];
+                    response.forEach(element => {
+                        results.push(element.average_result);
+                        users.push(element.user_name);
+                        percent.push(element.average_percentage);
                     });
+
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: users,
+                            datasets: [{
+                                label: '#scores',
+                                data: results,
+                                borderWidth: 1,
+                                backgroundColor: 'rgb(79,129,189)',
+                            }]
+                        },
+                        options: {
+                            animations: {
+                                tension: {
+                                    duration: 1000,
+                                    easing: 'linear',
+                                    from: 1,
+                                    to: 0,
+                                    loop: true
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    min: 0,
+                                    max: 100
+                                }
+                            }
+                        }
+                    });
+
+
+                    new Chart(pie, {
+                        type: 'pie',
+                        data: {
+                            labels: users,
+                            datasets: [{
+                                label: '# percentage scores',
+                                data: percent,
+                                borderWidth: 1,
+                                backgroundColor: generateRandomColors(users.length)
+
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+            });
     </script>
 </body>
 
