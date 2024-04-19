@@ -79,13 +79,13 @@
                                                     <button type="button" class="btn btn-sm btn-info options"
                                                         data-id ="{{ $question->options }}" data-toggle="modal"
                                                         data-target="#view-options-modal" title="view options">
-                                                        options <i class="fa fa-eye"></i>
+                                                       <i class="fa fa-eye"></i>
                                                     </button>
 
                                                     <a class="btn btn-sm bg3 text-white"
                                                         href="{{ route('admin.question.edit', $question->id) }}"
                                                         title="edit"><i class="fa fa-edit text-white"></i>
-                                                        edit</a>
+                                                    </a>
 
                                                     <form action="{{ route('admin.question.delete', $question->id) }}"
                                                         method="post" class="d-inline">
@@ -93,7 +93,7 @@
                                                         @method('delete')
                                                         <button class="btn btn-sm bg1 text-white" type="submit"
                                                             onclick="return confirm('Are you sure?')"
-                                                            title="delete">delete<i
+                                                            title="delete"><i
                                                                 class="fa fa-trash-alt text-white"></i></button>
                                                     </form>
                                                 </td>

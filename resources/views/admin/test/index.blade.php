@@ -123,7 +123,7 @@
     </div>
     <!-- ./wrapper -->
     <div id="view-question-modal" class="modal animated rubberBand delete-modal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-body myModal text-center">
                     <label for="options">Questions</label>

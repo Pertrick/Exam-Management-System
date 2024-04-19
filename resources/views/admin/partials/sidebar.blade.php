@@ -20,7 +20,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.subject.index') }}"
-                        class="nav-link {{ request()->is('admin/subject') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/subject*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-book"></i>
                         <p>
                             Subject
@@ -29,7 +29,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.question.index') }}"
-                        class="nav-link {{ request()->is('admin/question') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('admin/question*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-certificate "></i>
                         <p>
                             Question

@@ -56,7 +56,7 @@ class ResponseController extends Controller
         }
 
         $score->storeScore($test_id, $total_score);
-        return redirect()->route('student.test.index');
+        return redirect()->route('student.test.index')->with('success', 'Exam submitted successfully!');
     }
 
     /**

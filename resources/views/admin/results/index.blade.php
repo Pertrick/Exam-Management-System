@@ -36,10 +36,10 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            @foreach ($tests as $key => $value)
+                            @forelse ($tests as $key => $value)
                                 <p class="text-center font-weight-bold">{{ ucfirst($key) }}</p>
                                 <div class="col-md-9 table-responsive" style="border-left: 1px solid #ddd;">
-                                    <table id="example-${{$key}}" class="table table-bordered table-hover">
+                                    <table id="example-${{ $key }}" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>sn.</th>
@@ -48,21 +48,29 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($value as $test)
+                                            @forelse ($value as $test)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $test->subject->name }}</td>
                                                     <td>
-                                                        <a href="{{route('admin.result.show', $test->id)}}" class="btn btn-outline-success">
-                                                        <i class="fa fa-eye"></i>
+                                                        <a href="{{ route('admin.result.show', $test->id) }}"
+                                                            class="btn btn-outline-success">
+                                                            <i class="fa fa-eye"></i>
                                                         </a>
-                                                </td>
+                                                    </td>
                                                 </tr>
-                                            @endforeach
+
+                                            @empty
+                                                <tr>
+                                                    <td> No result to show yet!</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                 </div>
-                            @endforeach
+                            @empty
+                                <p class="text-center"><i> No Exam taken yet!</i></p>
+                            @endforelse
                         </div>
                     </div>
                     <!-- form start -->

@@ -118,6 +118,8 @@
                                         <td>{{$subject->courses ? $subject->courses->implode('name') : ''}}</td>
                                         <td>{{ $subject->description }}</td>
                                         <td class="text-right">
+                                            <a href="{{route('admin.subject.show',$subject->id)}}" class="btn btn-sm btn-primary"><i
+                                                class="fa fa-eye"></i></a>
                                             <button type="button" class="btn btn-sm btn-info"
                                                 onclick="editSubject({{ $subject }})"><i
                                                     class="fa fa-edit"></i></button>
@@ -127,7 +129,7 @@
                                                 @csrf
                                                 @method('delete')
                                                 <button class="btn btn-sm bg1 text-white" type="submit"
-                                                    onclick="return confirm('Are you sure?')">delete<i
+                                                    onclick="return confirm('Are you sure?')"><i
                                                         class="fa fa-trash-alt text-white"></i></button>
                                             </form>
                                             {{-- <a class="btn btn-sm bg1" href="#" data-toggle="modal"

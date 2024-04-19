@@ -17,7 +17,7 @@
                     </a>
                 </li>
                 <li class="nav-item" title="Dashboard">
-                    <a href="{{route('student.subject.index')}}" class="nav-link {{ request()->is('student/subject') ? 'active' : ''}}">
+                    <a href="{{route('student.subject.index')}}" class="nav-link {{ request()->is('student/subject*') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-book"></i>
                         <p>
                             Subjects
@@ -25,7 +25,7 @@
                     </a>
                 </li>
                 <li class="nav-item" title="Upcoming Exam">
-                    <a href="{{route('student.test.index')}}" class="nav-link {{ request()->is('student/exam') ? 'active' : ''}}">
+                    <a href="{{route('student.test.index')}}" class="nav-link {{ request()->is('student/exam*') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-file-signature"></i>
                         <p>
                             Upcoming Exam
