@@ -54,11 +54,13 @@
                                                     <p class="font-weight-bold">
                                                         {{ $test->subject->name }}
                                                         ({{$test->testType->name}})
+                                                        <input type="hidden" id="testId" value="{{$test->id}}" />
                                                     </p>
                                                     <p>Instruction: <span class="font-weight-bold">{{$test->instruction}}</span></p>
                                                 </div>
-                                                <p id="seconds-left" class="text-right pr-3">{{ $test->duration }}
+                                                <p id="seconds-left" class="text-right pr-3" style="position: static">{{ $test->duration }}
                                                     seconds</p>
+                                                    
 
                                                 @foreach ($test->questions as $quest)
                                                     <div class="card-body">
@@ -173,9 +175,24 @@
         });
 
         $("#submitButton").on('click', function() {
+            const testId =  $('#testId').val();
             $(this).text('submitting...'); 
             this.disabled = true;
             $('#form-subject').submit();
+
+                $.ajax({
+                    type: 'POST',
+                    url: `student/exam/update/${testId}`,
+                    dataType: "json",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        test_id: testId
+                    },
+                    success: function(data) {
+                      console.log(data);
+
+                    }
+                });
         });
     </script>
 </body>

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Models\Test;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Question;
 use Carbon\Carbon;
+use App\Models\Test;
+use App\Models\Question;
+use App\Models\TestType;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class TestController extends Controller
 {
@@ -19,12 +20,17 @@ class TestController extends Controller
     {
         $subject_ids = auth()->user()->subjects()->get()->pluck('id');
         $tests = Test::with(['subject', 'questions:question', 'testType'])
+
             ->whereIn('subject_id', $subject_ids)
             ->where('is_published', Test::PUBLISHED)
             ->where(function ($query) {
                 $query->whereNull('start_date')
                       ->orWhereNull('end_date');
             })
+            // ->where(function($query){
+            //     $query->whereDoesntHave('users')
+            //           ->orWhereHas('users', fn($q) => $q->where('status',0));
+            // })
             ->orWhere(function ($query) {
                 $query->where('start_date', '<=', now())
                       ->where('end_date', '>=', now());
@@ -57,7 +63,7 @@ class TestController extends Controller
             $request->test_id,
             [
                 'start_time' => Carbon::now(),
-                'end_time' => Carbon::now()->addSecond($request->duration)
+                'status' => 1
             ]
         );
 
@@ -100,7 +106,16 @@ class TestController extends Controller
      */
     public function update(Request $request, Test $test)
     {
-        //
+        auth()->user()->tests()->updateExistingPivot(
+            $request->test_id,
+            [
+                'end_time' => Carbon::now(),
+            ]
+        );
+
+        return true;
+
+      
     }
 
     /**

@@ -27,6 +27,7 @@
                         <!-- /.col -->
                     </div>
                     <!-- /.row -->
+                    @include('student.partials.alert')
                 </div>
                 <!-- /.container-fluid -->
             </div>
@@ -35,6 +36,7 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="card card-info">
+                      
                         <div class="card-body">
                             @foreach($tests as $key => $test)
                             <h4 class="text-center bg-1 text-white p-2">{{ ucFirst($key)}}</h4>
@@ -180,8 +182,7 @@
                     dataType: "json",
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        test_id: test.id,
-                        duration: test.duration
+                        test_id: test.id
                     },
                     success: function(data) {
                         if (data == 1) {

@@ -62,7 +62,8 @@ class SubjectController extends Controller
      */
     public function show(Subject $subject)
     {
-        //
+        $students = $subject->load('users')->users;
+        return view('admin.subject.show', compact('students', 'subject'));
     }
 
     /**
@@ -100,5 +101,25 @@ class SubjectController extends Controller
         $subject->delete();
 
         return redirect()->back()->with('message', 'Subject Deleted Successfully!');
+    }
+
+       /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Subject  $subject
+     * @return \Illuminate\Http\Response
+     */
+
+    public function detach(Request $request,$subjectId)
+    {
+        $student = $request->student;
+        if($student){
+            $subject = Subject::findOrFail($subjectId);
+            $subject->users()->detach($student);
+            return redirect()->back()->with('message', 'Student removed Successfully!');
+        }
+
+        return redirect()->back()->with('message', 'failed to removed Student!');
+     
     }
 }

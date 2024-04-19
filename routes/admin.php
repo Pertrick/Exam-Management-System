@@ -28,8 +28,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard.index');
     Route::prefix('subject')->group(function () {
         Route::get('', [SubjectController::class, 'index'])->name('admin.subject.index');
+        Route::get('{subject}', [SubjectController::class, 'show'])->name('admin.subject.show');
         Route::post('store', [SubjectController::class, 'store'])->name('admin.subject.store');
+        Route::delete('/student/delete/{id}', [SubjectController::class, 'detach'])->name('admin.student.subject.delete');
         Route::delete('delete/{id}', [SubjectController::class, 'destroy'])->name('admin.subject.delete');
+       
     });
 
     Route::prefix('question')->group(function () {

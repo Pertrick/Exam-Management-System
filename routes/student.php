@@ -44,7 +44,7 @@ Route::group(['prefix' => 'student', 'middleware' => ['auth','subject']],functio
         Route::get('/show/{id}', [TestController::class, 'show'])->name('student.test.show');
         Route::get('edit/{id}', [TestController::class, 'edit'])->name('student.test.edit');
         Route::post('store', [TestController::class, 'store'])->name('student.test.store');
-        Route::put('update/{id}', [TestController::class, 'update'])->name('student.test.update');
+        Route::post('update/{id}', [TestController::class, 'update'])->name('student.test.update');
         Route::delete('delete/{id}', [testController::class, 'destroy'])->name('student.test.delete');
     });
 
