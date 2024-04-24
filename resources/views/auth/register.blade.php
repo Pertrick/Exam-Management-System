@@ -73,6 +73,7 @@
                     <x-input-label for="courses" :value="__('Courses')" />
                     <select id="course-id" name="course" class="block mt-1 w-full rounded text-sm text-gray-700"
                         required>
+                        <option disabled> select a program first</option>
 
                     </select>
                     @error('course')
