@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ResultController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
+use App\Http\Controllers\Admin\TestNewController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\AccessPinController;
@@ -55,17 +56,18 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::delete('delete/{id}', [StudentController::class, 'destroy'])->name('admin.student.delete');
     });
 
-    Route::prefix('exam')->group(function () {
-        Route::get('', [TestController::class, 'index'])->name('admin.test.index');
-        Route::get('/question/{id}', [TestController::class, 'question'])->name('admin.test.questions');
-        Route::get('create', [TestController::class, 'create'])->name('admin.test.create');
-        Route::get('edit/{id}', [TestController::class, 'edit'])->name('admin.test.edit');
-        Route::post('store', [TestController::class, 'store'])->name('admin.test.store');
-        Route::put('update/{id}', [TestController::class, 'update'])->name('admin.test.update');
-        Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
-        Route::delete('delete/{id}', [testController::class, 'destroy'])->name('admin.test.delete');
-        Route::post('export/{id}', [testController::class, 'export'])->name('admin.test.export');
-    });
+    // Route::prefix('exam')->group(function () {
+    //     Route::get('', [TestController::class, 'index'])->name('admin.test.index');
+    //     Route::get('/question/{id}', [TestController::class, 'question'])->name('admin.test.questions');
+    //     Route::get('/{test}', [TestController::class, 'show'])->name('admin.test.show');
+    //     Route::get('create', [TestController::class, 'create'])->name('admin.test.create');
+    //     Route::get('edit/{id}', [TestController::class, 'edit'])->name('admin.test.edit');
+    //     Route::post('store', [TestController::class, 'store'])->name('admin.test.store');
+    //     Route::put('update/{id}', [TestController::class, 'update'])->name('admin.test.update');
+    //     Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
+    //     Route::delete('delete/{id}', [testController::class, 'destroy'])->name('admin.test.delete');
+    //     Route::post('export/{id}', [testController::class, 'export'])->name('admin.test.export');
+    // });
 
     Route::prefix('accesspin')->group(function () {
         Route::get('', [AccessPinController::class, 'index'])->name('admin.accesspin.index');
@@ -77,6 +79,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::post('store', [ResourcesController::class, 'store'])->name('admin.resources.store');
     });
 
+
+    Route::prefix('exam')->group(function(){
+        Route::get('', [TestNewController::class, 'index'])->name('admin.test.new.index');
+        Route::get('/create', [TestNewController::class, 'create'])->name('admin.test.new.create');
+        Route::get('/questions/{test}', [TestNewController::class, 'show'])->name('admin.test.new.show');
+        Route::post('store', [TestNewController::class, 'store'])->name('admin.test.new.store');
+        Route::get('/{test}', [TestNewController::class, 'edit'])->name('admin.test.new.edit');
+        Route::get('/question/{id}', [TestController::class, 'question'])->name('admin.test.questions');
+        Route::put('update/{id}', [TestNewController::class, 'update'])->name('admin.test.new.update');
+        Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
+    });
 
 
     Route::resource('programs', ProgramController::class)

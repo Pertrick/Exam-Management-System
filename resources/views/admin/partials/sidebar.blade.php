@@ -27,7 +27,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.question.index') }}"
                         class="nav-link {{ request()->is('admin/question*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-certificate "></i>
@@ -35,7 +35,7 @@
                             Question
                         </p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                     <a href="{{ route('admin.program.index') }}"
                         class="nav-link {{ request()->is('admin/programs') ? 'active' : '' }}">
@@ -75,8 +75,18 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.test.index') }}"
+                        class="nav-link {{ request()->is('admin/exam*') ? 'active' : '' }}">
+                        <i class="nav-icon fa fa-chalkboard-teacher "></i>
+                        <p>
+                            Exams
+                        </p>
+                    </a>
+                </li> --}}
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.test.new.index') }}"
                         class="nav-link {{ request()->is('admin/exam*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-chalkboard-teacher "></i>
                         <p>

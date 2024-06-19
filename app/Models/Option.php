@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Question;
 use App\Models\Image;
+use App\Models\Question;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Option extends Model
 {
@@ -25,8 +26,13 @@ class Option extends Model
         'is_correct' => 'boolean'
     ];
 
-    public function setIsCorrectAttribute($value){
-        ($value == "on") ? $this->attributes['is_correct'] = 1 : $this->attributes['is_correct'] = 0; 
+    // public function setIsCorrectAttribute($value){
+    //     ($value == "on") ? $this->attributes['is_correct'] = 1 : $this->attributes['is_correct'] = 0; 
+        
+    // }
+
+      public function setIsCorrectAttribute($value){
+        ($value == "1") ? $this->attributes['is_correct'] = 1 : $this->attributes['is_correct'] = 0; 
         
     }
 

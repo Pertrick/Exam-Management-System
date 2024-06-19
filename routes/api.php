@@ -3,9 +3,11 @@
 use App\Models\Test;
 use App\Models\Course;
 use App\Models\Result;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\MockObject\Stub\ReturnSelf;
 use App\Http\Controllers\Auth\Api\RegisteredUserController;
 
 /*
@@ -44,4 +46,17 @@ Route::get('results/{test}', function($testId){
       WHERE r.test_id = ?
       GROUP BY u.id,u.name
     ', [$testId]);
+});
+
+
+
+Route::post('delete-question/{question}', function($question){
+    $question = Question::findOrFail($question);
+    if($question->options()->delete()){
+        $question->delete();
+        return true;
+    }
+
+    return false;
+       
 });

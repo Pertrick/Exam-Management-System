@@ -8,6 +8,7 @@ use App\Models\Subject;
 use App\Models\Question;
 use App\Models\Response;
 use App\Models\TestType;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -26,7 +27,9 @@ class Test extends Model
         'instruction',
         'pass_mark',
         'start_date',
-        'end_date'
+        'end_date',
+        'is_published',
+        'test_id'
 
     ];
 
@@ -44,7 +47,7 @@ class Test extends Model
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class);
+        return $this->hasMany(Question::class);
     }
 
     public function users()
@@ -83,7 +86,7 @@ class Test extends Model
         if (is_null($value)) {
             return null;
         }
-        return Carbon::parse($value)->format('M d Y H:i:s');
+        return Carbon::parse($value)->format('M d Y g:i A');
     }
 
     public function getEndDateAttribute($value)
@@ -91,6 +94,57 @@ class Test extends Model
         if (is_null($value)) {
             return null;
         }
-        return Carbon::parse($value)->format('M d Y H:i:s');
+        return Carbon::parse($value)->format('M d Y g:i A');
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($test) {
+            $test->test_id = 'test-' . substr(self::generateRandomCodes(), 0, 10);
+        });
+    }
+
+
+    public static function generateRandomCodes()
+    {
+        $code = Str::random(16);
+
+        $customCode = '';
+        for ($i = 0; $i < strlen($code); $i++) {
+            $char = $code[$i];
+            if (ctype_alpha($char)) {
+                $customCode .= (rand(0, 1) === 0) ? strtoupper($char) : $char;
+            } else {
+                $customCode .= $char;
+            }
+        }
+
+        return $customCode;
+    }
+
+
+    public function scopeSearch($query, $searchValue)
+    {
+        if (!$searchValue || !isset($searchValue) || is_null($searchValue)) {
+            return $query;
+        }
+
+        if (strtolower($searchValue) == "closed") {
+            $searchValue = 0;
+        } else if (strtolower($searchValue) == "open") {
+            $searchValue = 1;
+        }
+
+        return $query->where(function ($q) use ($searchValue) {
+            $q->Where("is_published", "$searchValue");
+        })->orWhereHas('subject', fn ($q) => $q->where('name', 'like', "%$searchValue%"))
+            ->orWhereHas('testType', fn ($q) => $q->where("name", "like", "%$searchValue"));
     }
 }

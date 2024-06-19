@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('tests', function (Blueprint $table) {
             $table->id();
+            $table->string('test_id')->nullable();
             $table->foreignId('test_type_id')->constrained();
             $table->foreignId('subject_id')->constrained();
             $table->string('duration')->nullable();

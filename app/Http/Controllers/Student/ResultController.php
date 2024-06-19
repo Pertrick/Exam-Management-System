@@ -17,7 +17,7 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = auth()->user()->results()->with(['test.subject','test.testType'])->latest()->get();
+        $results = auth()->user()->results()->with(['test.subject', 'test.testType'])->latest()->get();
         return view('student.result.index', compact('results'));
     }
 
@@ -54,26 +54,33 @@ class ResultController extends Controller
         $multi_choice_type = Question::MULTI_CHOICE;
         $no_option = Question::NO_OPTION;
 
-        $test = Test::with(['subject:id,name', 'questions.options.image','questions.image'])
-                            ->with(['questions.responses' => function($q) use($result_id){
-                                return $q->where('user_id', auth()->user()->id)->where('result_id', $result_id);
-                            }])->whereHas('results', 
-                                fn($q) => $q->where('id', $result_id)
-                                ->where('user_id', auth()->user()->id))
-                    ->first();
+        $test = Test::with(['subject:id,name', 'questions.options.image', 'questions.image'])
+            ->with(['questions.responses' => function ($q) use ($result_id) {
+                return $q->where('result_id', $result_id)
+                    ->where('user_id', auth()->user()->id)
+                    ->where('result_id', $result_id);
+            }])
+            ->whereHas('results', 
+                       fn ($q) => $q->where('id', $result_id)
+                                  ->where('user_id', auth()->user()->id))
+            ->first();
 
         $result = Result::findOrFail($result_id);
 
         $testPivot = $test->users()->first()->pivot;
 
         $responses = auth()->user()->responses()
-                            ->with('question.options.image')
-                            ->with(['question.options' => function($query){
-                                $query->where('is_correct', 1);
-        }])->with('question.image')->where('result_id', $result_id)->get();
+            ->with('question.options.image')
+            ->with(['question.options' => function ($query) {
+                $query->where('is_correct', 1);
+            }])->with('question.image')
+            ->where('result_id', $result_id)
+            ->get();
 
-        
-        return view('student.result.show', compact('responses', 'result','test', 'testPivot', 'option_type','multi_choice_type', 'no_option'));
+        // dd($result,$test,$responses);
+
+
+        return view('student.result.show', compact('responses', 'result', 'test', 'testPivot', 'option_type', 'multi_choice_type', 'no_option'));
     }
 
     /**
@@ -96,11 +103,10 @@ class ResultController extends Controller
      */
     public function calculate(Request $request, Result $result)
     {
-        
     }
 
 
-       /**
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

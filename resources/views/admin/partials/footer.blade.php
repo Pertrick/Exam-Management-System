@@ -16,6 +16,8 @@
 
  <script>
   CKEDITOR.replace( 'question' );
+  CKEDITOR.replace( 'instruction');
+  CKEDITOR.replace( 'option');
   </script>
 
 {{-- <!-- Initialize Quill editor -->

@@ -23,20 +23,17 @@ class TestController extends Controller
 
             ->whereIn('subject_id', $subject_ids)
             ->where('is_published', Test::PUBLISHED)
-            ->where(function ($query) {
+            ->orWhere(function ($query) {
                 $query->whereNull('start_date')
                       ->orWhereNull('end_date');
             })
-            // ->where(function($query){
-            //     $query->whereDoesntHave('users')
-            //           ->orWhereHas('users', fn($q) => $q->where('status',0));
-            // })
             ->orWhere(function ($query) {
                 $query->where('start_date', '<=', now())
                       ->where('end_date', '>=', now());
             })
             ->get()
             ->groupBy('testType.name');
+
 
         return view('student.test.index', compact('tests'));
     }
@@ -82,7 +79,7 @@ class TestController extends Controller
         $multi_choice_type = Question::MULTI_CHOICE;
         $no_option = Question::NO_OPTION;
         $sn = 1;
-        $test = Test::with(['questions.options.image', 'subject', 'questions.image'])->findOrFail($id);
+        $test = Test::with(['questions.options.image', 'subject', 'questions.image'])->where('test_id',$id)->first();
         return view('student.test.show', compact('test', 'option_type', 'no_option', 'multi_choice_type', 'sn'));
     }
 

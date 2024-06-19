@@ -49,17 +49,17 @@
                         @foreach ($test->questions as $quest)
                         <div class="card-body mx-3">
                            <p class="mx-3">Your Answer : <span class="font-weight-bold">{{ 
-                              (collect($quest->responses[0]->answer)->isEmpty() )? 'No answer' :
-                              collect($quest->responses[0]->answer)->values()->implode(",") }}</span>
+                              (collect($quest->responses->first()?->answer)->isEmpty() )? 'No answer' :
+                              collect($quest->responses->first()?->answer)->values()->implode(",") }}</span>
                            
                            @if($quest->type !== $no_option)
-                                @if (count(array_diff($quest->options->where('is_correct',1)->pluck('label')->toArray(), collect($quest->responses[0]->answer)->values()->toArray())) == 0)
+                                @if (count(array_diff($quest->options->where('is_correct',1)->pluck('label')->toArray(), collect($quest->responses->first()?->answer)->values()->toArray())) == 0)
                                 <i class='fa fa-check text-success'></i>
                                  @else
                                  <i class='fa fa-times text-danger'></i>
                                  @endif
                            @else
-                           @if(!collect($quest->responses[0]->answer)->isEmpty() && in_array(strtolower(collect($quest->responses[0]->answer)->values()->implode(',')),$quest->options->where('is_correct',1)->pluck('label')->toArray()))
+                           @if(!collect($quest->responses->first()?->answer)->isEmpty() && in_array(strtolower(collect($quest->responses->first()?->answer)->values()->implode(',')),$quest->options->where('is_correct',1)->pluck('label')->toArray()))
                               <i class='fa fa-check text-success'></i> 
                           @else
                           <i class='fa fa-times text-danger'></i>

@@ -186,7 +186,7 @@
                     },
                     success: function(data) {
                         if (data == 1) {
-                            window.location.href = 'student/exam/show/' + test.id;
+                            window.location.href = 'student/exam/take/' + test.test_id;
                         }
 
                     }

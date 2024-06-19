@@ -18,7 +18,7 @@ class Question extends Model
 
     const OPTION = 'option';
     const MULTI_CHOICE = 'multiple choice';
-    const NO_OPTION = 'no option';
+    const NO_OPTION = 'no_option';
 
     protected $fillable = [
         'subject_id',
@@ -44,8 +44,8 @@ class Question extends Model
         return $this->belongsTo(Subject::class);
     }
 
-    public function tests(){
-        return $this->belongsToMany(Test::class);
+    public function test(){
+        return $this->belongsTo(Test::class);
     }
 
     public function responses(){
