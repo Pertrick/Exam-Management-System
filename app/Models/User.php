@@ -19,6 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+    const WEBSITE_ID = 1;
 
     /**
      * The attributes that are mass assignable.
@@ -105,6 +106,14 @@ class User extends Authenticatable
 
     public function courses(){
         return $this->belongsToMany(Course::class)->withTimestamps();
+    }
+
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->website_id = User::WEBSITE_ID;
+        });
     }
 
 

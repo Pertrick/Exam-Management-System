@@ -6,4 +6,5 @@
    <script src="EMS/asset/tables/datatables/jquery.dataTables.min.js"></script>
    <script src="EMS/asset/tables/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
    <script src="EMS/asset/tables/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-   <script src="EMS/asset/tables/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+   <script src="EMS/asset/tables/hpdatatables-buttons/js/buttons.bootstrap4.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>

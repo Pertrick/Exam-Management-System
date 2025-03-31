@@ -78,7 +78,7 @@ class TestNewController extends Controller
 
         // $test->questions()->attach($request->question_ids);
 
-        return redirect()->route('admin.test.new.index')->with('message', 'Question added to Exam successfully!');
+        return redirect()->route('admin.test.new.index')->with('success', 'Question added to Exam successfully!');
     }
 
     /**
@@ -133,7 +133,7 @@ class TestNewController extends Controller
         $test->is_published = $request->is_published ?? $test->is_published;
         $test->save();
 
-        return redirect()->route('admin.test.new.index')->with('message', 'Exam updated successfully!');
+        return redirect()->route('admin.test.new.index')->with('success', 'Exam updated successfully!');
 
     }
 
@@ -174,7 +174,7 @@ class TestNewController extends Controller
             $test->delete();
         }
         
-        return redirect()->back()->with('message', 'Test Deleted Successfully!');
+        return redirect()->back()->with('success', 'Test Deleted Successfully!');
     }
 
 

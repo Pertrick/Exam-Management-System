@@ -31,9 +31,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        flash('login successful');
 
-        return redirect()->route(auth()->user()->getRedirectRouteName());
+        return redirect()->route(auth()->user()->getRedirectRouteName())->with('success','Login successful!');
     }
 
     /**
@@ -49,6 +48,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        toastr()->success('Logout Successful!.');
 
         return redirect('/');
     }

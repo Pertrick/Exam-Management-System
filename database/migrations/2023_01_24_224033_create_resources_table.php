@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('resources', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->text('name')->nullable();
-            $table->text('link')->nullable();
+            $table->text('description')->nullable();
             $table->foreignId('subject_id')->constrained();
+            $table->string('cover_image')->nullable();
+            $table->string('resource')->nullable();
             $table->timestamps();
         });
     }

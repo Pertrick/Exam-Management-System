@@ -13,6 +13,7 @@ class Setting extends Model
     [
         'primary_color',
         'secondary_color',
-        'main_color'
+        'main_color',
+        'cover_image'
     ];
 }

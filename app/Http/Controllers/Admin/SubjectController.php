@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Models\Course;
 use App\Models\Subject;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class SubjectController extends Controller
 
         $subject->courses()->attach($request->course);
 
-        return redirect()->back()->with('message', 'Request Successful!');
+        return redirect()->back()->with('success', 'Request Successful!');
         
     }
 
@@ -62,7 +63,12 @@ class SubjectController extends Controller
      */
     public function show(Subject $subject)
     {
-        $students = $subject->load('users')->users;
+        $students = User::with(['courses.subjects' => function($query) use ($subject) {
+            $query->where('subjects.id', $subject->id);
+        }])->whereHas('courses.subjects', function($query) use ($subject) {
+            $query->where('subjects.id', $subject->id);
+        })->get();
+
         return view('admin.subject.show', compact('students', 'subject'));
     }
 
@@ -100,7 +106,7 @@ class SubjectController extends Controller
         $subject = Subject::findOrFail($id);
         $subject->delete();
 
-        return redirect()->back()->with('message', 'Subject Deleted Successfully!');
+        return redirect()->back()->with('success', 'Subject Deleted Successfully!');
     }
 
        /**
@@ -116,10 +122,10 @@ class SubjectController extends Controller
         if($student){
             $subject = Subject::findOrFail($subjectId);
             $subject->users()->detach($student);
-            return redirect()->back()->with('message', 'Student removed Successfully!');
+            return redirect()->back()->with('success', 'Student removed Successfully!');
         }
 
-        return redirect()->back()->with('message', 'failed to removed Student!');
+        return redirect()->back()->with('error', 'failed to removed Student!');
      
     }
 }

@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="EMS/asset/tables/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.3/dist/quill.snow.css" rel="stylesheet" />
     <link rel="stylesheet" href="filter-multi-select-main/src/filter_multi_select.css">
+     <!-- FilePond CSS -->
+     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
 
 
     <style type="text/css">

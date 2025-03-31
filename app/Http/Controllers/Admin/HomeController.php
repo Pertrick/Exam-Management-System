@@ -22,7 +22,7 @@ class HomeController extends Controller
         $subject_count =  Subject::count();
         $program_count = Program::count();
         $course_count = Course::count();
-        $students =  User::select('name', 'created_at')->where('role_id', '!=', 1)->get();
+        $students =  User::select('name', 'created_at')->where('website_id', User::WEBSITE_ID)->get();
         $results = Result::with('test.subject')->latest(6);
     
         return view('admin.dashboard', compact('subject_count','program_count','course_count', 'students', 'results'));

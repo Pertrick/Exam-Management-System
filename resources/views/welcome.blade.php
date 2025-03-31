@@ -4,6 +4,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ Config('app.name') }}</title>
+    <style>
+        :root {
+            --bg-image: url({{ $settings->cover_image ? asset('storage' . $settings->cover_image) : asset('assets/images/cbt-exam.jpg') }});
+        }
+    </style>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}">
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/ajax-script.js"></script>

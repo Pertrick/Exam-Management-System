@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class SubjectMiddleware
@@ -16,8 +17,10 @@ class SubjectMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->subjects->count() == 0){
-            return redirect()->route('student.subject.create')->with('warning','kindly select a subject to continue!');
+        if (auth()->user()->role_id == Role::ADMIN) {
+            return $next($request);
+        } else if (auth()->user()->subjects->count() == 0) {
+            return redirect()->route('student.subject.create')->with('info', 'select a material to continue!');
         }
         return $next($request);
     }

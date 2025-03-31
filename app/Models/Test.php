@@ -143,8 +143,13 @@ class Test extends Model
         }
 
         return $query->where(function ($q) use ($searchValue) {
-            $q->Where("is_published", "$searchValue");
-        })->orWhereHas('subject', fn ($q) => $q->where('name', 'like', "%$searchValue%"))
-            ->orWhereHas('testType', fn ($q) => $q->where("name", "like", "%$searchValue"));
+            $q->where("is_published", $searchValue)
+              ->orWhereHas('subject', function ($q) use ($searchValue) {
+                  $q->where('name', $searchValue);
+              })
+              ->orWhereHas('testType', function ($q) use ($searchValue) {
+                  $q->where("name", $searchValue);
+              });
+        });
     }
 }

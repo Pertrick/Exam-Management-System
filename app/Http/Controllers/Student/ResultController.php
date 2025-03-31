@@ -17,7 +17,10 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = auth()->user()->results()->with(['test.subject', 'test.testType'])->latest()->get();
+        $results = Result::with(['test.subject', 'test.testType'])
+                         ->where('user_id',auth()->id())
+                         ->latest()
+                         ->paginate(10);
         return view('student.result.index', compact('results'));
     }
 

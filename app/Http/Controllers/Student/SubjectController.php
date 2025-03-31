@@ -38,7 +38,7 @@ class SubjectController extends Controller
 
     public function store(Request $request)
     {
-       
+
         $this->validate($request,[
             'subject' => 'required',
             'code' => 'required'
@@ -53,7 +53,7 @@ class SubjectController extends Controller
         }
 
         if($acp->status == 1){
-            return redirect()->back()->with('error', 'Pin has already been used by '.$acp->used_by);
+            return redirect()->back()->with('error', 'Invalid Pin');
         }
 
         $acp->status=1;
@@ -107,6 +107,6 @@ class SubjectController extends Controller
     public function destroy($id)
     {
         auth()->user()->subjects()->detach($id);
-        return redirect()->back()->with('message', 'Subject removed successfully!');
+        return redirect()->back()->with('success', 'Subject removed successfully!');
     }
 }

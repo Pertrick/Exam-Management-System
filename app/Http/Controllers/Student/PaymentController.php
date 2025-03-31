@@ -41,7 +41,7 @@ class PaymentController extends Controller
     {
         $response = $paymentService->storeTransaction();
         if(!$response->status){
-            return redirect()->back()->with('message', "couldn't initiate payment");
+            return redirect()->back()->with('success', "couldn't initiate payment");
         }
 
         return redirect($response->data->authorization_url);

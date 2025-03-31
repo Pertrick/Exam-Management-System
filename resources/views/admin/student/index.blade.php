@@ -64,10 +64,15 @@
                                                 <td>{{ $student->subjects->implode("name",',') }}</td>
                                                 <td><span class="badge bg-success">active</span></td>
                                                 <td class="text-right">
-                                                    <a class="btn btn-sm bg3" href=""><i class="fa fa-edit"></i>
+                                                    <a class="btn btn-sm bg3" href="{{route('admin.student.edit',$student)}}"><i class="fa fa-edit"></i>
                                                         edit</a>
-                                                    <a class="btn btn-sm bg1" href="" data-toggle="modal"
-                                                        data-target="#delete"><i class="fa fa-trash-alt"></i> delete</a>
+                                                    <a class="btn btn-sm bg1 delete-btn" 
+                                                    data-id="{{ $student->id }}" 
+                                                    href="#" data-toggle="modal" 
+                                                    data-target="#delete">
+                                                    <i class="fa fa-trash-alt"></i>delete
+                                                </a>
+
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -93,10 +98,18 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
-                    <img src="../asset/img/sent.png" alt="" width="50" height="46">
-                    <h3>Are you sure want to delete this Student?</h3>
-                    <div class="m-t-20"> <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
-                        <button type="submit" class="btn bg1">Delete</button>
+               
+                    <h3>Are you sure want to delete this Student and all related data permanently ?</h3>
+                    <div class="m-t-20">
+                         <a href="#" class="btn btn-white" data-dismiss="modal">Close</a>
+                         <form id="deleteForm" action="" method="post" class="d-inline">
+                            @csrf
+                            @method('delete')
+                            <button type="submit" class="btn bg1">
+                                Delete<i class="fa fa-trash"></i>
+                            </button>
+                         </form>
+                    
                     </div>
                 </div>
             </div>
@@ -228,6 +241,17 @@
                     console.log(data);
                 }
             });
+        });
+
+
+        $('.delete-btn').click(function() {
+            var studentId = $(this).data('id');
+            var studentName = $(this).data('name');
+            var url = '{{ route("admin.student.delete", ":id") }}';
+            url = url.replace(':id', studentId);
+
+            $('#deleteForm').attr('action', url);
+            $('#deleteStudentName').text(studentName);
         });
 
         $(function() {

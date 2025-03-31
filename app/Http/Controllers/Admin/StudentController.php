@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -15,8 +17,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = User::with('subjects')->where('role_id',2)->get();
-        return view('admin.student.index',compact('students'));
+        $students = User::with('subjects')->where('role_id', 2)->where('website_id',User::WEBSITE_ID)->get();
+        return view('admin.student.index', compact('students'));
     }
 
     /**
@@ -57,9 +59,9 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        return view('admin.student.edit', compact('user'));
     }
 
     /**
@@ -69,9 +71,23 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $validatedData =  $this->validate($request, [
+            "name" => ['required', 'string'],
+            "email" => ['required', 'string'],
+            "phone" => ['sometimes', 'nullable', 'string'],
+            "password" => ['sometimes', 'nullable', 'string']
+        ]);
+
+        $user = $user->update([
+            "name" => $validatedData['name'],
+            "email" => $validatedData["email"],
+            "phone" => $validatedData["phone"] ?? $user->phone,
+            "password" => !empty($validatedData["password"]) ? Hash::make($validatedData["password"])  : $user->password
+        ]);
+
+        return redirect()->route('admin.student.index')->with('success', 'Student details updated successfully!');
     }
 
     /**
@@ -80,8 +96,22 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        try {
+            DB::transaction(function () use ($user) {
+                $user->subjects()->detach();
+                $user->tests()->detach();
+                $user->responses()->detach();
+                $user->results()->detach();
+
+                $user->delete();
+            });
+
+            return redirect()->route('admin.student.index')->with('success', 'Student deleted successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.student.index')->with('failed', 'Failed to delete student!');
+        }
     }
 }

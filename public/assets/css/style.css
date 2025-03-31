@@ -4,12 +4,12 @@
 	font-family: Helvetica, Arial;
 }
 
-.background{
-	background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(../images/cbt-exam.jpg) no-repeat;
-	background-size: cover;
-	background-position: center;
-	height: 100vh;
-
+.background {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                var(--bg-image, url(../images/cbt-exam.jpg)) no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
 }
 
 h1{

@@ -1,9 +1,13 @@
 <style>
-    textarea:focus, input:focus{
-    outline: none;
-}
+    textarea:focus,
+    input:focus {
+        outline: none;
+    }
 
 
+    input {
+        cursor: pointer;
+    }
 </style>
 @include('student.partials.header')
 
@@ -53,67 +57,81 @@
                                                 <div class="text-center mt-2">
                                                     <p class="font-weight-bold">
                                                         {{ $test->subject->name }}
-                                                        ({{$test->testType->name}})
-                                                        <input type="hidden" id="testId" value="{{$test->id}}" />
+                                                        ({{ $test->testType->name }})
+                                                        <input type="hidden" id="testId"
+                                                            value="{{ $test->id }}" />
                                                     </p>
-                                                    <p>Instruction: <span class="font-weight-bold">{{$test->instruction}}</span></p>
+                                                    <p>Instruction: <span
+                                                            class="font-weight-bold">{{ $test->instruction }}</span></p>
                                                 </div>
-                                                <p id="seconds-left" class="text-right pr-3" style="position: static">{{ $test->duration }}
+                                                <p id="seconds-left" class="text-right pr-3 font-weight-bold"
+                                                    style=""><span class="text-lg">{{ $test->duration }}</span>
                                                     seconds</p>
-                                                    
+
 
                                                 @foreach ($test->questions as $quest)
                                                     <div class="card-body">
                                                         <div class="card">
                                                             <div class="card-body">
                                                                 <h4 class="card-title mb-2">
-                                                                    {{ $loop->iteration }}. {!! $quest->question !!} 
+                                                                    {{ $loop->iteration }}. {!! $quest->question !!}
                                                                     @if ($quest->image)
                                                                         <div class="m-2">
                                                                             <img src="/storage/images/questions/{{ $quest->image->name }}"
-                                                                            alt="{{ $quest->image->name }}" height="100"
-                                                                            width="200" class="img-fluid border">
+                                                                                alt="{{ $quest->image->name }}"
+                                                                                height="100" width="200"
+                                                                                class="img-fluid border">
                                                                         </div>
-                                                                       
                                                                     @endif
                                                                 </h4>
-                                                                <small class="float-right font-weight-bold">{{$quest->point}} point(s)</small>
+                                                                <small
+                                                                    class="float-right font-weight-bold">{{ $quest->point }}
+                                                                    point(s)</small>
                                                                 @foreach ($quest->options as $key => $option)
                                                                     <p class="card-text pl-3">
                                                                         @if ($quest->type == $option_type)
-                                                                            <input type="radio"name="{{ $quest->id }}[]"
+                                                                            <input
+                                                                                type="radio"name="{{ $quest->id }}[]"
                                                                                 id="answer-id"
                                                                                 value="{{ $option->label ?? ($option->image->name ?? '') }}">{{ $option->label }}
                                                                             @if ($option->image)
                                                                                 <img src="/storage/images/options/{{ $option->image->name }}"
                                                                                     alt="{{ $option->image->name }}"
-                                                                                    height="50" width="100" class="img-fluid border">
+                                                                                    height="50" width="100"
+                                                                                    class="img-fluid border">
                                                                             @endif
-        
-                                                                            <input type="hidden" name="{{ $quest->id }}[]"
+
+                                                                            <input type="hidden"
+                                                                                name="{{ $quest->id }}[]"
                                                                                 id="answer-id">
                                                                         @elseif($quest->type == $multi_choice_type)
-                                                                            <input type="checkbox" name="{{ $quest->id }}[]"
+                                                                            <input type="checkbox"
+                                                                                name="{{ $quest->id }}[]"
                                                                                 id="answer-id"
                                                                                 value="{{ $option->label ?? ($option->image->name ?? '') }} ">
                                                                             {{ $option->label }}
                                                                             @if ($option->image)
                                                                                 <img src="/storage/images/options/{{ $option->image->name }}"
                                                                                     alt="{{ $option->image->name }}"
-                                                                                    height="50" width="100" class="img-fluid border">
+                                                                                    height="50" width="100"
+                                                                                    class="img-fluid border">
                                                                             @endif
-                                                                            <input type="hidden" name="{{ $quest->id }}[]"
+                                                                            <input type="hidden"
+                                                                                name="{{ $quest->id }}[]"
                                                                                 id="answer-id">
                                                                         @elseif($quest->type == $no_option)
-                                                                            <input type="text" class="border-top-0 border-right-0 border-left-0" style="width:70%" name="{{ $quest->id}}[]"
+                                                                            <input type="text"
+                                                                                class="border-top-0 border-right-0 border-left-0"
+                                                                                style="width:70%"
+                                                                                name="{{ $quest->id }}[]"
                                                                                 id="answer-id" autocomplete="off">
                                                                         @endif
                                                                     </p>
-                                                                    @endforeach
+                                                                @endforeach
                                                             </div>
                                                         </div>
-                                                        
-                                                      
+
+
                                                     </div>
                                                 @endforeach
 
@@ -123,7 +141,8 @@
                                         </div>
 
                                         <div class="col-md-12 m-3 text-right">
-                                            <button type="submit" class="btn btn-success" id="submitButton">Submit</button>
+                                            <button type="submit" class="btn btn-success"
+                                                id="submitButton">Submit</button>
                                         </div>
                                     </div>
                                 </div>
@@ -155,44 +174,76 @@
     <!-- jQuery -->
     @include('student.partials.footer')
     <script>
-        var value = $('#seconds-left').text();
-        var duration = value.split(' ')[0];
-
-        var refreshId = window.setInterval(function() {
+        $(document).ready(function() {
+            let duration = parseInt($('#seconds-left').text().split(' ')[0]);
+            let isSubmitting = false;
+            const testId = $('#testId').val();
+            const form = $('#form-subject');
+            const submitButton = $('#submitButton');
+    
+            // Update finish time function
+            async function updateFinishTime() {
+                try {
+                    const response = await $.ajax({
+                        type: 'POST',
+                        url: `/student/exam/update/${testId}`,
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            test_id: testId,
+                            remaining_time: duration
+                        }
+                    });
+                    console.log('Finish time updated:', response);
+                    return true;
+                } catch (error) {
+                    console.error('Error updating finish time:', error);
+                    return false;
+                }
+            }
+    
+            // Handle form submission
+            async function handleSubmission() {
+                if (!isSubmitting) {
+                    isSubmitting = true;
+                    submitButton.text('Submitting...').prop('disabled', true);
+                    
+                    // Update finish time before submitting
+                    await updateFinishTime();
+                    
+                    // Submit the form
+                    form.submit();
+                }
+            }
+    
+            // Timer function
+            const timer = setInterval(function() {
+                if (duration > 0) {
+                    duration--;
+                    $("#seconds-left").html(`Time Left : <strong class='text-lg'>${duration}</strong> seconds`);
+                    
+                    if (duration <= 0) {
+                        handleSubmission();
+                    }
+                }
+            }, 1000);
+    
+            // Submit button click handler
+            submitButton.on('click', function(e) {
+                e.preventDefault();
+                handleSubmission();
+            });
+    
+            // Handle page unload
             if (duration > 0) {
-                duration--;
-            }
-            document.getElementById("seconds-left").innerHTML = "Time Left : <strong>" + duration +
-                "</strong> seconds";
-            if (duration <= 0) {
-                $("form").submit();
-                clearInterval(refreshId);
-            }
-        }, 1000);
-
-        $(function() {
-            $("#example1").DataTable();
-        });
-
-        $("#submitButton").on('click', function() {
-            const testId =  $('#testId').val();
-            $(this).text('submitting...'); 
-            this.disabled = true;
-            $('#form-subject').submit();
-
-                $.ajax({
-                    type: 'POST',
-                    url: `student/exam/update/${testId}`,
-                    dataType: "json",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        test_id: testId
-                    },
-                    success: function(data) {
-                      console.log(data);
-
+                window.addEventListener('beforeunload', async function(e) {
+                    if (!isSubmitting) {
+                        e.preventDefault();
+                        await updateFinishTime();
+                        e.returnValue = 'You have an active test. Are you sure you want to leave?';
+                        return e.returnValue;
                     }
                 });
+            }
         });
     </script>
 </body>

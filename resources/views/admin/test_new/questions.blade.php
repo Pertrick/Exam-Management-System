@@ -481,7 +481,7 @@
             let newQuestionIndex = $('.question-count').length;
             let incrementQuestionIndex = newQuestionIndex + 1;
             let newQuestionCard = `
-        <div class="card-body" id="question${ newQuestionIndex }">
+        <div class="card-body" id="question${incrementQuestionIndex}">
             <div class="card">
                 <div class="card-body question-count">
                     <h4 class="card-title mb-2">
@@ -501,37 +501,37 @@
                         <!-- Option 1 -->
                         <p class="card-text pl-3 options">
                              <input type="hidden" name="questions[${newQuestionIndex}][options][0][text]"
-                                    value="" id="optionValue-question-${newQuestionIndex}option-0">
+                                    value="" id="optionValue-question-${incrementQuestionIndex}option-0">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][0][is_correct]" value="0"
-                                    id="is-correct-option-0-question-${newQuestionIndex}">
-                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="0" onclick="updateIsCorrect(this,'is-correct-option-0-question-${newQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-0')" id="question-${newQuestionIndex}option-0">Option 1</span>
+                                    id="is-correct-option-0-question-${incrementQuestionIndex}">
+                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="0" onclick="updateIsCorrect(this,'is-correct-option-0-question-${incrementQuestionIndex}')">
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-0')" id="question-${incrementQuestionIndex}option-0">Option 1</span>
                         </p>
                         <!-- Option 2 -->
                         <p class="card-text pl-3 options">
                              <input type="hidden" name="questions[${newQuestionIndex}][options][1][text]"
-                                    value="" id="optionValue-question-${newQuestionIndex}option-1">
+                                    value="" id="optionValue-question-${incrementQuestionIndex}option-1">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][1][is_correct]"
-                                 value="0" id="is-correct-option-1-question-${newQuestionIndex}">
-                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="1" onclick="updateIsCorrect(this,'is-correct-option-1-question-${newQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-1')" id="question-${newQuestionIndex}option-1">Option 2</span>
+                                 value="0" id="is-correct-option-1-question-${incrementQuestionIndex}">
+                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="1" onclick="updateIsCorrect(this,'is-correct-option-1-question-${incrementQuestionIndex}')">
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-1')" id="question-${incrementQuestionIndex}option-1">Option 2</span>
                         </p>
                         <!-- Option 3 -->
                         <p class="card-text pl-3 options">
                              <input type="hidden" name="questions[${newQuestionIndex}][options][2][text]"
-                                    value="" id="optionValue-question-${newQuestionIndex}option-2">
+                                    value="" id="optionValue-question-${incrementQuestionIndex}option-2">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][2][is_correct]"
                                   value="0" id="is-correct-option-2-question-${newQuestionIndex}">
-                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="2"   onclick="updateIsCorrect(this,'is-correct-option-2-question-${newQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-2')" id="question-${newQuestionIndex}option-2">Option 3</span>
+                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="2"   onclick="updateIsCorrect(this,'is-correct-option-2-question-${incrementQuestionIndex}')">
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-2')" id="question-${incrementQuestionIndex}option-2">Option 3</span>
                         </p>
                           <p class="card-text pl-3 options">
                              <input type="hidden" name="questions[${newQuestionIndex}][options][3][text]"
-                                    value="" id="optionValue-question-${newQuestionIndex}option-3">
+                                    value="" id="optionValue-question-${incrementQuestionIndex}option-3">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][3][is_correct]"
-                                  value="0" id="is-correct-option-3-question-${newQuestionIndex}">
-                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="3" onclick="updateIsCorrect(this,'is-correct-option-3-question-${newQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-3')" id="question-${newQuestionIndex}option-3">Option 4</span>
+                                  value="0" id="is-correct-option-3-question-${incrementQuestionIndex}">
+                            <input type="radio" name="questions[${newQuestionIndex}][selected_option]" value="3" onclick="updateIsCorrect(this,'is-correct-option-3-question-${incrementQuestionIndex}')">
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-3')" id="question-${incrementQuestionIndex}option-3">Option 4</span>
                         </p>
                         <!-- Add more options if needed -->
                     </div>
@@ -561,7 +561,7 @@
             <div class="card">
                 <div class="card-body question-count">
                     <h4 class="card-title mb-2">
-                        <span class="question-number">${incrementQuestionIndex }</span>. <span id="question-${incrementQuestionIndex}" onclick="editText(this, 'question-${incrementQuestionIndex}')">
+                        <span class="question-number">${incrementQuestionIndex}</span>. <span id="question-${incrementQuestionIndex}" onclick="editText(this, 'question-${incrementQuestionIndex}')">
                             Enter question text here
                         </span>
                         <input type="hidden" name="questions[${newQuestionIndex}][text]" value="" id="questionValue-question-${incrementQuestionIndex}" />
@@ -579,29 +579,29 @@
                         <p class="card-text pl-3 options">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][0][text]" value="" id="optionValue-question-${incrementQuestionIndex}option-0">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][0][is_correct]" value="0" id="is-correct-option-0-question-${incrementQuestionIndex}">
-                            <input type="checkbox" name="questions[${newQuestionIndex}][selected_options][]" value="0" onclick="updateIsCorrect(this,'is-correct-option-0-question-${incrementQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-0')" id="question-${incrementQuestionIndex}option-0">Option 1</span>
+                            <input type="checkbox" name="questions[${newQuestionIndex}][selected_option][]" value="0" onclick="updateIsCorrect(this,'is-correct-option-0-question-${incrementQuestionIndex}')">
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-0')" id="question-${incrementQuestionIndex}option-0">Option 1</span>
                         </p>
                         <!-- Option 2 -->
                         <p class="card-text pl-3 options">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][1][text]" value="" id="optionValue-question-${incrementQuestionIndex}option-1">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][1][is_correct]" value="0" id="is-correct-option-1-question-${incrementQuestionIndex}">
                             <input type="checkbox" name="questions[${newQuestionIndex}][selected_option][]" value="1" onclick="updateIsCorrect(this,'is-correct-option-1-question-${incrementQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-1')" id="question-${incrementQuestionIndex}option-1">Option 2</span>
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-1')" id="question-${incrementQuestionIndex}option-1">Option 2</span>
                         </p>
                         <!-- Option 3 -->
                         <p class="card-text pl-3 options">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][2][text]" value="" id="optionValue-question-${incrementQuestionIndex}option-2">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][2][is_correct]" value="0" id="is-correct-option-2-question-${incrementQuestionIndex}">
                             <input type="checkbox" name="questions[${newQuestionIndex}][selected_option][]" value="2" onclick="updateIsCorrect(this,'is-correct-option-2-question-${incrementQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-2')" id="question-${incrementQuestionIndex}option-2">Option 3</span>
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-2')" id="question-${incrementQuestionIndex}option-2">Option 3</span>
                         </p>
                         <!-- Option 4 -->
                         <p class="card-text pl-3 options">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][3][text]" value="" id="optionValue-question-${incrementQuestionIndex}option-3">
                             <input type="hidden" name="questions[${newQuestionIndex}][options][3][is_correct]" value="0" id="is-correct-option-3-question-${incrementQuestionIndex}">
                             <input type="checkbox" name="questions[${newQuestionIndex}][selected_option][]" value="3" onclick="updateIsCorrect(this,'is-correct-option-3-question-${incrementQuestionIndex}')">
-                            <span onclick="editOption(this, 'question-${newQuestionIndex}option-3')" id="question-${incrementQuestionIndex}option-3">Option 4</span>
+                            <span onclick="editOption(this, 'question-${incrementQuestionIndex}option-3')" id="question-${incrementQuestionIndex}option-3">Option 4</span>
                         </p>
                         <!-- Add more options if needed -->
                     </div>

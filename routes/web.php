@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Role;
+use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $settings = Setting::first() ?? new Setting();
+    return view('welcome', compact('settings'));
 });
 
 Route::get('/dashboard', function () {

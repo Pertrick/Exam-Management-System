@@ -14,7 +14,7 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> Results
+                            <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-book"></span> View Subject
                             </h1>
                         </div>
                         <!-- /.col -->
@@ -36,13 +36,18 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            <h4 class="text-center font-weight-bold">Registered Students ({{$subject->name}})</h4>
+                            <h4 class="text-center font-weight-bold">Registered Students</h4>
+                            <p>
+                                Subject: <strong>{{ $subject->name }} </strong><br />
+                                Description: <strong>{{ $subject->description }}</strong>
+                            </p>
                             <div class="table-responsive">
                                 <table class="table" id="example1">
                                     <thead>
                                         <tr>
                                             <th>Sn.</th>
                                             <th>Student</th>
+                                            <th>Couses</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -50,15 +55,23 @@
                                         @foreach ($students as $student)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td class="font-weight-bold">{{ $student->name}}</td>
+                                                <td class="font-weight-bold">{{ $student->name }}</td>
+                                                <td> @foreach($student->courses as $course)
+                                                    @if($course->subjects->contains($subject->id))
+                                                        <span class="badge badge-info">{{ $course->name }}</span>
+                                                    @endif
+                                                @endforeach
+                                               </td>
                                                 <td>
-                                                    <a href="{{route('admin.student.index')}}" class="btn btn-lg btn-primary"><i
-                                                        class="fa fa-eye"></i></a>
-                                                    <form action="{{ route('admin.student.subject.delete', $subject->id) }}"
+                                                    <a href="{{ route('admin.student.index') }}"
+                                                        class="btn btn-lg btn-primary"><i class="fa fa-eye"></i></a>
+                                                    <form
+                                                        action="{{ route('admin.student.subject.delete', $subject->id) }}"
                                                         method="post" style="display: inline-block">
                                                         @csrf
                                                         @method('delete')
-                                                        <input type="hidden" value="{{$student->id}}" name="student">
+                                                        <input type="hidden" value="{{ $student->id }}"
+                                                            name="student">
                                                         <button class="btn  bg1 text-white" type="submit"
                                                             onclick="return confirm('Are you sure?')"><i
                                                                 class="fa fa-trash-alt text-white"></i></button>
@@ -86,12 +99,10 @@
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
-        
+        $(function() {
+            $("#example1").DataTable();
 
-            $(function() {
-                $("#example1").DataTable();
-
-            });
+        });
     </script>
 </body>
 

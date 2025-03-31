@@ -28,12 +28,12 @@
                     <a href="{{route('student.test.index')}}" class="nav-link {{ request()->is('student/exam*') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-file-signature"></i>
                         <p>
-                            Upcoming Exam
+                            Exam
                         </p>
                     </a>
                 </li>
                 <li class="nav-item" title="Result">
-                    <a href="{{route('student.result.index')}}" class="nav-link {{ 
+                    <a href="{{route('student.result.index')}}" class="nav-link {{
                         request()->is('student/result*') ? 'active' : ''
                         }}">
                         <i class="nav-icon fa fa-star"></i>
@@ -42,22 +42,22 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item" title="Payment">
+                {{-- <li class="nav-item" title="Payment">
                     <a href="{{route('student.payment.index')}}" class="nav-link {{ request()->is('student/payment') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-credit-card"></i>
                         <p>
                             payment
                         </p>
                     </a>
-                </li>
-                {{-- <li class="nav-item" title="resources">
-                    <a href="{{route('student.resources.index')}}" class="nav-link {{ request()->is('student/resources') ? 'active' : ''}}">
+                </li> --}}
+                 <li class="nav-item" title="resources">
+                    <a href="{{route('student.resources.index')}}" class="nav-link {{ request()->is('student/resources*') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-credit-card"></i>
                         <p>
                             Resources
                         </p>
                     </a>
-                </li> --}}
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

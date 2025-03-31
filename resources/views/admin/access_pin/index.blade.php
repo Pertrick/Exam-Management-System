@@ -36,9 +36,22 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            <a class="btn btn-success" href="{{ route('admin.accesspin.create') }}"><i
-                                    class="fa fa-plus"></i> Generate Pins</a><br><br>
+                            <div class="d-flex" style="justify-content:space-between">
+                                <a class="btn btn-success" href="{{ route('admin.accesspin.create') }}">
+                                    <i class="fa fa-plus"></i> 
+                                    Generate Pins
+                                </a>
+
+                                <button class="btn btn-sm btn-info" 
+                                    title="Print Access Pin" id="print-id" onclick="window.print()">
+                                    <i class="fa fa-print"></i>
+                                    Print
+                                </button>
+                            </div>
+                          
+                            <br><br>
                             <div class="col-md-12 table-responsive">
+
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -47,12 +60,13 @@
                                             <th>Serial</th>
                                             <th>Status</th>
                                             <th>Used By</th>
+                                            <th>Used On</th>
                                             <th>Created On</th>
                                             <th>Created By</th>
-                                            <th class="text-right">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+
                                         @foreach ($pins as $data)
                                             <tr>
                                                 <td>{{ $i++ }}</td>
@@ -66,28 +80,19 @@
                                                     @endif
                                                 </td>
                                                 @if ($data->usedBy)
-                                                    <td onclick="showModal({{ $data->usedBy }})" 
-                                                        style="text-decoration: underline; cusor:pointer"
-                                                        >
+                                                    <td onclick="showModal({{ $data->usedBy }})"
+                                                        style="text-decoration: underline; cusor:pointer">
                                                         {{ $data->usedBy?->name }}</td>
                                                 @else
                                                     <td>{{ $data->usedBy?->name }}</td>
                                                 @endif
 
+                                                <td>{{ $data->used_on }}</td>
+
 
                                                 <td>{{ $data->created_at }}</td>
                                                 <td>{{ $data->creator->name }}</td>
 
-                                                <td class="text-right">
-                                                    @if ($data->status == 0)
-                                                        <button type="button" class="btn btn-sm btn-info options"
-                                                            data-toggle="modal" data-target="#view-options-modal"
-                                                            title="Print Access Pin">
-                                                            <i class="fa fa-print"></i> Print
-                                                        </button>
-                                                    @endif
-
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -125,42 +130,11 @@
     </div>
     @include('admin.partials.footer')
     <script>
-        $('.options').on('click', function() {
-            $('#option-p').html('');
-            var data = $(this).attr('data-id');
-            console.log(data);
-            var options = JSON.parse(data);
-            var label = '';
-            options.forEach(element => {
-                console.log(element)
-                if (element.is_correct == 1) {
-                    label += `<h6><li class="text-left bg-success rounded-sm p-1 ">${element.label} <i
-                                                     class="fa fa-check"></i></li></h6>`
-                } else {
-                    label += `<h6><li class="text-left">${element.label} <i
-                                                     class="fa fa-times text-danger"></i></li></h6>`;
-                }
-
-            });
-            $('#option-p').append(label);
-        });
-
-        $(function() {
+         $(function() {
             $("#example1").DataTable();
+        
+
         });
-
-
-        function showModal(user) {
-            $('#userDetails').text('');
-            const userDetails = `
-                <p> Name : <span class="font-weight-bold">${user.name}<span> </p>
-                <p> Email : <span class="font-weight-bold">${user.email}<span> </p>
-                <p> Phone :  <span class="font-weight-bold">${user.phone ?? ''}<span> </p>
-            `;
-            $('#userDetails').append(userDetails);
-            const options = 'show';
-            $('#view-user-modal').modal(options)
-        }
     </script>
 </body>
 

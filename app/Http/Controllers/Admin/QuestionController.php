@@ -143,7 +143,7 @@ class QuestionController extends Controller
         }
 
 
-        return redirect()->back()->with('message', 'Question saved successfully!');
+        return redirect()->back()->with('success', 'Question saved successfully!');
 
 
         // $question =  Question::create([
@@ -315,7 +315,7 @@ class QuestionController extends Controller
         //     };
         // };
 
-        return redirect()->route('admin.question.index')->with('message', 'Question updated successfully!');
+        return redirect()->route('admin.question.index')->with('success', 'Question updated successfully!');
     }
 
     /**
@@ -328,7 +328,7 @@ class QuestionController extends Controller
     {
         $question = Question::findOrFail($id);
         $question->delete();
-        return redirect()->route('admin.question.index')->with('message', 'Question deleted successfully!');
+        return redirect()->route('admin.question.index')->with('success', 'Question deleted successfully!');
     }
 
 

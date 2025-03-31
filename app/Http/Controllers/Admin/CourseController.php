@@ -106,6 +106,6 @@ class CourseController extends Controller
         }
     
         $course->delete();
-        return redirect()->back()->with('message', 'Program Deleted Successfully!');
+        return redirect()->back()->with('success', 'Program Deleted Successfully!');
     }
 }

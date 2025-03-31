@@ -47,7 +47,7 @@ class ProgramController extends Controller
             ['name' => $request->name, 'description' => $request->description]
         );
 
-        return redirect()->back()->with('message', 'Request Successful!');
+        return redirect()->back()->with('success', 'Request Successful!');
     }
 
     /**
@@ -98,6 +98,6 @@ class ProgramController extends Controller
     
         $program->delete();
 
-        return redirect()->back()->with('message', 'Program Deleted Successfully!');
+        return redirect()->back()->with('success', 'Program Deleted Successfully!');
     }
 }

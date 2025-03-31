@@ -12,6 +12,8 @@
  <script src="filter-multi-select-main/dist/filter-multi-select-bundle.min.js"></script>
  <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
 
 
  <script>

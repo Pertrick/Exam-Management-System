@@ -30,6 +30,6 @@ class ExamAuthController extends Controller
            return redirect()->route('student.test.index')->with('success', 'Pin correct!');
         }
 
-          return redirect()->back()->with('error', 'Incorrect Pin!');
+          return redirect()->back()->with('success', 'Incorrect Pin!');
     }
 }

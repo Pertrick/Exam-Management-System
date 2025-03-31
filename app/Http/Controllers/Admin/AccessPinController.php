@@ -11,7 +11,7 @@ class AccessPinController extends Controller
 {
     public function index()
     {
-        $data['pins'] = AccessPin::with('creator','usedBy')->latest()->get();
+        $data['pins'] = AccessPin::with('creator','usedBy')->orderBy('status','asc')->get();
         $data['i']=1;
         return view('admin.access_pin.index', $data);
     }
@@ -19,7 +19,7 @@ class AccessPinController extends Controller
     public function create()
     {
 
-        $qtys =10;
+        $qtys = 7;
         $batch=rand(). uniqid();
 
         for ($i = 0; $i < $qtys; $i++) {

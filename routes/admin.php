@@ -50,10 +50,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::prefix('student')->group(function () {
         Route::get('', [StudentController::class, 'index'])->name('admin.student.index');
         Route::get('create', [StudentController::class, 'create'])->name('admin.student.create');
-        Route::get('edit', [StudentController::class, 'edit'])->name('admin.student.edit');
+        Route::get('edit/{user}', [StudentController::class, 'edit'])->name('admin.student.edit');
         Route::post('store', [StudentController::class, 'store'])->name('admin.student.store');
-        Route::put('update', [StudentController::class, 'update'])->name('admin.student.update');
-        Route::delete('delete/{id}', [StudentController::class, 'destroy'])->name('admin.student.delete');
+        Route::put('update/{user}', [StudentController::class, 'update'])->name('admin.student.update');
+        Route::delete('delete/{user}', [StudentController::class, 'destroy'])->name('admin.student.delete');
     });
 
     // Route::prefix('exam')->group(function () {
@@ -76,7 +76,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
 
     Route::prefix('resources')->group(function () {
         Route::get('', [ResourcesController::class, 'index'])->name('admin.resources.index');
+        Route::get('/create', [ResourcesController::class, 'create'])->name('admin.resources.create');
         Route::post('store', [ResourcesController::class, 'store'])->name('admin.resources.store');
+        Route::get('/{uuid}', [ResourcesController::class, 'show'])->name('admin.resources.show');
+        Route::get('/edit/{id}', [ResourcesController::class, 'edit'])->name('admin.resources.edit');
+        Route::post('update/{id}', [ResourcesController::class, 'update'])->name('admin.resources.update');
+        Route::delete('delete/{id}', [ResourcesController::class, 'destroy'])->name('admin.resources.delete');
     });
 
 
@@ -113,4 +118,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         ->name('index', 'admin.settings.index')
         ->name('store', 'admin.settings.store')
         ->name('destroy', 'admin.settings.delete');
+
+    Route::post('settings/upload', [SettingsController::class, 'upload'])->name('admin.settings.upload');
 });

@@ -74,7 +74,7 @@ class TestController extends Controller
 
         $test->questions()->attach($request->question_ids);
 
-        return redirect()->route('admin.test.new.index')->with('message', 'Question added to Exam successfully!');
+        return redirect()->route('admin.test.new.index')->with('success', 'Question added to Exam successfully!');
     }
 
     /**
@@ -128,7 +128,7 @@ class TestController extends Controller
 
         // $test->questions()->sync($request->question_ids);
 
-        return redirect()->route('admin.test.new.index')->with('message', 'Questions updated to Exam successfully!');
+        return redirect()->route('admin.test.new.index')->with('success', 'Questions updated to Exam successfully!');
 
     }
 
@@ -169,7 +169,7 @@ class TestController extends Controller
             $test->delete();
         }
         
-        return redirect()->back()->with('message', 'Test Deleted Successfully!');
+        return redirect()->back()->with('success', 'Test Deleted Successfully!');
     }
 
 

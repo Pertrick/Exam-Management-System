@@ -35,91 +35,71 @@
             <section class="content">
                 <div class="container-fluid">
                     <div class="card card-info">
-                        <!-- form start -->
-                        <form action="{{ route('admin.resources.store') }}" method="POST" id="form-subject">
-                            @csrf
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <div class="card-header">
-                                            <span class="fa fa-book"> Subject </span>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12 mt-2">
-                                                <div class="form-group">
-                                                    <label>Subject </label>
-                                                    <select name="subject_id" id="subject">
-                                                        <option value="" selected disabled>--choose subject--</option>
-                                                        @foreach($subjects as $subject) 
-                                                            <option value="{{$subject->id}}">{{$subject->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @error('subject_id')
-                                                        <div class="error text-danger text-xs">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Name</label>
-                                                    <input type="text" name="name" id="name"
-                                                        class="form-control" placeholder=""
-                                                        value="{{old('name')}}">
-                                                    @error('name')
-                                                        <div class="error text-danger text-xs">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Link</label>
-                                                    <textarea name="link" id="link" class="form-control">{{ old('link') }}</textarea>
-                                                    @error('link')
-                                                        <div class="error text-danger text-xs">{{ $message }}</div>
-                                                    @enderror
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <button type="submit" class="btn bg2">Save</button>
-                                            <button class="btn bg1" id="cancel">Cancel</button>
-                                        </div>
-                        </form>
-                    </div>
+                        <div class="card-body">
+                            <div class="">
+                                <a class="btn btn-sm btn-success" href="{{ route('admin.resources.create') }}">
+                                    <i class="fa fa-plus"></i> Add Resource
+                                </a>
+                            </div>
 
-                    <div class="col-md-9 table-responsive" style="border-left: 1px solid #ddd;">
-                        <table id="example1" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Link</th>
-                                    <th>Subject</th>
-                                    <th class="text-right">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($resources as $resource)
-                                    <tr data-toggle="modal" data-id="{{$resource}}" data-target="#delete">
-                                        <td>{{ $resource->name }}</td>
-                                        <td>{{ $resource->link}}</td>
-                                        <td>{{ $resource->subject->name }}</td>
-                                        <td class="text-right">
-                                            <button type="button" class="btn btn-sm btn-info"
-                                                onclick="editResource({{ $resource }})"><i
-                                                    class="fa fa-edit"></i></button>
+                            <br><br>
+                            <div class="col-md-12 table-responsive">
+                                <table id="example1" class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>Subject</th>
+                                            <th>cover image</th>
+                                            {{-- <th>Resource</th> --}}
+                                            <th class="text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($resources as $resource)
+                                            <tr>
+                                                <td>{{ $resource->name }}</td>
+                                                <td>
+                                                    {{ $resource->description }}
 
-                                            <form action="{{ route('admin.subject.delete', $resource->id) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-sm bg1 text-white" type="submit"
-                                                    onclick="return confirm('Are you sure?')" >delete<i class="fa fa-trash-alt text-white"></i></button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                                </td>
+                                                <td>{{ $resource->subject->name }}</td>
+                                                <td><img width="100" height="70"
+                                                        src="{{ $resource->cover_image ? asset('storage' . $resource->cover_image) : asset('resources-assets/default-book.png') }}" />
+                                                </td>
+
+                                                {{-- <td>
+                                                    <img width="100" height="70"
+                                                        src="{{ asset('resources-assets/pdf-img.png') }}" />
+                                                </td> --}}
+                                                <td class="text-right">
+
+                                                    <a class="btn btn-sm btn-info"
+                                                        href="{{ route('admin.resources.show', $resource->uuid) }}"
+                                                        title="view resource"><i class="fa fa-eye"></i>
+                                                    </a>
+
+                                                    <a class="btn btn-sm bg3 text-white"
+                                                        href="{{ route('admin.resources.edit', $resource->id) }}"
+                                                        title="edit"><i class="fa fa-edit text-white"></i>
+                                                    </a>
+
+                                                    <form action="{{ route('admin.resources.delete', $resource->id) }}"
+                                                        method="post" class="d-inline">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button class="btn btn-sm bg1 text-white" type="submit"
+                                                            onclick="return confirm('Are you sure?')" title="delete"><i
+                                                                class="fa fa-trash-alt text-white"></i></button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
         </div>
@@ -135,7 +115,7 @@
     <!-- /.content-wrapper -->
     </div>
     <!-- ./wrapper -->
-    {{-- <div id="delete" class="modal animated rubberBand delete-modal" role="dialog">
+    <div id="delete" class="modal animated rubberBand delete-modal" role="dialog">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body text-center">
@@ -147,7 +127,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
     <!-- jQuery -->
     @include('admin.partials.footer')
     <script>
@@ -168,7 +148,9 @@
         }
 
         function editResource(resource) {
-            $('#subject').val(resource.subject_id).prop({"selected":true});
+            $('#subject').val(resource.subject_id).prop({
+                "selected": true
+            });
             $('#subject').find('option').not(':selected').remove();
             $('#name').val(resource.name);
             $('#link').val(resource.link);

@@ -65,11 +65,10 @@ class RegisteredUserController extends Controller
             return back()->with(['message' =>  'Registration failed']);
         }
 
-
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect()->route(auth()->user()->getRedirectRouteName());
+        return redirect()->route(auth()->user()->getRedirectRouteName())->with('success','Registration Successful!.');
     }
 }
