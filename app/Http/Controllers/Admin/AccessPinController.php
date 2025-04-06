@@ -18,7 +18,6 @@ class AccessPinController extends Controller
 
     public function create()
     {
-
         $qtys = 7;
         $batch=rand(). uniqid();
 

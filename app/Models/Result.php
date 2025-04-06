@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use App\Models\Test;
+use App\Traits\HasWebsiteId;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Result extends Model
 {
-    use HasFactory;
+    use HasFactory,HasWebsiteId;
 
     const PASSED = 1;
     const FAILED = 0;

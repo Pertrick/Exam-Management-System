@@ -20,6 +20,11 @@ return new class extends Migration
             $table->string('currency')->default('NGN');
             $table->string('amount');
             $table->string('status')->default('pending');
+            $table->string('payment_method'); // e.g., Paystack, Credit Card
+            $table->string('transaction_id');
+            $table->timestamp('paid_at')->nullable();
+            $table->unsignedInteger('website_id');
+            $table->unsignedInteger('access_pin_id');
             $table->timestamps();
         });
     }

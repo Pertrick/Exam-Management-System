@@ -18,7 +18,14 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        $subjects = Subject::all();
+        $courses = auth()->user()->courses()->select('courses.id', 'courses.name')->get();
+        $subjects = Subject::with('courses:id,name')
+            ->whereHas('courses', function ($q) {
+                $q->whereIn('courses.id', auth()->user()->courses->pluck('id'));
+            })
+            ->select('subjects.id', 'subjects.code', 'subjects.name', 'subjects.description') // Fully qualified column names
+            ->get();
+
         $user_subjects = auth()->user()->subjects()->get();
         return view('student.subject.index', compact('subjects', 'user_subjects'));
     }
@@ -30,38 +37,46 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        $coursesId = auth()->user()->courses->pluck('id');
-        $subjects = Subject::whereHas('courses', fn($q) => $q->whereIn('course_id',$coursesId ))->get();
-        return view('student.subject.create',compact('subjects'));
+        $courses = auth()->user()->courses()->select('courses.id', 'courses.name')->get();
+        $subjects = Subject::with('courses:id,name')
+            ->whereHas('courses', function ($q) {
+                $q->whereIn('courses.id', auth()->user()->courses->pluck('id'));
+            })
+            ->select('subjects.id', 'subjects.code', 'subjects.name', 'subjects.description')
+            ->get();
+
+
+        return view('student.subject.create', compact('subjects'));
     }
 
 
     public function store(Request $request)
     {
 
-        $this->validate($request,[
+        $this->validate($request, [
             'subject' => 'required',
             'code' => 'required'
         ]);
 
-        $input=$request->all();
+        $input = $request->all();
 
-        $acp=AccessPin::where("pin", $input['code'])->latest()->first();
+        $acp = AccessPin::where("pin", $input['code'])->latest()->first();
 
-        if(!$acp){
+        if (!$acp) {
             return redirect()->back()->with('error', 'Incorrect pin. Kindly check and try again');
         }
 
-        if($acp->status == 1){
-            return redirect()->back()->with('error', 'Invalid Pin');
+        if ($acp->status == 1 || $acp->used_by != null) {
+            return redirect()->back()->with('error', 'This pin has already been used. Kindly contact the admin for a new pin');
         }
 
-        $acp->status=1;
-        $acp->used_by=Auth::id();
+        $acp->status = 1;
+        $acp->used_by = Auth::id();
+        $acp->used_on = now();
         $acp->save();
 
-       auth()->user()->subjects()->attach($request->subject);
-       return redirect()->route('student.subject.index')->with('success', 'subject saved successfully!');
+        auth()->user()->subjects()->attach($request->subject);
+        return redirect()->route('student.subject.index')->with('success', 'subject saved successfully!');
     }
 
     /**
@@ -70,10 +85,7 @@ class SubjectController extends Controller
      * @param  \App\Models\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-
-    }
+    public function show($id) {}
 
     /**
      * Show the form for editing the specified resource.

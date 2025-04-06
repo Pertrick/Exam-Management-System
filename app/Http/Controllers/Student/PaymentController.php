@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Http\Controllers\Controller;
+use Paystack;
 use App\Models\Payment;
-use App\Services\PaymentService;
+use App\Models\AccessPin;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Services\PaymentService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 
 class PaymentController extends Controller
 {
@@ -16,79 +20,88 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $user_payments = auth()->user()->payments;
-        $sn=1;
+        $user_payments = auth()->user()->payments()->with('accessPin')->latest()->paginate(12);
+        $sn = 1;
         return view('student.payment.index', compact('user_payments', 'sn'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Redirect the User to Paystack Payment Page
+     * @return Url
      */
-    public function create()
+    public function redirectToGateway()
     {
-       
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(PaymentService $paymentService)
-    {
-        $response = $paymentService->storeTransaction();
-        if(!$response->status){
-            return redirect()->back()->with('success', "couldn't initiate payment");
+        try {
+            $amount = config('paystack.amount') * 100; 
+            $data = array(
+                "amount" => $amount,
+                "reference" => Str::random(7) . '_' . uniqid("paystack"),
+                "email" => auth()->user()->email,
+                "currency" => "NGN",
+            );
+            return Paystack::getAuthorizationUrl($data)->redirectNow();
+        } catch (\Exception $e) {
+            return redirect()->back()->withError(['msg' => 'The paystack token has expired. Please refresh the page and try again.', 'type' => 'error']);
         }
-
-        return redirect($response->data->authorization_url);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+
+
+    public function handleGatewayCallback()
     {
-        //
+        $paymentDetails = Paystack::getPaymentData();
+
+        if ($paymentDetails['status'] == 'success') {
+            $authorizationCode = $paymentDetails['data']['authorization']['authorization_code'];
+            $amount = $paymentDetails['data']['amount'] / 100;  // Convert from kobo to Naira (or the smallest currency unit)
+            $currency = $paymentDetails['data']['currency'];
+
+
+            $accessPin = AccessPin::where('status',0)->whereNull('used_by')->whereNull('used_on')->first();
+
+
+            // Now, store the payment information
+            auth()->user()->payments()->create([
+                'currency' => $currency,
+                'amount' => $amount,
+                'payment_method' => 'Paystack',
+                'reference_no' => $paymentDetails['data']['reference'],
+                'transaction_id' => $paymentDetails['data']['reference'],
+                'status' => Payment::STATUS_SUCCESS,
+                'access_pin_id' => $accessPin->id,
+                'paid_at' => now(),
+            ]);
+
+            // Optionally, you can send the user to a success page
+            return redirect()->route('student.payment.index')->with('success', 'Payment successful! Your transaction ID is: ' . $paymentDetails['data']['reference']);
+        } else {
+            
+            auth()->user()->payments()->create([
+                'currency' => $paymentDetails['data']['currency'],
+                'amount' => $paymentDetails['data']['amount'] / 100,
+                'payment_method' => 'Paystack',
+                'reference_no' => $paymentDetails['data']['reference'],
+                'transaction_id' => $paymentDetails['data']['reference'],
+                'status' => Payment::STATUS_FAILED,
+                'paid_at' => now(),
+            ]);
+    
+            Log::error('Payment failed', [
+                'user_id' => auth()->id(),
+                'payment_details' => $paymentDetails,
+            ]);
+            return redirect()->route('student.subject.index')->with('error','Payment failed! Please try again.');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function success()
     {
-        //
+        $details = auth()->user()->successPaymentpayments()->latest()->first();
+        return view('student.payment.success', compact('details'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function failed()
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('student.payment.failed');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Auth;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Website;
 use Illuminate\Support\Str;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,7 @@ class LoginRequest extends FormRequest
         $credentials = $this->only('email', 'password');
 
         if (!User::where('email', $this->email)->where('role_id', Role::ADMIN)->first()) {
-            $credentials['website_id'] = User::WEBSITE_ID;
+            $credentials['website_id'] = Website::getWebsiteBySlug('cbtprep')->id;
         }
 
         if (!Auth::attempt($credentials, $this->boolean('remember'))) {

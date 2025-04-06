@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LDAP\Result;
@@ -22,7 +23,7 @@ class WebsiteMiddleware
     {
         if (auth()->user()->role_id == Role::ADMIN) {
             return $next($request);
-        } else if (Auth::check() && auth()->user()->website_id == User::WEBSITE_ID) {
+        } else if (Auth::check() && auth()->user()->website_id == Website::getWebsiteBySlug('cbtprep')->id) {
             return $next($request);
         }
         Auth::logout();

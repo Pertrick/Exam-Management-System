@@ -18,6 +18,7 @@ class WebsiteScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('website_id', User::WEBSITE_ID);
+        $websiteId = config('website.default_website_id');
+        $builder->where('website_id', $websiteId);
     }
 }

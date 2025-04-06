@@ -95,7 +95,10 @@
                                                         </div>
                                                     </div>
                                                 @empty
-                                                    <p>No resource to Show</p>
+                                                <div class="col-sm-12 col-lg-12 text-center">
+                                                    <p class="">Subscribe to a subject to get resources!</p>
+                                                </div>
+                                                   
                                                 @endforelse
 
                                             </div>

@@ -17,6 +17,11 @@ class SubjectMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->routeIs('pay') || $request->routeIs('student.payment.index')){
+            return $next($request);
+        }
+
+        
         if (auth()->user()->role_id == Role::ADMIN) {
             return $next($request);
         } else if (auth()->user()->subjects->count() == 0) {

@@ -19,7 +19,8 @@ class ResourcesController extends Controller
     public function index()
     {
         $searchQuery = request()->query('search');
-        $resources = Resources::with('subject')->search($searchQuery)->latest()->paginate(6);
+        $subjectIds = auth()->user()->subjects()->pluck('subjects.id')->toArray();
+        $resources = Resources::whereIn('subject_id',$subjectIds)->search($searchQuery)->latest()->paginate(6);
         return view('student.resources.index', compact('resources'));
     }
 

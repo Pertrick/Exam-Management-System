@@ -70,7 +70,14 @@ class ScoreService
 
         $totalPoint = $test->questions->sum('point');
 
-        $percentage = ($totalScore / $totalPoint) * 100;
+        if($totalPoint != 0){
+            $percentage = ($totalScore / $totalPoint) * 100;
+        }else{
+            $totalScore = 0;
+            $percentage = 0;
+        }
+
+      
 
        $result =  Result::create([
             'user_id' => auth()->user()->id,

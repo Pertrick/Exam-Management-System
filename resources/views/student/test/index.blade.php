@@ -38,6 +38,11 @@
                     <div class="card card-info">
                       
                         <div class="card-body">
+                            @if($tests->isEmpty())
+                                <div class="text-center">
+                                    <strong>No Exams / Mock</strong>
+                                </div>
+                            @endif
                             @foreach($tests as $key => $test)
                             <h4 class="text-center bg-1 text-white p-2">{{ ucFirst($key)}}</h4>
                             <div class="col-md-12 table-responsive">
@@ -52,7 +57,7 @@
                                                 Duration</th>
                                             <th
                                                 class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                                </th>
+                                                Questions</th>
                                             <th class="text-secondary opacity-7"></th>
                                         </tr>
                                     </thead>
@@ -61,6 +66,7 @@
                                             <tr>
                                                 <td>{{ $value->subject->name }}</td>
                                                 <td>{{ $value->duration }} seconds</td>
+                                                <td>{{$value->questions_count}}</td>
                                                 <td>
                                                     <button type="button" data-target="#confirm" data-toggle="modal"
                                                         class="btn btn-sm btn-link text-success" onclick="confirm({{ $value}});">

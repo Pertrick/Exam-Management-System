@@ -9,8 +9,11 @@ use App\Models\Course;
 use App\Models\Result;
 use App\Models\Payment;
 use App\Models\Subject;
+use App\Models\Website;
 use App\Models\Response;
 use App\Models\Resources;
+use App\Scopes\WebsiteScope;
+use App\Traits\HasWebsiteId;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,8 +21,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    const WEBSITE_ID = 1;
+    use HasApiTokens, HasFactory, Notifiable,HasWebsiteId;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +55,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function website()
+    {
+        return $this->belongsTo(Website::class);
+    }
+
     public function tests()
     {
         return $this->belongsToMany(Test::class)->withTimestamps();
@@ -75,7 +82,7 @@ class User extends Authenticatable
 
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)->with('resources')->withTimestamps();
+        return $this->belongsToMany(Subject::class)->withTimestamps();
     }
 
     public function getCreatedAtAttribute($value)
@@ -107,14 +114,4 @@ class User extends Authenticatable
     public function courses(){
         return $this->belongsToMany(Course::class)->withTimestamps();
     }
-
-
-    protected static function booted()
-    {
-        static::creating(function ($model) {
-            $model->website_id = User::WEBSITE_ID;
-        });
-    }
-
-
 }

@@ -52,7 +52,7 @@
                                         @foreach ($results as $result)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td class="font-weight-bold">{{ $result->user->name }}</td>
+                                                <td class="font-weight-bold">{{ $result->user?->name }}</td>
                                                 <td>{{ $result->score }}</td>
                                                 <td>{{ $result->score_percentage }}</td>
                                                 <td>

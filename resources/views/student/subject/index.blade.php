@@ -48,9 +48,19 @@
 
                             @include('student.partials.alert')
 
-                            <div class="m-3">
-                                <span class="fa fa-book"> Subject Information</span>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="m-3">
+                                    <span class="fa fa-book"> Subject Information</span>
+                                </div>
+                                <div>
+                                    <form action="{{ route('pay') }}" method="POST" id="form-subject">
+                                        @csrf
+                                        <input type="submit" class="btn btn-primary" value="Buy PIN" />
+                                    </form>
+                                </div>
+                               
                             </div>
+                            
                             <div class="col-md-12 mb-5">
                                 <!-- form start -->
                                 <form action="{{ route('student.subject.store') }}" method="POST" id="form-subject">
@@ -79,7 +89,7 @@
                                             <input type="password" name="code" class="form-control"
                                                 placeholder="Enter pin" />
                                         </div>
-                                        <div class="col-md-4" style="margin-top: 32px">
+                                        <div class="col-md-4" style="margin-top: 25px">
                                             <input type="submit" class="btn btn-success" value="Save" />
                                         </div>
                                           

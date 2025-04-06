@@ -42,19 +42,21 @@
                         </p>
                     </a>
                 </li>
-                {{-- <li class="nav-item" title="Payment">
-                    <a href="{{route('student.payment.index')}}" class="nav-link {{ request()->is('student/payment') ? 'active' : ''}}">
-                        <i class="nav-icon fa fa-credit-card"></i>
-                        <p>
-                            payment
-                        </p>
-                    </a>
-                </li> --}}
+               
                  <li class="nav-item" title="resources">
                     <a href="{{route('student.resources.index')}}" class="nav-link {{ request()->is('student/resources*') ? 'active' : ''}}">
                         <i class="nav-icon fa fa-credit-card"></i>
                         <p>
                             Resources
+                        </p>
+                    </a>
+                </li>
+
+                 <li class="nav-item" title="Payment">
+                    <a href="{{route('student.payment.index')}}" class="nav-link {{ request()->is('student/payment') ? 'active' : ''}}">
+                        <i class="nav-icon fa fa-credit-card"></i>
+                        <p>
+                            payment
                         </p>
                     </a>
                 </li>

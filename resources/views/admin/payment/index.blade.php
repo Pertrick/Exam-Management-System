@@ -1,54 +1,12 @@
-@include('student.partials.header')
-
-<style>
-    .secret-key-container {
-      display: flex;
-      align-items: center;
-      background-color: #fff;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .secret-key {
-      border: none;
-      outline: none;
-      font-size: 14px;
-      letter-spacing: 2px;
-      padding: 7px;
-      width: 200px;
-      background: none;
-    }
-
-    .secret-key[readonly] {
-      color: #555;
-    }
-
-    .icon {
-      cursor: pointer;
-      margin-left: 10px;
-      padding: 5px;
-      color: #555;
-    }
-
-    .icon:hover {
-      color: #000;
-    }
-
-    .btn-copy {
-      border: none;
-      background: none;
-      cursor: pointer;
-    }
-  </style>
+@include('admin.partials.header')
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <!-- Navbar -->
-        @include('student.partials.navigation')
+        @include('admin.partials.navigation')
         <!-- /.navbar -->
         <!-- Main Sidebar Container -->
-        @include('student.partials.sidebar')
+        @include('admin.partials.sidebar')
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -78,30 +36,27 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            <div class="d-flex justify-content-end mb-3">
-                                <form action="{{ route('pay') }}" method="POST" id="form-subject">
-                                    @csrf
-                                    <input type="submit" class="btn btn-primary" value="Buy PIN" />
-                                </form>
-                            </div>
-                            
                             <div class="col-md-12 table-responsive">
                                 <h4 class="text-center font-weight-bold">Payment History</h4>
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th>Sn.</th>
+                                            <th>Student Name</th>
+                                            <th>Student Email</th>
                                             <th>Amount(&#8358;)</th>
                                             <th>Reference Id</th>
                                             <th>Status</th>
                                             <th>Date</th>
-                                            <th>View PIn</th>
+                                            <th>Access Pin</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                        @foreach($user_payments as $user_payment)
                                         <tr>
                                             <td>{{$sn++}}.</td>
+                                            <td>{{ $user_payment->user->name }}</th>
+                                            <td>{{ $user_payment->user->email }}</td>
                                             <td>{{$user_payment->amount}}</td>
                                             <td>{{$user_payment->reference_no}}</td>
                                             <td>
@@ -112,21 +67,7 @@
                                                 @endif
                                             </td> 
                                             <td>{{ $user_payment->created_at->format('l, F jS, Y') }}</td>
-                                            <td>
-                                                @if($user_payment->status =="successful" &&  $user_payment->accessPin?->pin)
-                                                <div class="secret-key-container">
-                                                    <input
-                                                      type="password"
-                                                      id="secretKeyField"
-                                                      value="{{ $user_payment->accessPin?->pin }}"
-                                                      class="secret-key"
-                                                      readonly
-                                                    />
-                                                    <span class="icon" id="revealIcon">👁️</span>
-                                                    <button class="btn-copy" id="copyIcon">📋</button>
-                                                  </div>
-                                                  @endif
-                                            </td>
+                                            <td>{{ ($user_payment->status =="successful") ? $user_payment->accessPin?->pin : '' }}</td>
                                         </tr>
                             
                                         @endforeach
@@ -152,35 +93,14 @@
   
     
     <!-- jQuery -->
-    @include('student.partials.footer')
+    @include('admin.partials.footer')
     <script>
+
+      
+
         $(function() {
             $("#example1").DataTable();
         });
-    const secretKeyField = document.getElementById('secretKeyField');
-    const revealIcon = document.getElementById('revealIcon');
-    const copyIcon = document.getElementById('copyIcon');
-
-    // Toggle reveal/hide functionality
-    revealIcon.addEventListener('click', () => {
-      if (secretKeyField.type === 'password') {
-        secretKeyField.type = 'text';
-        revealIcon.textContent = '🙈'; // Change icon to "hide"
-      } else {
-        secretKeyField.type = 'password';
-        revealIcon.textContent = '👁️'; // Change icon to "show"
-      }
-    });
-
-    // Copy to clipboard functionality
-    copyIcon.addEventListener('click', () => {
-      secretKeyField.select();
-      navigator.clipboard.writeText(secretKeyField.value).then(() => {
-        alert('Secret key copied to clipboard!');
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
-      });
-    });
     </script>
 </body>
 

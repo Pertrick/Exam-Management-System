@@ -111,6 +111,14 @@
                   </a>
               </li>
 
+              <li class="nav-item" title="Payment">
+                <a href="{{route('admin.payment.index')}}" class="nav-link {{ request()->is('student/payment') ? 'active' : ''}}">
+                    <i class="nav-icon fa fa-credit-card"></i>
+                    <p>
+                        payment
+                    </p>
+                </a>
+            </li>
               {{-- <li class="nav-item">
                     <a href="{{ route('admin.resources.index') }}"
                         class="nav-link {{ request()->is('admin/resources*') ? 'active' : '' }}">

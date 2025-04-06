@@ -6,6 +6,7 @@ use Exception;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Program;
+use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
-use App\Providers\RouteServiceProvider;
 
 class RegisteredUserController extends Controller
 {
@@ -40,7 +40,13 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users,email,NULL,id,website_id,' . $request->website_id
+            ],
             'phone' => ['required', 'nullable', 'string', 'numeric:max:11'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'course' => ['required', 'string'],
@@ -53,6 +59,7 @@ class RegisteredUserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
+                'website_id' => Website::getWebsiteBySlug('cbtprep')->id,
                 'role_id' => Role::USER,
                 'password' => Hash::make($request->password),
             ]);

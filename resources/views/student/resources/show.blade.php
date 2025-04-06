@@ -1,36 +1,88 @@
 @include('student.partials.header')
 
 <style>
+    /* General PDF Viewer Styles */
     .pdf-viewer {
-        max-width: 800px;
+        max-width: 100%; /* Allow the PDF viewer to take full width on small screens */
         margin: 0 auto;
         text-align: center;
+        padding: 15px; /* Add some padding to the container for better spacing */
     }
 
+    /* Toolbar Styles */
     .pdf-toolbar {
-        margin-bottom: 7px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-bottom: 10px;
+        gap: 10px; /* Space between the buttons */
     }
 
+    /* Styling for PDF Canvas */
     #pdf-canvas {
         margin: 20px auto;
     }
 
-
+    /* Media Queries for Smaller Screens */
     @media (max-width: 768px) {
         .pdf-toolbar {
-            flex-direction: column;
+            flex-direction: column; /* Stack toolbar buttons vertically */
+            align-items: center; /* Center-align the buttons */
         }
 
+        /* Adjust the page input and button width for smaller screens */
         .pdf-toolbar .input-group {
-            margin-top: 0.5rem;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .pdf-toolbar .input-group input,
+        .pdf-toolbar .input-group button {
+            width: 100%; /* Full width for input fields and buttons */
+            padding: 10px;
+        }
+
+        /* Scale input and apply button for mobile */
+        .pdf-toolbar .input-group input[type="number"],
+        .pdf-toolbar .btn-group button {
+            padding: 12px;
+        }
+
+        .pdf-canvas {
+            width: 100%; /* Make the canvas responsive */
+            overflow-x: auto; /* Allow scrolling for large PDFs */
+        }
+
+        /* Adjust the PDF header styling for smaller screens */
+        #pdf-header {
+            font-size: 14px;
+        }
+    }
+
+    /* Additional Styling for Mobile */
+    @media (max-width: 480px) {
+        .pdf-toolbar .btn-group button {
+            font-size: 12px;
+            padding: 8px; /* Smaller buttons on very small screens */
+        }
+
+        #pdf-header {
+            font-size: 12px;
+        }
+
+        /* Make the page navigation input more compact */
+        #page-num {
+            width: 60%; /* Narrower input */
         }
     }
 </style>
+
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <!--Nav bar -->
         @include('student.partials.navigation')
+        <!-- /.navbar -->
         <!-- Main Sidebar Container -->
         @include('student.partials.sidebar')
         <!-- Content Wrapper. Contains page content -->
@@ -41,13 +93,17 @@
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1 class="m-0" style="color: rgb(31,108,163);"><span class="fa fa-file-word"></span>
-                            Resources</h1>
+                                Resources</h1>
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="{{ route('student.dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="{{ route('student.resources.index') }}">Resources</li>
+                                <li class="breadcrumb-item active">
+                                    <a href="{{ route('student.resources.index') }}" class="btn btn-sm btn-primary">
+                                        <i class="fa fa-list"></i> View Resources
+                                    </a>
+                                </li>
                             </ol>
                         </div>
                         <!-- /.col -->
@@ -93,51 +149,42 @@
                                         aria-labelledby="nav-pdf-tab">
                                         <div class="container m-2" style="background-color: #dbe1f1">
                                             <h4 class="text-dark p-3">{{ $resource->name }}</h4>
+                                            
                                             <div id="pdf-viewer" class="pdf-viewer">
                                                 <div id="pdf-header" class="pdf-header mb-3 text-dark">
-                                                    Page <span id="page-num-display">1</span> of <span
-                                                        id="total-pages">1</span>
+                                                    Page <span id="page-num-display">1</span> of <span id="total-pages">1</span>
                                                 </div>
                                                 <div id="pdf-canvas"></div>
-
+                                            
                                                 <div class="pdf-toolbar">
-                                                    <div class="input-group mb-3 ">
+                                                    <div class="input-group mb-3">
                                                         <div class="mx-auto w-50">
-                                                            <input type="number" id="page-num" class=""
-                                                                min="1" value="1">
+                                                            <input type="number" id="page-num" min="1" value="1">
                                                             <button id="go-to-page" class="btn btn-success">Go</button>
                                                         </div>
-
                                                     </div>
                                                     <div class="btn-group mt-3" role="group">
-                                                        <button id="first-page" class="btn btn-secondary">First
-                                                            Page</button>
-                                                        <button id="prev-page"
-                                                            class="btn btn-primary mx-1">Previous</button>
+                                                        <button id="first-page" class="btn btn-secondary">First Page</button>
+                                                        <button id="prev-page" class="btn btn-primary mx-1">Previous</button>
                                                         <button id="next-page" class="btn btn-info mr-1">Next</button>
-                                                        <button id="last-page" class="btn btn-secondary">Last
-                                                            Page</button>
-
+                                                        <button id="last-page" class="btn btn-secondary">Last Page</button>
                                                     </div>
-
-                                                    <div class="input-group mt-3 mx-auto w-25 text-light">
-                                                        <label for="scale">scale: </label>
-                                                        <input type="number" id="scale" min="0.1"
-                                                            max="1.6" step="0.1" value="1">
-                                                        <button id="apply-scale"
-                                                            class="btn btn-sm btn-primary mx-1">Apply</button>
+                                            
+                                                    <div class="input-group mt-3 w-25 text-light">
+                                                        <label for="scale"class="ml-4 mr-2 text-dark" >Scale: </label>
+                                                        <input type="number" id="scale" min="0.1" max="1.6" step="0.1" value="1">
+                                                        <button id="apply-scale" class="btn btn-sm btn-primary mx-1">Apply</button>
                                                     </div>
                                                 </div>
-
-                                                <div id="pdf-canvas" class="pdf-canvas">
-                                                    <div id="loading-indicator" class="text-center">
-                                                        <div class="spinner-border text-primary" role="status">
-                                                            <span class="visually-hidden"></span>
-                                                        </div>
-                                                        <p>Loading PDF...</p>
+                                            
+                                                <div id="loading-indicator" class="text-center">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden"></span>
                                                     </div>
+                                                    <p>Loading PDF...</p>
                                                 </div>
-                                            </div>
+                                            </div>                                            
+                                               
                                         </div>
                                     </div>
                                 @endif
@@ -147,7 +194,7 @@
                                         aria-labelledby="nav-video-tab">
                                         <div class="container m-2">
                                             <div class="video-container">
-                                                <video controls width="100%" class="mt-3">
+                                                <video controls width="100%" class="mt-3" height="500">
                                                     <source src="{{ $resourceData['video_url'] }}" type="video/mp4">
                                                     Your browser does not support the video tag.
                                                 </video>
@@ -174,14 +221,14 @@
                                 <div class="tab-pane fade" id="nav-info" role="tabpanel"
                                     aria-labelledby="nav-info-tab">
                                     <div class="container m-2">
-                                        <h6>{{ $resource->name }}</h6>
-                                        <p>{{ $resource->description }}</p>
+                                        <h6>title: <strong>{{ $resource->name }}</strong></h6>
+                                        <p>description: <strong>{{ $resource->description }}</strong></p>
                                         <div class="resource-metadata">
-                                            <p><strong>Subject:</strong> {{ $resource->subject->name }}</p>
-                                            <p><strong>Added:</strong> {{ $resource->created_at->format('M d, Y') }}</p>
+                                            <p>subject: <strong>{{ $resource->subject->name }}</strong></p>
+                                            <p>added:<strong>{{ $resource->created_at->format('M d, Y') }}</strong></p>
                                             @if ($resource->updated_at != $resource->created_at)
-                                                <p><strong>Last Updated:</strong>
-                                                    {{ $resource->updated_at->format('M d, Y') }}</p>
+                                                <p>Last Updated:
+                                                    <strong>{{ $resource->updated_at->format('M d, Y') }}</strong> </p>
                                             @endif
                                         </div>
                                     </div>
@@ -189,6 +236,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </section>
 
@@ -343,9 +391,15 @@
             const updateButtonStates = (pageNum) => {
                 const prevButton = document.getElementById('prev-page');
                 const nextButton = document.getElementById('next-page');
+                const firstButton = document.getElementById('first-page');
+                const lastButton = document.getElementById('last-page');
+
 
                 prevButton.disabled = pageNum <= 1;
                 nextButton.disabled = pageNum >= pdfInstance.numPages;
+
+                firstButton.disabled = pageNum <= 1;
+                lastButton.disabled = pageNum >= pdfInstance.numPages;
 
                 // Highlight current page in navigation
                 const pageButtons = document.querySelectorAll('.page-nav-button');
@@ -386,6 +440,39 @@
                         break;
                 }
             });
+
+
+             let startTouchX = 0;
+        let endTouchX = 0;
+
+        pdfViewer.addEventListener('touchstart', (e) => {
+            const touchStart = e.touches[0];
+            startTouchX = touchStart.pageX; // Store initial touch position
+        });
+
+        pdfViewer.addEventListener('touchmove', (e) => {
+            const touchMove = e.touches[0];
+            endTouchX = touchMove.pageX; // Store final touch position
+        });
+
+        pdfViewer.addEventListener('touchend', () => {
+            const swipeThreshold = 50; // Minimum distance to trigger swipe action
+
+            // Check if the user swiped left or right
+            if (startTouchX - endTouchX > swipeThreshold) {
+                // Swipe left (next page)
+                if (currentPage < pdfInstance.numPages) {
+                    currentPage++;
+                    renderPage(currentPage, pdfScale);
+                }
+            } else if (endTouchX - startTouchX > swipeThreshold) {
+                // Swipe right (previous page)
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderPage(currentPage, pdfScale);
+                }
+            }
+        });
 
 
 

@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Result;
 use App\Models\Program;
 use App\Models\Subject;
+use App\Models\Website;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -22,7 +23,7 @@ class HomeController extends Controller
         $subject_count =  Subject::count();
         $program_count = Program::count();
         $course_count = Course::count();
-        $students =  User::select('name', 'created_at')->where('website_id', User::WEBSITE_ID)->get();
+        $students =  User::select('name', 'created_at')->latest()->take(12)->get();
         $results = Result::with('test.subject')->latest(6);
     
         return view('admin.dashboard', compact('subject_count','program_count','course_count', 'students', 'results'));

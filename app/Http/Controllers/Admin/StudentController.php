@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Website;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -17,7 +18,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = User::with('subjects')->where('role_id', 2)->where('website_id',User::WEBSITE_ID)->get();
+        $students = User::with('subjects')->where('role_id', 2)->get();
         return view('admin.student.index', compact('students'));
     }
 

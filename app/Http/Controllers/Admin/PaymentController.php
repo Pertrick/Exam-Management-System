@@ -15,7 +15,9 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+        $user_payments = Payment::with(['user','accessPin'])->latest()->paginate(12);
+        $sn = 1;
+        return view('admin.payment.index', compact('user_payments', 'sn'));
     }
 
     /**

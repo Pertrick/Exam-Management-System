@@ -61,7 +61,11 @@ Route::middleware('auth', 'website')->group(function () {
 
         Route::prefix('payment')->group(function () {
             Route::get('', [PaymentController::class, 'index'])->name('student.payment.index');
-            Route::post('pay', [PaymentController::class, 'store'])->name('student.payment.store');
+            // Route::post('pay', [PaymentController::class, 'store'])->name('student.payment.store');
+            Route::post('/pay', [PaymentController::class, 'redirectToGateway'])->name('pay');
+            Route::get('/success', [PaymentController::class,'success'])->name('payment.success');
+            Route::get('/cancel', [PaymentController::class,'cancel'])->name('payment.cancel');
+            Route::get('/failed', [PaymentController::class,'failed'])->name('payment.failed');
         });
 
         Route::prefix('exam-auth')->group(function () {
@@ -81,3 +85,5 @@ Route::middleware('auth', 'website')->group(function () {
         Route::get('/{uuid}', [ResourcesController::class, 'show'])->name('student.resources.show');
     });
 });
+
+Route::get('student/payment/callback', [PaymentController::class, 'handleGatewayCallback']);

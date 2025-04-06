@@ -20,7 +20,7 @@ class TestController extends Controller
     {
         $subject_ids = auth()->user()->subjects()->get()->pluck('id');
         $tests = Test::with(['subject', 'questions:question', 'testType'])
-
+            ->withCount('questions')
             ->whereIn('subject_id', $subject_ids)
             ->where('is_published', Test::PUBLISHED)
             ->orWhere(function ($query) {

@@ -38,6 +38,13 @@
                         <div class="card-body">
                             @include('student.partials.alert')
                             <div class="col-md-12 table-responsive">
+                                <div class="d-flex justify-content-end mb-3">
+                                    <form action="{{ route('pay') }}" method="POST" id="form-subject">
+                                        @csrf
+                                        <input type="hidden" name="amount" value="2000">
+                                        <input type="submit" class="btn btn-primary" value="Buy PIN" />
+                                    </form>
+                                </div>
                                 <p>Kindly choose your preferred subject*</p>
                                 <form action="{{ route('student.subject.store') }}" method="post">
                                     @csrf
@@ -64,6 +71,7 @@
                                         <div class="col-md-6 mx-auto">
                                             <div class="form-group">
                                                 <input type="password" name="code" class="form-control" placeholder="enter your pin!"/>
+                                                <i>click on buy pin to get your pin</i>
                                             </div>
                                             @error('code')
                                             <div class="error text-danger text-bold text-xs m-1 text-center">{{ $message }}</div>

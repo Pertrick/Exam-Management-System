@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\TestController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ResultController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\SubjectController;
@@ -69,6 +70,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     //     Route::post('export/{id}', [testController::class, 'export'])->name('admin.test.export');
     // });
 
+    Route::prefix('payment')->group(function () {
+        Route::get('', [PaymentController::class, 'index'])->name('admin.payment.index');
+    });
+    
     Route::prefix('accesspin')->group(function () {
         Route::get('', [AccessPinController::class, 'index'])->name('admin.accesspin.index');
         Route::get('/generate', [AccessPinController::class, 'create'])->name('admin.accesspin.create');

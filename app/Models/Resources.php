@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use App\Models\Subject;
 use Ramsey\Uuid\Uuid;
+use App\Models\Subject;
+use App\Traits\HasWebsiteId;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Resources extends Model
 {
-    use HasFactory;
+    use HasFactory,HasWebsiteId;
 
     protected $fillable = [
         'name',  'uuid', 'description', 
