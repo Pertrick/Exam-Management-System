@@ -30,7 +30,8 @@ class SendResultEmail
      */
     public function handle(ResultEmail $event)
     {
-        $user = User::findOrFail($event->result->user_id);
+        $result = $event->result;
+        $user = User::findOrFail($result->user->id);
         Mail::to($user)->send(new SendResultMail($user, $event->result));
 
        

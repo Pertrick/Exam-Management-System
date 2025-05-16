@@ -11,6 +11,7 @@ use App\Exports\QuestionExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\DB;
 
 class TestNewController extends Controller
 {
@@ -22,7 +23,51 @@ class TestNewController extends Controller
     public function index(Request $request)
     {
         $value = $request->query('search');
-        $tests = Test::search($value)->with(['subject', 'questions.options.image', 'questions.image','testType'])->latest()->paginate(10);
+        $isArchived = $request->query('is_archived');
+        
+        $query = Test::query()
+            ->select([
+                'tests.*',
+                DB::raw('COUNT(DISTINCT tu.id) as total_scores'),
+                DB::raw('COALESCE(AVG(r.score_percentage), 0) as average_score'),
+                DB::raw('COALESCE(MIN(r.score_percentage), 0) as lowest_score'),
+                DB::raw('COALESCE(MAX(r.score_percentage), 0) as highest_score'),
+                DB::raw('MAX(tu.end_time) as last_taken')
+            ])
+            ->leftJoin('test_user as tu', 'tests.id', '=', 'tu.test_id')
+            ->leftJoin('results as r', 'tu.id', '=', 'r.test_user_id')
+            ->with([
+                'subject', 
+                'questions.options.image', 
+                'questions.image', 
+                'testType',
+                'testUsers' => function($q) {
+                    $q->select('test_user.id', 'test_user.test_id', 'test_user.end_time')
+                      ->whereNotNull('end_time');
+                }
+            ])
+            ->groupBy('tests.id');
+
+        if ($value) {
+            $query->where(function($q) use ($value) {
+                $q->whereHas('subject', function($q) use ($value) {
+                    $q->where('name', 'like', "%{$value}%");
+                })
+                ->orWhereHas('testType', function($q) use ($value) {
+                    $q->where('name', 'like', "%{$value}%");
+                })
+                ->orWhere('is_published', 'like', "%{$value}%");
+            });
+        }
+
+        if($isArchived){
+            $query->where('is_archived', true);
+        }else{
+            $query->where('is_archived', false);
+        }
+
+        $tests = $query->latest()->paginate(10);
+
         return view('admin.test_new.index', compact('tests'));
     }
 
@@ -190,5 +235,52 @@ class TestNewController extends Controller
 
         $pdf = Pdf::loadView('admin.test.export', compact('test','questions','option_type','multi_choice_type','no_option'))->setPaper('a4', 'portrait')->setWarnings(false);
         return $pdf->download("$subjectName test.pdf");
+    }
+
+
+     /**
+     * Archive the specified tests.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function archive(Request $request)
+    {
+        $request->validate([
+            'test_ids' => 'required|array',
+            'test_ids.*' => 'exists:tests,id'
+        ]);
+
+        try {
+            Test::whereIn('id', $request->test_ids)
+                ->update(['is_archived' => true]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Unarchive the specified tests.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function unarchive(Request $request)
+    {
+        $request->validate([
+            'test_ids' => 'required|array',
+            'test_ids.*' => 'exists:tests,id'
+        ]);
+
+        try {
+            Test::whereIn('id', $request->test_ids)
+                ->update(['is_archived' => false]);
+
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

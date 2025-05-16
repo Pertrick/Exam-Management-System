@@ -52,18 +52,10 @@
                               (collect($quest->responses->first()?->answer)->isEmpty() )? 'No answer' :
                               collect($quest->responses->first()?->answer)->values()->implode(",") }}</span>
                            
-                           @if($quest->type !== $no_option)
-                                @if (count(array_diff($quest->options->where('is_correct',1)->pluck('label')->toArray(), collect($quest->responses->first()?->answer)->values()->toArray())) == 0)
+                           @if($quest->responses->first()?->is_correct)
                                 <i class='fa fa-check text-success'></i>
-                                 @else
-                                 <i class='fa fa-times text-danger'></i>
-                                 @endif
                            @else
-                           @if(!collect($quest->responses->first()?->answer)->isEmpty() && in_array(strtolower(collect($quest->responses->first()?->answer)->values()->implode(',')),$quest->options->where('is_correct',1)->pluck('label')->toArray()))
-                              <i class='fa fa-check text-success'></i> 
-                          @else
-                          <i class='fa fa-times text-danger'></i>
-                          @endif
+                                <i class='fa fa-times text-danger'></i>
                            @endif
                                </p>
                             <h4 class="card-title mb-2">

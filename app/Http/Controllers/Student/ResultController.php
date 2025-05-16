@@ -7,6 +7,7 @@ use App\Models\Result;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Response;
 
 class ResultController extends Controller
 {
@@ -17,10 +18,17 @@ class ResultController extends Controller
      */
     public function index()
     {
-        $results = Result::with(['test.subject', 'test.testType'])
-                         ->where('user_id',auth()->id())
-                         ->latest()
-                         ->paginate(10);
+        $results = Result::with([
+            'testUser.test.subject',
+            'testUser.test.testType',
+            'testUser.user'
+        ])
+        ->whereHas('testUser', function($query) {
+            $query->where('user_id', auth()->id());
+        })
+        ->latest()
+        ->paginate(10);
+        
         return view('student.result.index', compact('results'));
     }
 
@@ -57,31 +65,28 @@ class ResultController extends Controller
         $multi_choice_type = Question::MULTI_CHOICE;
         $no_option = Question::NO_OPTION;
 
-        $test = Test::with(['subject:id,name', 'questions.options.image', 'questions.image'])
-            ->with(['questions.responses' => function ($q) use ($result_id) {
-                return $q->where('result_id', $result_id)
-                    ->where('user_id', auth()->user()->id)
-                    ->where('result_id', $result_id);
-            }])
-            ->whereHas('results', 
-                       fn ($q) => $q->where('id', $result_id)
-                                  ->where('user_id', auth()->user()->id))
-            ->first();
+        $result = Result::with(['testUser.test.subject:id,name', 
+                              'testUser.test.questions.options.image', 
+                              'testUser.test.questions.image',
+                              'testUser.test.questions.responses' => function($query) use ($result_id) {
+                                  $query->whereHas('testUser', function($q) use ($result_id) {
+                                      $q->where('id', Result::find($result_id)->test_user_id);
+                                  });
+                              }])
+                        ->whereHas('testUser', function($query) {
+                            $query->where('user_id', auth()->id());
+                        })
+                        ->findOrFail($result_id);
 
-        $result = Result::findOrFail($result_id);
+        $test = $result->testUser->test;
+        $testPivot = $result->testUser;
 
-        $testPivot = $test->users()->first()->pivot;
-
-        $responses = auth()->user()->responses()
-            ->with('question.options.image')
+        $responses = Response::with(['question.options.image', 'question.image'])
             ->with(['question.options' => function ($query) {
                 $query->where('is_correct', 1);
-            }])->with('question.image')
-            ->where('result_id', $result_id)
+            }])
+            ->where('test_user_id', $result->test_user_id)
             ->get();
-
-        // dd($result,$test,$responses);
-
 
         return view('student.result.show', compact('responses', 'result', 'test', 'testPivot', 'option_type', 'multi_choice_type', 'no_option'));
     }

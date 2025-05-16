@@ -99,6 +99,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         Route::get('/question/{id}', [TestController::class, 'question'])->name('admin.test.questions');
         Route::put('update/{id}', [TestNewController::class, 'update'])->name('admin.test.new.update');
         Route::get('publish/{id}', [TestController::class, 'publish'])->name('admin.test.publish');
+        Route::post('archive', [TestNewController::class, 'archive'])->name('admin.test.new.archive');  
+        Route::post('unarchive', [TestNewController::class, 'unarchive'])->name('admin.test.new.unarchive');
     });
 
 
@@ -118,6 +120,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
         ->name('show', 'admin.result.show')
         ->name('store', 'admin.result.store')
         ->name('destroy', 'admin.result.delete');
+
+        Route::get('export-result', [ResultController::class,'export'])->name('admin.results.export');
 
     Route::resource('settings', SettingsController::class)
         ->name('index', 'admin.settings.index')

@@ -19,7 +19,7 @@ class ResourcesController extends Controller
     public function index()
     {
         $searchQuery = request()->query('search');
-        $subjectIds = auth()->user()->subjects()->pluck('subjects.id')->toArray();
+        $subjectIds = auth()->user()->activeSubjects()->pluck('subjects.id')->toArray();
         $resources = Resources::whereIn('subject_id',$subjectIds)->search($searchQuery)->latest()->paginate(6);
         return view('student.resources.index', compact('resources'));
     }

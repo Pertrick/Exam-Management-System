@@ -62,7 +62,7 @@
                                         <div class="filters-content mt-2">
                                             <div class="row grid">
                                                 @forelse($resources as $resource)
-                                                    <div class="col-sm-6 col-lg-4 all pizza">
+                                                    <div class="col-sm-6 col-lg-3 all pizza">
                                                         <div class="box">
                                                             <div>
                                                                 <a

@@ -4,6 +4,31 @@
         height: 550px;
         overflow-y: auto;
     }
+    .simple-pagination {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .simple-pagination a, .simple-pagination span {
+        background: none !important;
+        border: none !important;
+        color: #007bff;
+        font-size: 1.2rem;
+        padding: 0 6px;
+        box-shadow: none;
+        line-height: 1;
+        vertical-align: middle;
+    }
+    .simple-pagination span.disabled {
+        color: #ccc;
+        cursor: not-allowed;
+    }
+    .simple-pagination input[type="number"] {
+        width: 60px;
+        display: inline-block;
+        margin: 0 6px;
+        text-align: center;
+    }
 </style>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -42,8 +67,33 @@
                 <div class="container-fluid">
                     <div class="card card-info">
                         <div class="card-body">
-                            <a class="btn btn-sm bg-success" href="{{ route('admin.test.create') }}"><i
-                                    class="fa fa-plus"></i> Add Exam</a><br><br>
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <a class="btn btn-sm bg-success" href="{{ route('admin.test.create') }}">
+                                        <i class="fa fa-plus"></i> Add Exam
+                                    </a>
+                                </div>
+                                <div class="col-md-4 d-flex justify-content-end align-items-center">
+                                    <div class="simple-pagination">
+                                        @if ($tests->onFirstPage())
+                                            <span class="disabled"><i class="fas fa-chevron-left"></i></span>
+                                        @else
+                                            <a href="{{ $tests->previousPageUrl() }}"><i class="fas fa-chevron-left"></i></a>
+                                        @endif
+                                        <input type="number" 
+                                               id="pageInput" 
+                                               value="{{ $tests->currentPage() }}" 
+                                               min="1" 
+                                               max="{{ $tests->lastPage() }}">
+                                        <span>of {{ $tests->lastPage() }}</span>
+                                        @if ($tests->hasMorePages())
+                                            <a href="{{ $tests->nextPageUrl() }}"><i class="fas fa-chevron-right"></i></a>
+                                        @else
+                                            <span class="disabled"><i class="fas fa-chevron-right"></i></span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-12 table-responsive">
                                 <table id="example1" class="table table-bordered table-hover">
                                     <thead>
@@ -207,6 +257,26 @@
                     },
             });
         }
+
+        document.getElementById('pageInput').addEventListener('change', function() {
+            const page = parseInt(this.value);
+            const maxPage = parseInt(this.getAttribute('max'));
+            const minPage = parseInt(this.getAttribute('min'));
+            
+            // Validate the input
+            if (isNaN(page) || page < minPage) {
+                this.value = minPage;
+            } else if (page > maxPage) {
+                this.value = maxPage;
+            }
+            
+            // Only proceed if the value is valid
+            if (page >= minPage && page <= maxPage) {
+                const url = new URL(window.location.href);
+                url.searchParams.set('page', this.value);
+                window.location.href = url.toString();
+            }
+        });
     </script>
 </body>
 

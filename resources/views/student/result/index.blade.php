@@ -48,8 +48,8 @@
                      <tbody>
                         @foreach($results as $result)
                        <tr>
-                        <td>{{$result->test->subject->name}}</td>
-                        <td>{{$result->test->testType->name}}</td>
+                        <td>{{$result->testUser->test->subject->name}}</td>
+                        <td>{{$result->testUser->test->testType->name}}</td>
                          <td>{{number_format($result->score_percentage,2)}}</td>
                          <td><span class="{{$result->status ? 'badge bg-success' : 'badge bg-danger'}}">{{$result->status? 'passed' : 'failed'}}</span></td> 
                          <td>

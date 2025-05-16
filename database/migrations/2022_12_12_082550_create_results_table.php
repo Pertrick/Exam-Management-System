@@ -15,10 +15,11 @@ return new class extends Migration
     {
         Schema::create('results', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('test_id')->constrained();
+            $table->foreignId('test_user_id')->constrained('test_user');
             $table->float('score');
+            $table->float('score_percentage');
             $table->integer('status');
+            $table->string('website_id');
             $table->timestamps();
         });
     }

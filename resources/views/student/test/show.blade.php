@@ -8,6 +8,23 @@
     input {
         cursor: pointer;
     }
+
+    .form-group textarea {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-group textarea:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        outline: 0;
+    }
+
+    .form-text {
+        margin-top: 0.25rem;
+        font-size: 0.875rem;
+    }
 </style>
 @include('student.partials.header')
 
@@ -62,7 +79,7 @@
                                                             value="{{ $test->id }}" />
                                                     </p>
                                                     <p>Instruction: <span
-                                                            class="font-weight-bold">{{ $test->instruction }}</span></p>
+                                                            class="font-weight-bold">{!! $test->instruction !!}</span></p>
                                                 </div>
                                                 <p id="seconds-left" class="text-right pr-3 font-weight-bold"
                                                     style=""><span class="text-lg">{{ $test->duration }}</span>
@@ -120,11 +137,21 @@
                                                                                 name="{{ $quest->id }}[]"
                                                                                 id="answer-id">
                                                                         @elseif($quest->type == $no_option)
-                                                                            <input type="text"
-                                                                                class="border-top-0 border-right-0 border-left-0"
-                                                                                style="width:70%"
-                                                                                name="{{ $quest->id }}[]"
-                                                                                id="answer-id" autocomplete="off">
+                                                                            <div class="form-group">
+                                                                                <textarea 
+                                                                                    class="form-control" 
+                                                                                    name="{{ $quest->id }}[]"
+                                                                                    id="answer-id"
+                                                                                    rows="4"
+                                                                                    placeholder="Type your answer here..."
+                                                                                    style="resize: vertical; min-height: 100px;"
+                                                                                    autocomplete="off"
+                                                                                ></textarea>
+                                                                                <small class="form-text text-muted">
+                                                                                    <i class="fas fa-info-circle"></i> 
+                                                                                    You can write detailed answers here. The text area will expand as you type.
+                                                                                </small>
+                                                                            </div>
                                                                         @endif
                                                                     </p>
                                                                 @endforeach

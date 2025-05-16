@@ -67,12 +67,12 @@ class User extends Authenticatable
 
     public function responses()
     {
-        return $this->hasMany(Response::class);
+        return $this->hasManyThrough(Response::class, TestUser::class, 'user_id', 'test_user_id', 'id', 'id');
     }
 
     public function results()
     {
-        return $this->hasMany(Result::class);
+        return $this->hasManyThrough(Result::class, TestUser::class, 'user_id', 'test_user_id', 'id', 'id');
     }
 
     public function payments()
@@ -80,9 +80,23 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
+    public function testUsers()
+    {
+        return $this->belongsToMany(Test::class, 'test_user')
+                    ->withPivot('start_time', 'end_time', 'status')
+                    ->withTimestamps();
+    }
+
     public function subjects()
     {
-        return $this->belongsToMany(Subject::class)->withTimestamps();
+        return $this->belongsToMany(Subject::class)
+                    ->withPivot('expires_at')
+                    ->withTimestamps();
+    }
+
+    public function activeSubjects()
+    {
+        return $this->subjects()->wherePivot('expires_at', '>', now());
     }
 
     public function getCreatedAtAttribute($value)
@@ -98,11 +112,11 @@ class User extends Authenticatable
     }
 
     public function passedResults(){
-        return $this->results()->where('status', 1);
+        return $this->results()->where('results.status', 1);
     }
 
     public function failedResults(){
-        return $this->results()->where('status', 0);
+        return $this->results()->where('results.status', 0);
     }
 
 

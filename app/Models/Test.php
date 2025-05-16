@@ -29,8 +29,8 @@ class Test extends Model
         'start_date',
         'end_date',
         'is_published',
-        'test_id'
-
+        'test_id',
+        'is_archived',
     ];
 
 
@@ -52,7 +52,7 @@ class Test extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class)->withPivot(['start_time', 'end_time'])->withTimestamps();
+        return $this->belongsToMany(User::class)->withPivot(['start_time', 'end_time','status'])->withTimestamps();
     }
 
     public function responses()
@@ -63,6 +63,11 @@ class Test extends Model
     public function results()
     {
         return $this->hasMany(Result::class);
+    }
+
+    public function result()
+    {
+        return $this->hasOne(Result::class);
     }
 
 
@@ -95,6 +100,13 @@ class Test extends Model
             return null;
         }
         return Carbon::parse($value)->format('M d Y g:i A');
+    }
+
+    public function testUsers()
+    {
+        return $this->belongsToMany(User::class, 'test_user')
+                    ->withPivot('start_time', 'end_time', 'status')
+                    ->withTimestamps();
     }
 
     /**
@@ -152,4 +164,23 @@ class Test extends Model
               });
         });
     }
+
+    /**
+     * Scope a query to only include archived tests.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeArchived($query)
+    {
+        return $query->where('is_archived', true);
+    }
+
+    public function scopeNotArchived($query)
+    {
+        return $query->where('is_archived', false);
+    }  
+
+    
+    
 }

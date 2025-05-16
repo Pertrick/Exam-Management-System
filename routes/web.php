@@ -3,6 +3,7 @@
 use App\Models\Role;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\TestNewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,10 @@ Route::get('/dashboard', function () {
     return redirect()->route('student.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::post('/tests/archive', [TestNewController::class, 'archive'])->name('tests.archive');
+    Route::post('/tests/unarchive', [TestNewController::class, 'unarchive'])->name('tests.unarchive');
+});
 
 require __DIR__.'/auth.php';
 require __DIR__.'/student.php';

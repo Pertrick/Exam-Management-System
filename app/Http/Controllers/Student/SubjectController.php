@@ -26,7 +26,7 @@ class SubjectController extends Controller
             ->select('subjects.id', 'subjects.code', 'subjects.name', 'subjects.description') // Fully qualified column names
             ->get();
 
-        $user_subjects = auth()->user()->subjects()->get();
+        $user_subjects = auth()->user()->activeSubjects()->get();
         return view('student.subject.index', compact('subjects', 'user_subjects'));
     }
 
@@ -75,7 +75,9 @@ class SubjectController extends Controller
         $acp->used_on = now();
         $acp->save();
 
-        auth()->user()->subjects()->attach($request->subject);
+        auth()->user()->subjects()->attach($request->subject, [
+            'expires_at' => now()->addYear()
+        ]);
         return redirect()->route('student.subject.index')->with('success', 'subject saved successfully!');
     }
 

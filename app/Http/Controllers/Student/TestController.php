@@ -18,7 +18,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        $subject_ids = auth()->user()->subjects()->get()->pluck('id');
+        $subject_ids = auth()->user()->activeSubjects()->get()->pluck('id');
         $tests = Test::with(['subject', 'questions:question', 'testType'])
             ->withCount('questions')
             ->whereIn('subject_id', $subject_ids)
@@ -59,7 +59,7 @@ class TestController extends Controller
         auth()->user()->tests()->attach(
             $request->test_id,
             [
-                'start_time' => Carbon::now(),
+                'start_time' => now(),
                 'status' => 1
             ]
         );

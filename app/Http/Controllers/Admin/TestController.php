@@ -21,7 +21,10 @@ class TestController extends Controller
      */
     public function index()
     {
-        $tests = Test::with(['subject', 'questions.options.image', 'questions.image','testType'])->get();
+        $tests = Test::with(['subject', 'questions.options.image', 'questions.image', 'testType'])
+            ->latest()
+            ->paginate(10);
+            
         return view('admin.test.index', compact('tests'));
     }
 
